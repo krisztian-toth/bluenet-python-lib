@@ -1,0 +1,6 @@
+{
+  "emailAddress": "test@gmail.com",
+  "password":     "plaintext",
+  "sha1Password": "sha1Password",
+  "accessToken":  "token"
+}
