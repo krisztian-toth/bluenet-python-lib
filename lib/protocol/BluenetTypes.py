@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class ControlType(Enum):
     SWITCH                 = 0
     PWM                    = 1

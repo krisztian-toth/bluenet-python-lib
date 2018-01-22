@@ -4,11 +4,11 @@ from lib.util.Conversion import Conversion
 
 class BLEPacket:
     type = 0
-    lengthAsUint8Array = []
+    lengthAsUint8Array = [0,0]
     payload = []
 
     def __init__(self, packetType):
-        self.type = packetType
+        self.type = packetType.value
 
     def loadString(self, string):
         self.payload = Conversion.string_to_uint8_array(string)
@@ -27,7 +27,7 @@ class BLEPacket:
         return self._process()
 
     def loadUInt32(self, uint32):
-        self.payload = Conversion.uint32_array_to_uint8_array(uint32)
+        self.payload = Conversion.uint32_to_uint8_array(uint32)
         return self._process()
 
     def loadByteArray(self, byteArray):
@@ -51,7 +51,7 @@ class BLEPacket:
 class ControlPacket(BLEPacket):
 
     def __init__(self, packetType):
-        super().__init__(self, packetType)
+        super().__init__(packetType)
 
 
     def getPacket(self):

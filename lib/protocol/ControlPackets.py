@@ -1,4 +1,4 @@
-from lib.protocol.BlePackets import ControlPacket, FactoryResetPacket, keepAliveStatePacket
+from lib.protocol.BlePackets 	import ControlPacket, FactoryResetPacket, keepAliveStatePacket
 from lib.protocol.BluenetTypes 	import ControlType
 from lib.util.Conversion	 	import Conversion
 
@@ -7,7 +7,7 @@ class ControlPacketsGenerator:
 
 	@staticmethod
 	def getFactoryResetPacket():
-		return Conversion.hex_string_to_uint8_array("deadbeef").reverse()
+		return Conversion.uint32_to_uint8_array(0xdeadbeef)
 
 
 	@staticmethod
@@ -75,15 +75,15 @@ class ControlPacketsGenerator:
 		if changeState:
 			actionState = 1
 
-		return keepAliveStatePacket(actionState, convertedSwitchState, timeout)
+		return keepAliveStatePacket(actionState, convertedSwitchState, timeout).getPacket()
 
 	@staticmethod
 	def getKeepAliveRepeatPacket():
 		return ControlPacket(ControlType.KEEP_ALIVE_REPEAT).getPacket()
 
 	@staticmethod
-	def getResetErrorPacket():
-		return ControlPacket(ControlType.RESET_ERRORS).getPacket()
+	def getResetErrorPacket(errorMask):
+		return ControlPacket(ControlType.RESET_ERRORS).loadUInt32(errorMask).getPacket()
 
 	@staticmethod
 	def getSetTimePacket(time):
@@ -120,4 +120,5 @@ class ControlPacketsGenerator:
 		lockByte = 0
 		if lock:
 			lockByte = 1
+
 		return ControlPacket(ControlType.LOCK_SWITCH).loadUInt8(lockByte).getPacket()
