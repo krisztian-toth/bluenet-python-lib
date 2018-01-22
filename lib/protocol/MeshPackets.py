@@ -12,7 +12,7 @@ class StoneKeepAlivePacket:
 		:param state:  number [0..1]
 		'''
 
-		switchState = min(1, max(0, state)) * 100
+		switchState = int(min(1, max(0, state)) * 100)
 		if not action:
 			switchState = 255
 
@@ -34,13 +34,14 @@ class MeshKeepAlivePacket:
 	packets = []
 
 	def __init__(self, packetType, timeout, packets):
-		self.type = packetType
+		self.type = packetType.value
 		self.timeout = timeout
 		self.packets = packets
 		self.reserved = [0,0]
 
 	def getPacket(self):
 		packet = []
+		packet.append(self.type)
 		timeoutArray = Conversion.uint16_to_uint8_array(self.timeout)
 		packet += timeoutArray
 		packet.append(len(self.packets))
@@ -56,7 +57,7 @@ class MeshCommandPacket:
 	payload = []
 
 	def __init__(self, packetType, crownstoneIds, payload):
-		self.type = packetType
+		self.type = packetType.value
 		self.crownstoneIds = crownstoneIds
 		self.payload = payload
 
@@ -78,10 +79,16 @@ class StoneMultiSwitchPacket:
 	intent = 0
 
 	def __init__(self, crownstoneId, state, timeout, intent):
+		"""
+		:param crownstoneId:
+		:param state:  number [0..1]
+		:param timeout:
+		:param intent: intentType
+		"""
 		self.crownstoneId = crownstoneId
-		self.state = state
+		self.state = int(min(1, max(0, state)) * 100) # map to [0 .. 100]
 		self.timeout = timeout
-		self.intent = intent
+		self.intent = intent.value
 
 	def getPacket(self):
 		packet = []
@@ -98,7 +105,7 @@ class MeshMultiSwitchPacket:
 	packets = []
 
 	def __init__(self, packetType, packets):
-		self.type = packetType
+		self.type = packetType.value
 		self.packets = packets
 
 	def getPacket(self):
