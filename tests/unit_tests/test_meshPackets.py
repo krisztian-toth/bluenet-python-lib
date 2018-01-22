@@ -22,7 +22,7 @@ class TestMeshPackets(unittest.TestCase):
 			skaPackets.append(StoneKeepAlivePacket(i+1, True, 0.2))
 
 
-		self.assertEqual(MeshKeepAlivePacket(MeshKeepAliveTypes.SHARED_TIMEOUT, 60, skaPackets).getPacket(), [0, 60, 0, 3, 1, 20, 2, 20, 3, 20])
+		self.assertEqual(MeshKeepAlivePacket(MeshKeepAliveTypes.SHARED_TIMEOUT, 60, skaPackets).getPacket(), [1, 60, 0, 3, 1, 20, 2, 20, 3, 20])
 
 
 	def test_MeshCommandPacket(self):

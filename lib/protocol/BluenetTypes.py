@@ -130,7 +130,7 @@ class IntentType(Enum):
 
 
 class MeshKeepAliveTypes(Enum):
-    SHARED_TIMEOUT = 0
+    SHARED_TIMEOUT = 1
 
 
 class MeshMultiSwitchType(Enum):

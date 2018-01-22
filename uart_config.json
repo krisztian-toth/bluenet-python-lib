@@ -1,0 +1,6 @@
+{
+  "serial": {
+    "baudrate": 38400,
+    "port": "/dev/tty.usbmodemFA1331"
+  }
+}
