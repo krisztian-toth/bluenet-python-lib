@@ -4,6 +4,7 @@ from enum import Enum
 
 
 class SystemTopics(Enum):
+	stateUpdate     = "stateUpdate"    # used to propagate verified state messages through the system
 	uartNewPackage 	= 'uartNewPackage' # used for Ready Packets. This comes from the UartReadBuffer and data is a UartPacket.
 	uartWriteData 	= 'uartWriteData'  # used to write to the UART. Data is array of bytes.
 	cleanUp 		= 'cleanUp'		   # used to propagate CTRL+C throughout the modules.
@@ -25,7 +26,6 @@ class EventBus:
 		pass
 
 	def on(self, topic, callback):
-		print("subscribing", topic)
 		if topic not in self.topics:
 			self.topics[topic] = {}
 
@@ -49,7 +49,7 @@ class EventBus:
 
 			self.subscriberIds.pop(subscriptionId)
 		else:
-			print("Subscription ID cannot be found.")
+			print("ERROR: EventBus: Subscription ID ", subscriptionId, " cannot be found.")
 
 
 eventBus = EventBus()

@@ -1,5 +1,6 @@
 from lib.core.uart.UartBridge import UartBridge
 from lib.core.uart.UartWrapper import UartWrapper
+from lib.dataFlowManagers.StateUpdateManager import StateUpdateManager
 from lib.protocol.BlePackets import ControlPacket
 from lib.protocol.BluenetTypes import IntentType, MeshMultiSwitchType, ControlType
 from lib.protocol.MeshPackets import StoneMultiSwitchPacket, MeshMultiSwitchPacket
@@ -9,14 +10,17 @@ import signal # used to catch control C
 
 class Bluenet:
 	uartBridge = None
+	stateUpdateManager = None
+	isRunning = True
 
 	def __init__(self):
-		pass
+		self.stateUpdateManager = StateUpdateManager()
 
-
-	def initializeUsbBridge(self, port):
+	def initializeUsbBridge(self, port, bindControlC = True):
 		# listen for CTRL+C and handle the exit cleanly.
-		signal.signal(signal.SIGINT, self.stopAll)
+		if bindControlC:
+			signal.signal(signal.SIGINT, self.stopAll)
+
 		baudrate = 38400
 
 		# init the uart bridge
@@ -26,7 +30,11 @@ class Bluenet:
 
 	def stopAll(self, source, frame):
 		print("Quitting Bluenet...")
+		self.stop()
+
+	def stop(self):
 		self.uartBridge.stop()
+		self.isRunning = False
 
 
 	def switchCrownstone(self, crownstoneId, value):
