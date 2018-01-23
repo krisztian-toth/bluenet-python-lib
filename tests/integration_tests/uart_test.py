@@ -6,7 +6,7 @@ from random import randint
 from lib.core.uart.UartBridge import UartBridge
 from lib.util.UartUtil import UartUtil
 from lib.util.Conversion import Conversion
-from lib.util.EventBus import Topics, eventBus
+from lib.util.EventBus import SystemTopics, eventBus
 
 
 class UartTest:
@@ -23,7 +23,7 @@ class UartTest:
 
 	# make sure everything is killed and cleaned up on abort.
 	def stopAll(self, signal, frame):
-		eventBus.emit(Topics.cleanUp)
+		eventBus.emit(SystemTopics.cleanUp)
 		self.runTest = False
 		exit(0)
 
@@ -78,4 +78,4 @@ class UartTest:
 		while self.runTest:
 			inputStr = input("input plz")
 			byteArray = self.genMsg()
-			eventBus.emit(Topics.uartWriteData, byteArray)
+			eventBus.emit(SystemTopics.uartWriteData, byteArray)

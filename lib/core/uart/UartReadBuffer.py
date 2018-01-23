@@ -1,78 +1,81 @@
-from lib.util.Conversion import Conversion
+import binascii
 
-ESCAPE_TOKEN = 0x5c
-BIT_FLIP_MASK = 0x40
-START_TOKEN = 0x7e
+from lib.containerClasses.UartPacket import UartPacket, OPCODE_SIZE, PREFIX_SIZE, WRAPPER_SIZE, CRC_SIZE
+from lib.core.uart.UartWrapper import BIT_FLIP_MASK, ESCAPE_TOKEN, START_TOKEN
+from lib.util.Conversion import Conversion
+from lib.util.EventBus import eventBus, SystemTopics
+from lib.util.UartUtil import UartUtil
 
 class UartReadBuffer:
-
 	buffer = []
 	escapingNextToken = False
 	active = False
 
-	opCode = 0
 	length = 0
-
-
 
 	def __init__(self):
 		pass
 
-	def add(self, rawByte):
-		print("working with", rawByte)
-
-		byte = rawByte
-		# first get the escaping out of the way to avoid any double checks later on
-		if self.escapingNextToken:
-			byte ^= BIT_FLIP_MASK
-			print("ESCAPING BYTE")
-			self.escapingNextToken = False
+	def add(self, rawByteArray):
+		byte = rawByteArray[0]
 
 		# if we have a start token and we are not active
 		if byte is START_TOKEN:
 			if self.active:
-				print("RESET: MULTIPLE START TOKENS")
+				print("WARN: MULTIPLE START TOKENS")
 				self.reset()
 				return
 			else:
-				print("ACTIVATING")
 				self.active = True
 				return
 
 
 		if not self.active:
-			print("NOT ACTIVE")
 			return
 
 		if byte is ESCAPE_TOKEN:
-			print("GOT ESCAPE TOKEN")
+			if self.escapingNextToken:
+				print("WARN: DOUBLE ESCAPE")
+				self.reset()
+				return
+
 			self.escapingNextToken = True
 			return
 
+		# first get the escaping out of the way to avoid any double checks later on
+		if self.escapingNextToken:
+			byte ^= BIT_FLIP_MASK
+			self.escapingNextToken = False
 
 
 		self.buffer.append(byte)
 		bufferSize = len(self.buffer)
 
-		if bufferSize == 2:
-			self.opCode = Conversion.uint8_array_to_uint16([self.buffer[0], self.buffer[1]])
-			print("GOT OPCODE", self.opCode)
-		elif bufferSize == 4:
-			self.length = Conversion.uint8_array_to_uint16([self.buffer[2], self.buffer[3]])
-			print("GOT length", self.length)
-		elif bufferSize == (self.length + 2):
-			self.process()
-			return
-		elif bufferSize > self.length + 2:
-			print("OVERFLOW")
-			self.reset()
+		if bufferSize == PREFIX_SIZE:
+			self.length = Conversion.uint8_array_to_uint16(self.buffer[OPCODE_SIZE:PREFIX_SIZE])
 
+		if bufferSize > PREFIX_SIZE:
+			if bufferSize == (self.length + WRAPPER_SIZE):
+				self.process()
+				return
+			elif bufferSize > self.length + WRAPPER_SIZE:
+				print("WARN: OVERFLOW")
+				self.reset()
 
 
 	def process(self):
-		# TODO: handle processed package
-		print("GOT PAYLOAD", self.buffer)
+		payload = self.buffer[0:len(self.buffer)-CRC_SIZE]
+		calculatedCrc = UartUtil.crc16_ccitt(payload)
+		sourceCrc = Conversion.uint8_array_to_uint16(self.buffer[len(self.buffer) - CRC_SIZE : len(self.buffer)])
 
+		if calculatedCrc != sourceCrc:
+			print("WARN: Failed CRC")
+			self.reset()
+			return
+
+		packet = UartPacket(self.buffer)
+
+		eventBus.emit(SystemTopics.uartNewPackage, packet)
 		self.reset()
 
 

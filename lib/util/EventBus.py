@@ -3,10 +3,18 @@ from enum import Enum
 
 
 
+class SystemTopics(Enum):
+	uartNewPackage 	= 'uartNewPackage' # used for Ready Packets. This comes from the UartReadBuffer and data is a UartPacket.
+	uartWriteData 	= 'uartWriteData'  # used to write to the UART. Data is array of bytes.
+	cleanUp 		= 'cleanUp'		   # used to propagate CTRL+C throughout the modules.
+
+
 class Topics(Enum):
-	uartReadData 	= 'uartReadLine'
-	uartWriteData 	= 'uartWriteData'
-	cleanUp 		= 'cleanUp'
+	powerUsageUpdate  = "powerUsageReal" # tuple of (crownstoneId, powerUsage)
+	switchStateUpdate = "switchState"	 # tuple of (crownstoneId, switchState)
+
+
+
 
 
 class EventBus:

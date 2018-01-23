@@ -24,14 +24,13 @@ class UartUtil:
 
 	# Copied implementation of nordic
 	@staticmethod
-	def crc16_ccitt(arr8, length):
+	def crc16_ccitt(arr8):
 		"""
 		:param arr8:
-		:param length:
 		:return:
 		"""
 		crc = 0xFFFF
-		for i in range(0, length):
+		for i in range(0, len(arr8)):
 			crc = (crc >> 8 & 0xFF) | (crc << 8 & 0xFFFF)
 			crc ^= arr8[i]
 			crc ^= (crc & 0xFF) >> 4

@@ -106,6 +106,12 @@ class Conversion:
 		return (arr8[3] << 24) + (arr8[2] << 16) + (arr8[1] << 8) + arr8[0]
 
 	@staticmethod
+	def uint8_array_to_int32(arr8):
+		""" Convert an array of 4 bytes to a uint32 """
+		return Conversion.uint32_to_int32(Conversion.uint8_array_to_uint32(arr8))
+
+
+	@staticmethod
 	def uint32_to_uint8_array(value):
 		""" Convert a number into an array of 4 bytes. """
 		return [

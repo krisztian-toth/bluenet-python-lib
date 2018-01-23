@@ -17,6 +17,10 @@ Make sure pip here is for Python 3. If you're not sure, you can try running:
 pip3 install -r requirements.txt
 ```
 
+# API
+
+This lib is required to interpret the serial data from the Crownstone Hub Dongle.
+
 # License
 
 MIT

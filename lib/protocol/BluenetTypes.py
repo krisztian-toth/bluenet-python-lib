@@ -26,8 +26,8 @@ class ControlType(Enum):
     NO_OPERATION           = 21
     INCREASE_TX            = 22
     RESET_ERRORS           = 23
-    MESH_keepAliveRepeat   = 24
-    MESH_multiSwitch       = 25
+    MESH_KEEP_ALIVE_REPEAT = 24
+    MESH_MULTI_SWITCH      = 25
     SCHEDULE_REMOVE        = 26
     MESH_KEEP_ALIVE_STATE  = 27
     MESH_COMMAND           = 28

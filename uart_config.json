@@ -1,6 +1,4 @@
 {
-  "serial": {
-    "baudrate": 38400,
-    "port": "/dev/tty.usbmodemFA1331"
-  }
+  "baudrate": 38400,
+  "port": "/dev/tty.SLAB_USBtoUART"
 }
