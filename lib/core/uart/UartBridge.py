@@ -16,34 +16,26 @@ class UartBridge (threading.Thread):
 
 	running = True
 
-	def __init__(self):
-		threading.Thread.__init__(self)
-		self.readConfig()
+	def __init__(self, port, baudrate):
+		self.baudrate = baudrate
+		self.port = port
+
 		self.startSerial()
+		threading.Thread.__init__(self)
 
 
 	def run(self):
-		print("RUNNING UartBridge THREAD")
-		self.parser = UartParser()
-
 		eventBus.on(SystemTopics.uartWriteData, self.writeToUart)
 
+		self.parser = UartParser()
 		self.startReading()
 
 	def stop(self):
 		self.running = False
 
 
-	def readConfig(self):
-		with open('uart_config.json', 'r') as f:
-			config = json.load(f)
-
-		self.baudrate = config['baudrate']
-		self.port = config['port']
-
-
 	def startSerial(self):
-		print("initializing serial with ", self.port, ' and ', self.baudrate)
+		print("initializing serial on port ", self.port, ' with baudrate ', self.baudrate)
 		self.serialController = serial.Serial()
 		self.serialController.port = self.port
 		self.serialController.baudrate = int(self.baudrate)
@@ -52,7 +44,6 @@ class UartBridge (threading.Thread):
 
 
 	def startReading(self):
-		print("Starting reading the uart")
 		readBuffer = UartReadBuffer()
 		while self.running:
 			byte  = self.serialController.read()
@@ -64,5 +55,4 @@ class UartBridge (threading.Thread):
 		self.serialController.close()
 
 	def writeToUart(self, data):
-		# print("Writing", data)
 		self.serialController.write(data)

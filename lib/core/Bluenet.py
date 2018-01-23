@@ -14,12 +14,13 @@ class Bluenet:
 		pass
 
 
-	def initializeUsbBridge(self):
-		self.uartBridge = UartBridge()
-		# start listener for SIGINT kill command
+	def initializeUsbBridge(self, port):
+		# listen for CTRL+C and handle the exit cleanly.
 		signal.signal(signal.SIGINT, self.stopAll)
+		baudrate = 38400
 
-		# start processes
+		# init the uart bridge
+		self.uartBridge = UartBridge(port, baudrate)
 		self.uartBridge.start()
 
 
@@ -54,8 +55,10 @@ class Bluenet:
 	def dimCrownstone(self, crownstoneId, value):
 		Bluenet.switchCrownstone(crownstoneId, value)
 
+
 	def getEventBus(self):
 		return eventBus
 
 	def getTopics(self):
 		return Topics
+

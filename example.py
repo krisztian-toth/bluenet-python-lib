@@ -1,27 +1,35 @@
 import time
-
 from lib.core.Bluenet import Bluenet
 
 def showPowerUsage(data):
 	print("PowerUsage for CrownstoneId:", data[0], " is", data[1], "W")
 
-def showSwitchState(data):
-	print("SwitchState for CrownstoneId:", data[0], " is", data[1])
-
 # create new instance of Bluenet
 bluenet = Bluenet()
 
 # start up the USB bridge
-bluenet.initializeUsbBridge()
+bluenet.initializeUsbBridge("/dev/tty.SLAB_USBtoUART")
 
 #set up event listeners
 events = bluenet.getEventBus()
 topics = bluenet.getTopics()
 events.on(topics.powerUsageUpdate,  showPowerUsage )
-events.on(topics.switchStateUpdate, showSwitchState)
 
 time.sleep(2)
-bluenet.switchCrownstone(232, 1)
 
-time.sleep(4)
-bluenet.switchCrownstone(232, 0)
+targetCrownstoneId = 235
+
+print("Switching 235 on")
+bluenet.switchCrownstone(targetCrownstoneId, 1)
+
+time.sleep(2)
+print("Switching 235 off")
+bluenet.switchCrownstone(targetCrownstoneId, 0)
+
+time.sleep(2)
+print("Switching 235 on")
+bluenet.switchCrownstone(targetCrownstoneId, 1)
+
+time.sleep(2)
+print("Switching 235 off")
+bluenet.switchCrownstone(targetCrownstoneId, 0)
