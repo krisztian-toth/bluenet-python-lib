@@ -12,9 +12,9 @@ bluenet = Bluenet()
 bluenet.initializeUsbBridge("/dev/tty.SLAB_USBtoUART")
 
 #set up event listeners
-events = bluenet.getEventBus()
-topics = bluenet.getTopics()
-events.subscribe(topics.powerUsageUpdate, showPowerUsage)
+eventBus = bluenet.getEventBus()
+topics   = bluenet.getTopics()
+eventBus.subscribe(topics.powerUsageUpdate, showPowerUsage)
 
 # this is the id of the Crownstone we will be switching
 targetCrownstoneId = 235
@@ -22,12 +22,14 @@ targetCrownstoneId = 235
 # switch this Crownstone 100 times on and off.
 switchState = True
 for i in range(0,100):
-	if bluenet.isRunning:
-		time.sleep(2)
-		bluenet.switchCrownstone(targetCrownstoneId, on = switchState)
-		if switchState:
-			print("Switching Crownstone", switchState, "on  (iteration: ", i,")")
-		else:
-			print("Switching Crownstone", switchState, "off (iteration: ", i,")")
+	if not bluenet.isRunning:
+		break
 
-		switchState = not switchState
+	bluenet.switchCrownstone(targetCrownstoneId, on = switchState)
+	if switchState:
+		print("Switching Crownstone on  (iteration: ", i,")")
+	else:
+		print("Switching Crownstone off (iteration: ", i,")")
+
+	switchState = not switchState
+	time.sleep(2)
