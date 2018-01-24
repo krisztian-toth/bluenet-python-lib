@@ -1,35 +1,35 @@
+"""An example that switches a Crownstone, and prints the power usage of all Crownstones."""
+
 import time
 
 from BluenetLib import Bluenet
 
 def showPowerUsage(data):
-	print("PowerUsage for CrownstoneId:", data["crownstoneId"], " is", data["powerUsage"], "W")
+	print("PowerUsage for Crownstone ID", data["crownstoneId"], "is", data["powerUsage"], "W")
 
-# create new instance of Bluenet
+# Create new instance of Bluenet
 bluenet = Bluenet()
 
-# start up the USB bridge
-bluenet.initializeUsbBridge("/dev/tty.SLAB_USBtoUART")
+# Start up the USB bridge
+bluenet.initializeUsbBridge("/dev/ttyUSB0")
 
-#set up event listeners
+# Set up event listeners
 eventBus = bluenet.getEventBus()
 topics   = bluenet.getTopics()
 eventBus.subscribe(topics.powerUsageUpdate, showPowerUsage)
 
-# this is the id of the Crownstone we will be switching
-targetCrownstoneId = 235
+# This is the id of the Crownstone we will be switching
+targetCrownstoneId = 1
 
-# switch this Crownstone 100 times on and off.
+# Switch this Crownstone 100 times on and off.
 switchState = True
-for i in range(0,100):
-	if not bluenet.isRunning:
-		break
+while (bluenet.isRunning):
 
-	bluenet.switchCrownstone(targetCrownstoneId, on = switchState)
 	if switchState:
 		print("Switching Crownstone on  (iteration: ", i,")")
 	else:
 		print("Switching Crownstone off (iteration: ", i,")")
+	bluenet.switchCrownstone(targetCrownstoneId, on = switchState)
 
 	switchState = not switchState
 	time.sleep(2)
