@@ -86,24 +86,11 @@ You can use the event bus to subscribe to topics.
  
 The following Topics are currently available:
 
-##### powerUsageUpdate
-> Every time a new data point is recorded, this event will notify the updated powerUsage value. 
->
-> The data that is emitted is a dictionary: ```{ "crownstoneId": int, "powerUsage" :  float }```.
-
-##### switchStateUpdate
-> Every time a new data point is recorded, this event will notify the updated powerUsage value. 
->
-> The data that is emitted is a dictionary: ```{ "crownstoneId": int, "switchState" :  int [0 .. 128] }```.
->
-> The switchState value is [explained here.](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#switch_state_packet)
-
-
-##### newCrownstoneFound
-> When the lib hears from a Crownstone that it has not heard from since the lib was started, this event is emitted.
-> 
-> The data that is emitted is a single int which represents the Crownstone ID of the new Crownstone.
-
+| event enum title | description |
+| --------------- | ---------- |
+| *newCrownstoneFound* | When the lib hears from a Crownstone that it has not heard from since the lib was started, this event is emitted. The data that is emitted is a single int which represents the Crownstone ID of the new Crownstone. |
+| *powerUsageUpdate* | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: ```{ "crownstoneId": int, "powerUsage" :  float }```. |
+| *switchStateUpdate* | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: ```{ "crownstoneId": int, "switchState" :  int [0 .. 128] }```. The switchState value is [explained here.](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#switch_state_packet). |
 
 ## EventBus API
 
