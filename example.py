@@ -23,7 +23,7 @@ eventBus.subscribe(topics.powerUsageUpdate, showPowerUsage)
 # This is the id of the Crownstone we will be switching
 targetCrownstoneId = 1
 
-# Switch this Crownstone 100 times on and off.
+# Switch this Crownstone on and off.
 switchState = True
 while (bluenet.isRunning):
 
