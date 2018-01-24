@@ -6,6 +6,7 @@ import time
 
 from BluenetLib import Bluenet
 
+# Function that's called when the power usage is updated.
 def showPowerUsage(data):
 	print("PowerUsage for Crownstone ID", data["crownstoneId"], "is", data["powerUsage"], "W")
 

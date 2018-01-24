@@ -11,13 +11,11 @@ The Bluetooth implementation will be added soon.
 This module is written in Python 3 and needs Python 3.5 or higher. The reason for this is that most of the asynchronous processes use the embedded asyncio core library.
 
 Pip is used for package management. You can install all dependencies by running:
-
 ```
 pip install -r requirements.txt
 ```
 
 Make sure pip here is for Python 3. If you're not sure, you can try running:
-
 ```
 pip3 install -r requirements.txt
 ```
@@ -49,20 +47,32 @@ An example is provided in the root of this repository.
 
 - First use the [phone app](https://crownstone.rocks/app) to setup your Crownstones and the Crownstone USB.
 - Make sure you update the Crownstones' firmware to at least 2.0.0.
-- Find out what port to use (e.g. `COM1`, `/dev/ttyUSB0`, or `/dev/tty.SLAB_USBtoUART`) and fill this in the example.py.
-- Find out the ID of the Crownstone you want to switch: TODO
+- Find out what port to use (e.g. `COM1`, `/dev/ttyUSB0`, or `/dev/tty.SLAB_USBtoUART`) and fill this in at `discoveryExample.py` and `example.py`.
 
 
-## Running
+## Find the IDs of your Crownstones
 
-Run the example with python 3.
+Firstly run the example script that simply lists the IDs of the Crownstones:
+```
+$ python discoveryExample.py
+```
 
+Some systems may require calling python3 specifically:
+```
+$ python3 discoveryExample.py
+```
+
+Once some IDs are printed, use one of them for the next example.
+
+
+## Switch a Crownstone, and show power usage.
+
+After filling in the port to use, and the Crownstone ID to switch, run the example with python 3:
 ```
 $ python example.py
 ```
 
 Some systems may require calling python3 specifically:
-
 ```
 $ python3 example.py
 ```
@@ -76,6 +86,7 @@ import time
 
 from BluenetLib import Bluenet
 
+# Function that's called when the power usage is updated.
 def showPowerUsage(data):
 	print("PowerUsage for Crownstone ID", data["crownstoneId"], "is", data["powerUsage"], "W")
 
