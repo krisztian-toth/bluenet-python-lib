@@ -1,7 +1,7 @@
 # bluenet-python-lib
 Official Python lib for Crownstone. Currently this requires a "Crownstone Usb Dongle (working title)". The Bluetooth implementation will be added soon.
 
-# install guide
+# Install guide
 
 This module is written in Python 3 and needs Python 3.5 or higher. The reason for this is that most of the asynchronous processes use the embedded asyncio core library.
 
@@ -17,13 +17,23 @@ Make sure pip here is for Python 3. If you're not sure, you can try running:
 pip3 install -r requirements.txt
 ```
 
-## Communicating with the USB device
+## Requirements for the USB stick
 
-OS X: requires installation of the SiliconLabs driver: [https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers)
+### OS X
+OS X requires installation of the SiliconLabs driver: [https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers)
 
-Ubuntu: TODO
+### Ubuntu
+In order to use serial without root access, you have to add yourself to the `dialout` group:
+```
+$ sudo adduser $USER dialout
+```
 
-Raspbian: TODO
+### Raspbian
+In order to use serial without root access, you have to add yourself to the `dialout` group:
+```
+$ sudo adduser $USER dialout
+```
+
 
 
 # Example
