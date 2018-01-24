@@ -13,7 +13,7 @@ bluenet = Bluenet()
 bluenet.initializeUsbBridge("/dev/ttyUSB0")
 
 # List the ids that have been seen
-while (bluenet.isRunning):
+while bluenet.isRunning:
 	time.sleep(2)
 	ids = bluenet.getCrownstoneIds()
 	print("Crownstone IDs:", ids)
