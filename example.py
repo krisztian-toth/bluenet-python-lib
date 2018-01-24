@@ -26,7 +26,9 @@ targetCrownstoneId = 1
 
 # Switch this Crownstone on and off.
 switchState = True
-while (bluenet.isRunning):
+for i in range(0,100):
+	if not bluenet.isRunning:
+		break
 
 	if switchState:
 		print("Switching Crownstone on  (iteration: ", i,")")

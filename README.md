@@ -26,17 +26,20 @@ pip3 install -r requirements.txt
 OS X requires installation of the SiliconLabs driver: [https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers)
 
 ### Ubuntu
-In order to use serial without root access, you have to add yourself to the `dialout` group:
+In order to use serial without root access, you should be in the `dialout` group.
+
+You can check if you're in the group:
+```
+$ groups
+```
+
+To add yourself:
 ```
 $ sudo adduser $USER dialout
 ```
 
 ### Raspbian
-In order to use serial without root access, you have to add yourself to the `dialout` group:
-```
-$ sudo adduser $USER dialout
-```
-
+Similar to Ubuntu.
 
 
 # Example
@@ -82,6 +85,10 @@ $ python3 example.py
 The example is shown below to get an idea of how everything works:
 
 ```python 
+#!/usr/bin/env python
+
+"""An example that switches a Crownstone, and prints the power usage of all Crownstones."""
+
 import time
 
 from BluenetLib import Bluenet
@@ -106,7 +113,9 @@ targetCrownstoneId = 1
 
 # Switch this Crownstone on and off.
 switchState = True
-while (bluenet.isRunning):
+for i in range(0,100):
+	if not bluenet.isRunning:
+		break
 
 	if switchState:
 		print("Switching Crownstone on  (iteration: ", i,")")
