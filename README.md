@@ -250,7 +250,7 @@ myEventBus.unsubscribe(subscriptionId)
 > Stop any running processes.
 
 #### `isRunning()`
-> Returns Boolean signifying if the BluenetLib is running. This is relevant for the UART listener which communicates with the "Crownstone Hub Dongle (working title)".
+> Returns a Boolean indicating if the BluenetLib is running. This is relevant for the UART listener which communicates with the Crownstone USB.
 
 
 
