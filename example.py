@@ -14,7 +14,7 @@ bluenet.initializeUsbBridge("/dev/tty.SLAB_USBtoUART")
 #set up event listeners
 events = bluenet.getEventBus()
 topics = bluenet.getTopics()
-events.on(topics.powerUsageUpdate,  showPowerUsage)
+events.subscribe(topics.powerUsageUpdate, showPowerUsage)
 
 # this is the id of the Crownstone we will be switching
 targetCrownstoneId = 235

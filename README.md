@@ -1,5 +1,5 @@
 # bluenet-python-lib
-Official Python lib for Crownstone.
+Official Python lib for Crownstone. Currently this requires a "Crownstone Usb Dongle (working title)". The Bluetooth implementation will be added soon.
 
 # install guide
 
@@ -24,6 +24,62 @@ OS X: requires installation of the SiliconLabs driver: [https://www.silabs.com/p
 Ubuntu: TODO
 
 Raspbian: TODO
+
+
+# Example
+
+An example is provided in the root of this repository. It can be run with python 3.
+
+```
+python example.py
+```
+
+Some systems may require calling python3 specifically:
+
+```
+python3 example.py
+```
+
+The example is shown below to get an idea of how everything works:
+
+
+```python 
+import time
+
+from BluenetLib import Bluenet
+
+def showPowerUsage(data):
+	print("PowerUsage for CrownstoneId:", data["crownstoneId"], " is", data["powerUsage"], "W")
+
+# create new instance of Bluenet
+bluenet = Bluenet()
+
+# start up the USB bridge
+bluenet.initializeUsbBridge("/dev/tty.SLAB_USBtoUART")
+
+#set up event listeners
+events = bluenet.getEventBus()
+topics = bluenet.getTopics()
+events.subscribe(topics.powerUsageUpdate,  showPowerUsage)
+
+# this is the id of the Crownstone we will be switching
+targetCrownstoneId = 235
+
+# switch this Crownstone 100 times on and off.
+switchState = True
+for i in range(0,100):
+	if bluenet.isRunning:
+		time.sleep(2)
+		bluenet.switchCrownstone(targetCrownstoneId, on = switchState)
+		if switchState:
+			print("Switching Crownstone", switchState, "on  (iteration: ", i,")")
+		else:
+			print("Switching Crownstone", switchState, "off (iteration: ", i,")")
+
+		switchState = not switchState
+```
+
+
 
 # Documentation
 
@@ -86,19 +142,19 @@ You can use the event bus to subscribe to topics.
  
 The following Topics are currently available:
 
-| event enum title | description |
-| --------------- | ---------- |
+| Event Enum Name | Description |
+| :--------------- | :--------- |
 | *newCrownstoneFound* | When the lib hears from a Crownstone that it has not heard from since the lib was started, this event is emitted. The data that is emitted is a single int which represents the Crownstone ID of the new Crownstone. |
 | *powerUsageUpdate* | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: ```{ "crownstoneId": int, "powerUsage" :  float }```. |
-| *switchStateUpdate* | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: ```{ "crownstoneId": int, "switchState" :  int [0 .. 128] }```. The switchState value is [explained here.](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#switch_state_packet). |
+| *switchStateUpdate* | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: ```{ "crownstoneId": int, "switchState" :  int [0 .. 128] }```. The switchState value is [explained here](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#switch_state_packet). |
 
 ## EventBus API
 
-#### on(TopicName: enum, functionPointer)
-> Returns a subscription ID that can be used to unsubscribe again with the off method
+#### subscribe(TopicName: enum, functionPointer)
+> Returns a subscription ID that can be used to unsubscribe again with the unsubscribe method
 
-#### off(subscriptionId: number)
-> This will stop the invocation of the function you provided in the on method, unsubscribing you from the event.
+#### unsubscribe(subscriptionId: number)
+> This will stop the invocation of the function you provided in the subscribe method, unsubscribing you from the event.
 
 These can be used like this:
 
@@ -109,10 +165,10 @@ def dataPrinter(data):
     print(data)
     
 # subscribe to the powerUsageUpdate event
-subscriptionId = myEventBus.on(myTopics.powerUsageUpdate, dataPrinter)
+subscriptionId = myEventBus.subscribe(myTopics.powerUsageUpdate, dataPrinter)
  
 # unsubscribe again
-myEventBus.off(subscriptionId)
+myEventBus.unsubscribe(subscriptionId)
 
 
 ```
@@ -122,7 +178,8 @@ myEventBus.off(subscriptionId)
 #### initializeUsbBridge(port: string, catchSIGINT = True)
 > Sets up the listeners to the "Crownstone Hub Dongle (working title)". 
 > 
-> The ```port``` is the port used by the serial communication. For Windows devices this is commonly ```COM1```, for Linux based system ```/dev/ttyUSB0``` and for OSX ```/dev/tty.SLAB_USBtoUART```. Addresses and number can vary from system to system.
+> The ```port``` is the port used by the serial communication. 
+> For Windows devices this is commonly ```COM1```, for Linux based system ```/dev/ttyUSB0``` and for OSX ```/dev/tty.SLAB_USBtoUART```. Addresses and number can vary from system to system.
 > The ```catchSIGINT``` argument (default: True) is used to ensure that (if True) the close command of a program (SIGINT), commonly triggered by Control+C, will cleanly close all UART connections before closing. If you want to do this manually, use the ```stop``` method.
 
 #### switchCrownstone(crownstoneId: int, on: Boolean)
@@ -166,59 +223,6 @@ myEventBus.off(subscriptionId)
 > Returns Boolean signifying if the BluenetLib is running. This is relevant for the UART listener which communicates with the "Crownstone Hub Dongle (working title)".
 
 
-
-# Example
-
-An example is provided in the root of this repository. It can be run with python 3.
-
-```
-python example.py
-```
-
-Some systems may require calling python3 specifically:
-
-```
-python3 example.py
-```
-
-The example is shown below to get an idea of how everything works:
-
-
-```python 
-import time
-
-from BluenetLib import Bluenet
-
-def showPowerUsage(data):
-	print("PowerUsage for CrownstoneId:", data["crownstoneId"], " is", data["powerUsage"], "W")
-
-# create new instance of Bluenet
-bluenet = Bluenet()
-
-# start up the USB bridge
-bluenet.initializeUsbBridge("/dev/tty.SLAB_USBtoUART")
-
-#set up event listeners
-events = bluenet.getEventBus()
-topics = bluenet.getTopics()
-events.on(topics.powerUsageUpdate,  showPowerUsage)
-
-# this is the id of the Crownstone we will be switching
-targetCrownstoneId = 235
-
-# switch this Crownstone 100 times on and off.
-switchState = True
-for i in range(0,100):
-	if bluenet.isRunning:
-		time.sleep(2)
-		bluenet.switchCrownstone(targetCrownstoneId, on = switchState)
-		if switchState:
-			print("Switching Crownstone", switchState, "on  (iteration: ", i,")")
-		else:
-			print("Switching Crownstone", switchState, "off (iteration: ", i,")")
-
-		switchState = not switchState
-```
 
 
 

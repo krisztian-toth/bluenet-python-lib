@@ -26,13 +26,13 @@ class UartBridge (threading.Thread):
 
 
 	def run(self):
-		self.eventId = eventBus.on(SystemTopics.uartWriteData, self.writeToUart)
+		self.eventId = eventBus.subscribe(SystemTopics.uartWriteData, self.writeToUart)
 		self.parser = UartParser()
 		self.startReading()
 
 	def stop(self):
 		self.running = False
-		eventBus.off(self.eventId);
+		eventBus.unsubscribe(self.eventId);
 
 
 	def startSerial(self):

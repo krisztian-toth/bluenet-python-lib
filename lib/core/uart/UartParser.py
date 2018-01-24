@@ -8,7 +8,7 @@ from lib.util.EventBus import eventBus, SystemTopics
 
 class UartParser:
 	def __init__(self):
-		eventBus.on(SystemTopics.uartNewPackage, self.parse)
+		eventBus.subscribe(SystemTopics.uartNewPackage, self.parse)
 
 	def parse(self, dataPacket):
 

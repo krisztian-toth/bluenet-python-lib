@@ -24,7 +24,7 @@ class EventBus:
 	def __init__(self):
 		pass
 
-	def on(self, topic, callback):
+	def subscribe(self, topic, callback):
 		if topic not in self.topics:
 			self.topics[topic] = {}
 
@@ -40,7 +40,7 @@ class EventBus:
 				self.topics[topic][subscriptionId](data)
 
 
-	def off(self, subscriptionId):
+	def unsubscribe(self, subscriptionId):
 		if subscriptionId in self.subscriberIds:
 			topic = self.subscriberIds[subscriptionId]
 			if topic in self.topics:

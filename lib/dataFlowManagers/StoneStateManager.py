@@ -5,7 +5,7 @@ class StoneStateManager:
 	stones = {}
 
 	def __init__(self):
-		eventBus.on(SystemTopics.stateUpdate, self.handleStateUpdate)
+		eventBus.subscribe(SystemTopics.stateUpdate, self.handleStateUpdate)
 
 	def handleStateUpdate(self,data):
 		stoneId = data[0]
