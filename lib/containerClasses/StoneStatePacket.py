@@ -36,7 +36,7 @@ class StoneStatePacket:
 
 	def parseState(self, meshStateItemState):
 		self.crownstoneId 		= meshStateItemState[0]
-		self.switchState 		= meshStateItemState[1]
+		self.switchState    	= meshStateItemState[1]
 		self.flagBitMask 		= meshStateItemState[2]
 		self.temperature 		= meshStateItemState[3]
 		self.powerFactor 		= float(meshStateItemState[4]) / 127
@@ -58,3 +58,18 @@ class StoneStatePacket:
 
 		# tell the system this advertisement.
 		eventBus.emit(SystemTopics.stateUpdate, (self.crownstoneId, self))
+
+	def getDict(self):
+		dict = {}
+
+		dict["crownstoneId"] 	   = self.crownstoneId
+		dict["switchState"] 	   = self.switchState
+		dict["flagBitMask"] 	   = self.flagBitMask
+		dict["temperature"] 	   = self.temperature
+		dict["powerFactor"] 	   = self.powerFactor
+		dict["powerUsageReal"] 	   = self.powerUsageReal
+		dict["powerUsageApparent"] = self.powerUsageApparent
+		dict["energyUsed"] 		   = self.energyUsed
+		dict["timestamp"] 		   = self.timestamp
+
+		return dict

@@ -11,10 +11,9 @@ class SystemTopics(Enum):
 
 
 class Topics(Enum):
-	powerUsageUpdate  = "powerUsageReal" # tuple of (crownstoneId, powerUsage)
-	switchStateUpdate = "switchState"	 # tuple of (crownstoneId, switchState)
-
-
+	powerUsageUpdate   = "powerUsageReal" 		 # data is tuple of (crownstoneId: number, powerUsage  : number)
+	switchStateUpdate  = "switchState"			 # data is tuple of (crownstoneId: number, switchState : number)
+	newCrownstoneFound = "newCrownstoneFound"	 # data is single value: CrownstoneId : number
 
 
 

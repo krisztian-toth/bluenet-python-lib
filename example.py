@@ -1,5 +1,6 @@
 import time
-from lib.core.Bluenet import Bluenet
+
+from BluenetLib import Bluenet
 
 def showPowerUsage(data):
 	print("PowerUsage for CrownstoneId:", data["crownstoneId"], " is", data["powerUsage"], "W")
@@ -19,14 +20,14 @@ events.on(topics.powerUsageUpdate,  showPowerUsage)
 targetCrownstoneId = 235
 
 # switch this Crownstone 100 times on and off.
-switchState = 1
+switchState = True
 for i in range(0,100):
 	if bluenet.isRunning:
 		time.sleep(2)
-		bluenet.switchCrownstone(targetCrownstoneId, switchState)
-		if switchState is 1:
-			print("Switching Crownstone", switchState, "on  (", i,")")
-			switchState = 0
+		bluenet.switchCrownstone(targetCrownstoneId, on = switchState)
+		if switchState:
+			print("Switching Crownstone", switchState, "on  (iteration: ", i,")")
 		else:
-			print("Switching Crownstone", switchState, "off (", i,")")
-			switchState = 1
+			print("Switching Crownstone", switchState, "off (iteration: ", i,")")
+
+		switchState = not switchState
