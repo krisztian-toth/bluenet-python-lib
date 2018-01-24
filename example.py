@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """An example that switches a Crownstone, and prints the power usage of all Crownstones."""
 
 import time

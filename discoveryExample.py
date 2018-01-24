@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """An example that prints all known Crownstone IDs."""
 
 import time
