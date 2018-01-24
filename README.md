@@ -1,5 +1,6 @@
 # bluenet-python-lib
-Official Python lib for Crownstone. Currently this requires a "Crownstone Usb Dongle (working title)". The Bluetooth implementation will be added soon.
+Official Python lib for Crownstone. Currently this requires a "Crownstone Unified System Bridge", or Crownstone USB. The Bluetooth implementation will be added soon.
+
 
 # Install guide
 
@@ -17,7 +18,7 @@ Make sure pip here is for Python 3. If you're not sure, you can try running:
 pip3 install -r requirements.txt
 ```
 
-## Requirements for the USB stick
+## Requirements the Crownstone USB
 
 ### OS X
 OS X requires installation of the SiliconLabs driver: [https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers)
@@ -108,7 +109,7 @@ for i in range(0,100):
 
 # Documentation
 
-This lib is used to interpret the serial data from the "Crownstone Hub Dongle (working title)".
+This lib is used to interpret the serial data from the Crownstone USB.
 
 This library exposes the BluenetLib module. From this module you can use Bluenet.
 
@@ -201,7 +202,7 @@ myEventBus.unsubscribe(subscriptionId)
 ## Bluenet API
 
 #### `initializeUsbBridge(port: string, catchSIGINT = True)`
-> Sets up the listeners to the "Crownstone Hub Dongle (working title)". 
+> Sets up the communication with the Crownstone USB. 
 > 
 > The `port` is the port used by the serial communication. 
 > For Windows devices this is commonly `COM1`, for Linux based system `/dev/ttyUSB0` and for OSX `/dev/tty.SLAB_USBtoUART`. Addresses and number can vary from system to system.
