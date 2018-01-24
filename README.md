@@ -178,6 +178,8 @@ myEventBus.off(subscriptionId)
 #### isRunning()
 > Returns Boolean signifying if the BluenetLib is running. This is relevant for the UART listener which communicates with the "Crownstone Hub Dongle (working title)".
 
+
+
 # Example
 
 An example is provided in the root of this repository. It can be run with python 3.

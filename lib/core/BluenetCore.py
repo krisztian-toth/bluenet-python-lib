@@ -18,7 +18,7 @@ class BluenetCore:
 
 	def initializeUsbBridge(self, port, catchSIGINT = True):
 		# listen for CTRL+C and handle the exit cleanly.
-		if catchControlC:
+		if catchSIGINT:
 			signal.signal(signal.SIGINT, self.__stopAll)
 
 		baudrate = 38400
