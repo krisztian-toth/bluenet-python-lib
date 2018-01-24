@@ -1,5 +1,9 @@
 # bluenet-python-lib
-Official Python lib for Crownstone. Currently this requires a "Crownstone Unified System Bridge", or Crownstone USB. The Bluetooth implementation will be added soon.
+Official Python lib for Crownstone. 
+
+Currently this requires a "Crownstone Unified System Bridge", or **Crownstone USB**. 
+
+The Bluetooth implementation will be added soon.
 
 
 # Install guide
@@ -18,7 +22,7 @@ Make sure pip here is for Python 3. If you're not sure, you can try running:
 pip3 install -r requirements.txt
 ```
 
-## Requirements the Crownstone USB
+## Requirements for the Crownstone USB
 
 ### OS X
 OS X requires installation of the SiliconLabs driver: [https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers)
@@ -43,7 +47,7 @@ An example is provided in the root of this repository.
 
 ## Prerequisites
 
-- First use the [phone app](https://crownstone.rocks/app) to setup your Crownstones and the USB stick.
+- First use the [phone app](https://crownstone.rocks/app) to setup your Crownstones and the Crownstone USB.
 - Make sure you update the Crownstones' firmware to at least 2.0.0.
 - Find out what port to use (e.g. `COM1`, `/dev/ttyUSB0`, or `/dev/tty.SLAB_USBtoUART`) and fill this in the example.py.
 - Find out the ID of the Crownstone you want to switch: TODO
