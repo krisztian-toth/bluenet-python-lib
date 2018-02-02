@@ -14,6 +14,7 @@ class Topics(Enum):
 	powerUsageUpdate   = "powerUsageReal" 		 # data is tuple of (crownstoneId: number, powerUsage  : number)
 	switchStateUpdate  = "switchState"			 # data is tuple of (crownstoneId: number, switchState : number)
 	newCrownstoneFound = "newCrownstoneFound"	 # data is single value: CrownstoneId : number
+	currentSamples     = "currentSamples"        # data is list of samples
 
 
 
