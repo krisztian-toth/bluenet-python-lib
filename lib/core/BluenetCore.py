@@ -21,7 +21,7 @@ class BluenetCore:
 		if catchSIGINT:
 			signal.signal(signal.SIGINT, self.__stopAll)
 
-		baudrate = 38400
+		baudrate = 230400
 
 		# init the uart bridge
 		self.uartBridge = UartBridge(port, baudrate)
