@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class ControlType(Enum):
+class ControlType(IntEnum):
     SWITCH                 = 0
     PWM                    = 1
     SET_TIME               = 2
@@ -35,7 +35,7 @@ class ControlType(Enum):
     LOCK_SWITCH            = 30
 
 
-class ConfigurationType(Enum):
+class ConfigurationType(IntEnum):
     DEVICE_NAME             = 0
     DEVICE_TYPE             = 1
     ROOM                    = 2
@@ -88,12 +88,12 @@ class ConfigurationType(Enum):
     MESH_ACCESS_ADDRESS     = 49
 
 
-class MeshHandle(Enum):
+class MeshHandle(IntEnum):
     HUB  = 1
     DATA = 2
 
 
-class StateType(Enum):
+class StateType(IntEnum):
     RESET_COUNTER      = 128
     SWITCH_STATE       = 129
     ACCUMULATED_ENERGY = 130
@@ -106,7 +106,7 @@ class StateType(Enum):
     ERROR_BITMASK      = 139
 
 
-class OpCode(Enum):
+class OpCode(IntEnum):
     READ   = 0
     WRITE  = 1
     NOTIFY = 2
@@ -114,14 +114,14 @@ class OpCode(Enum):
 
 # *********** Mesh *********** 
 
-class MeshCommandType(Enum):
+class MeshCommandType(IntEnum):
     CONTROL = 0
     BEACON  = 1
     CONFIG  = 2
     STATE   = 3
 
 
-class IntentType(Enum):
+class IntentType(IntEnum):
     REGION_ENTER  = 0
     REGION_EXIT   = 1
     ENTER         = 2
@@ -129,9 +129,9 @@ class IntentType(Enum):
     MANUAL        = 4
 
 
-class MeshKeepAliveTypes(Enum):
+class MeshKeepAliveTypes(IntEnum):
     SHARED_TIMEOUT = 1
 
 
-class MeshMultiSwitchType(Enum):
+class MeshMultiSwitchType(IntEnum):
     SIMPLE_LIST    = 0

@@ -67,6 +67,11 @@ class Conversion:
 		return (arr8[1] << 8) + arr8[0]
 
 	@staticmethod
+	def uint8_array_to_int16(arr8):
+		""" Convert an array of 2 bytes to a uint16 """
+		return Conversion.uint16_to_int16(Conversion.uint8_array_to_uint16(arr8))
+
+	@staticmethod
 	def uint16_to_uint8_array(value):
 		""" Convert a number into an array of 2 bytes. """
 		return [

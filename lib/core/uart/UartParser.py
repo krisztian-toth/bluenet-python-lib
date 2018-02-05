@@ -1,9 +1,8 @@
-from lib.containerClasses.MeshStatePacket import MeshStatePacket
-from lib.util.Conversion import Conversion
-from lib.core.uart.UartTypes import RxOpcode
-import time
-import re
-
+from lib.core.uart.UartTypes import UartRxType
+from lib.core.uart.uartPackets.CurrentSamplesPacket import CurrentSamplesPacket
+from lib.core.uart.uartPackets.MeshStatePacket 		import MeshStatePacket
+from lib.core.uart.uartPackets.PowerCalculationPacket import PowerCalculationPacket
+from lib.core.uart.uartPackets.VoltageSamplesPacket import VoltageSamplesPacket
 from lib.util.EventBus import eventBus, SystemTopics, Topics
 
 
@@ -15,14 +14,38 @@ class UartParser:
 
 		opCode = dataPacket.opCode
 
-		if opCode >= RxOpcode.MESH_STATE_0 and opCode <= RxOpcode.MESH_STATE_LAST:
-		# if opCode is 100 or opCode is 101:
-		# if opCode is RxOpcode.MESH_STATE_0 or opCode is RxOpcode.MESH_STATE_1:
-			extractor = MeshStatePacket(dataPacket.payload)
-			extractor.broadcastState()
-		elif opCode == int(RxOpcode.POWER_LOG_CURRENT):
-			eventBus.emit(Topics.currentSamples, dataPacket.payload)
-			# print("current samples", len(dataPacket.payload), dataPacket.payload)
+		if opCode == UartRxType.MESH_STATE_0 or opCode == UartRxType.MESH_STATE_1:
+			# unpack the mesh packet
+			meshPacket = MeshStatePacket(dataPacket.payload)
+
+			# have each stone in the meshPacket broadcast it's state
+			for stoneState in meshPacket.stoneStates:
+				stoneState.broadcastState()
+
+		elif opCode == UartRxType.POWER_LOG_CURRENT:
+			# type is CurrentSamples
+			parsedData = CurrentSamplesPacket(dataPacket.payload)
+			eventBus.emit(Topics.newCurrentData, parsedData.getDict())
+			pass
+		elif opCode == UartRxType.POWER_LOG_VOLTAGE:
+			# type is VoltageSamplesPacket
+			parsedData = VoltageSamplesPacket(dataPacket.payload)
+			eventBus.emit(Topics.newVoltageData, parsedData.getDict())
+			pass
+		elif opCode == UartRxType.POWER_LOG_FILTERED_CURRENT:
+			# type is CurrentSamples
+			parsedData = CurrentSamplesPacket(dataPacket.payload)
+			eventBus.emit(Topics.newFilteredCurrentData, parsedData.getDict())
+			pass
+		elif opCode == UartRxType.POWER_LOG_FILTERED_VOLTAGE:
+			# type is VoltageSamplesPacket
+			parsedData = VoltageSamplesPacket(dataPacket.payload)
+			eventBus.emit(Topics.newFilteredVoltageData, parsedData.getDict())
+			pass
+		elif opCode == UartRxType.POWER_LOG_POWER:
+			# type is PowerCalculationsPacket
+			parsedData = PowerCalculationPacket(dataPacket.payload)
+			eventBus.emit(Topics.newCalculatedPowerData, parsedData.getDict())
 			pass
 		else:
 			print("Unknown OpCode", opCode)

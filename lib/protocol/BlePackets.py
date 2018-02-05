@@ -8,7 +8,7 @@ class BLEPacket:
     payload = []
 
     def __init__(self, packetType):
-        self.type = packetType.value
+        self.type = packetType
 
     def loadString(self, string):
         self.payload = Conversion.string_to_uint8_array(string)

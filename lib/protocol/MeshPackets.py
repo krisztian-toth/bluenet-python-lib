@@ -34,7 +34,7 @@ class MeshKeepAlivePacket:
 	packets = []
 
 	def __init__(self, packetType, timeout, packets):
-		self.type = packetType.value
+		self.type = packetType
 		self.timeout = timeout
 		self.packets = packets
 		self.reserved = [0,0]
@@ -57,7 +57,7 @@ class MeshCommandPacket:
 	payload = []
 
 	def __init__(self, packetType, crownstoneIds, payload):
-		self.type = packetType.value
+		self.type = packetType
 		self.crownstoneIds = crownstoneIds
 		self.payload = payload
 
@@ -88,7 +88,7 @@ class StoneMultiSwitchPacket:
 		self.crownstoneId = crownstoneId
 		self.state = int(min(1, max(0, state)) * 100) # map to [0 .. 100]
 		self.timeout = timeout
-		self.intent = intent.value
+		self.intent = intent
 
 	def getPacket(self):
 		packet = []
@@ -105,7 +105,7 @@ class MeshMultiSwitchPacket:
 	packets = []
 
 	def __init__(self, packetType, packets):
-		self.type = packetType.value
+		self.type = packetType
 		self.packets = packets
 
 	def getPacket(self):

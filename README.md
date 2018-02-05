@@ -195,6 +195,22 @@ The following Topics are currently available:
 | `newCrownstoneFound` | When the lib hears from a Crownstone that it has not heard from since the lib was started, this event is emitted. The data that is emitted is a single int which represents the Crownstone ID of the new Crownstone. |
 | `powerUsageUpdate` | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: `{ "crownstoneId": int, "powerUsage" :  float }`. |
 | `switchStateUpdate` | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: `{ "crownstoneId": int, "switchState" :  int [0 .. 128] }`. The switchState value is [explained here](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#switch_state_packet). |
+| `newCurrentData` | Once a new measurement is received via the UART connection, this event will notify the new data. The data that is emitted is a dictionary: `{ "crownstoneId": int, "type" : "current", "data": [(time: int, data: int)]}`. |
+| `newVoltageData` | Once a new measurement is received via the UART connection, this event will notify the new data. The data that is emitted is a dictionary: `{ "crownstoneId": int, "type" : "current", "data": [(time: int, data: int)]}`. | 
+| `newFilteredCurrentData` | Once a new measurement is received via the UART connection, this event will notify the new data. The data that is emitted is a dictionary: `{ "crownstoneId": int, "type" : "current", "data": [(time: int, data: int)]}`. | 
+| `newFilteredVoltageData` | Once a new measurement is received via the UART connection, this event will notify the new data. The data that is emitted is a dictionary: `{ "crownstoneId": int, "type" : "current", "data": [(time: int, data: int)]}`. | 
+| `newCalculatedPowerData` | Once a new measurement is received via the UART connection, this event will notify the new data. The data that is emitted is a dictionary: ```{	
+	"crownstoneId": int,
+	"currentRmsMA": int, 
+	"currentRmsMedianMA": int,
+	"filteredCurrentRmsMA": int,
+	"filteredCurrentRmsMedianMA": int,
+	"avgZeroVoltage": int,
+	"avgZeroCurrent": int,
+	"powerMilliWattApparent": int,
+	"powerMilliWattReal": int,
+	"avgPowerMilliWattReal": int
+}```. | 
 
 ## EventBus API
 

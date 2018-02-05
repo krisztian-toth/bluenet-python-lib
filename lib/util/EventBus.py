@@ -11,10 +11,25 @@ class SystemTopics(Enum):
 
 
 class Topics(Enum):
-	powerUsageUpdate   = "powerUsageReal" 		 # data is tuple of (crownstoneId: number, powerUsage  : number)
-	switchStateUpdate  = "switchState"			 # data is tuple of (crownstoneId: number, switchState : number)
-	newCrownstoneFound = "newCrownstoneFound"	 # data is single value: CrownstoneId : number
-	currentSamples     = "currentSamples"        # data is list of samples
+	powerUsageUpdate       = "powerUsageReal" 		    # data is dictionary: {crownstoneId: number, powerUsage  : number}
+	switchStateUpdate      = "switchState"			    # data is dictionary: {crownstoneId: number, switchState : number}
+	newCrownstoneFound     = "newCrownstoneFound"	    # data is single value: CrownstoneId : number
+	newCurrentData 		   = "newCurrentData"	 		# data is dictionary: {crownstoneId: number, type: 'current', data: [(time, data point)]}
+	newVoltageData         = "newVoltageData"	 		# data is dictionary: {crownstoneId: number, type: 'voltage', data: [(time, data point)]}
+	newFilteredCurrentData = "newFilteredCurrentData"	# data is dictionary: {crownstoneId: number, type: 'current', data: [(time, data point)]}
+	newFilteredVoltageData = "newFilteredVoltageData"	# data is dictionary: {crownstoneId: number, type: 'voltage', data: [(time, data point)]}
+	newCalculatedPowerData = "newCalculatedPowerData"	# data is dictionary: {
+														#	                     "crownstoneId": int,
+														# 						 "currentRmsMA": int,
+														# 						 "currentRmsMedianMA": int,
+														# 						 "filteredCurrentRmsMA": int,
+														# 						 "filteredCurrentRmsMedianMA": int,
+														# 						 "avgZeroVoltage": int,
+														# 						 "avgZeroCurrent": int,
+														# 						 "powerMilliWattApparent": int,
+														# 						 "powerMilliWattReal": int,
+														# 						 "avgPowerMilliWattReal": int
+														# 					  }
 
 
 

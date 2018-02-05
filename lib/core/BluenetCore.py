@@ -1,4 +1,6 @@
+from lib.core.bluenet_modules.control.ControlHandler import ControlHandler
 from lib.core.uart.UartBridge import UartBridge
+from lib.core.uart.UartTypes import UartTxType
 from lib.core.uart.UartWrapper import UartWrapper
 from lib.dataFlowManagers.StoneStateManager import StoneStateManager
 from lib.protocol.BlePackets import ControlPacket
@@ -15,6 +17,7 @@ class BluenetCore:
 
 	def __init__(self):
 		self.stoneStateManager = StoneStateManager()
+		self.control = ControlHandler()
 
 	def initializeUsbBridge(self, port, catchSIGINT = True):
 		# listen for CTRL+C and handle the exit cleanly.
@@ -97,7 +100,7 @@ class BluenetCore:
 		controlPacket 			= ControlPacket(ControlType.MESH_MULTI_SWITCH).loadByteArray(meshMultiSwitchPacket).getPacket()
 
 		# finally wrap it in an Uart packet
-		uartPacket 				= UartWrapper(1, controlPacket).getPacket()
+		uartPacket 				= UartWrapper(UartTxType.CONTROL, controlPacket).getPacket()
 
 		# send over uart
 		eventBus.emit(SystemTopics.uartWriteData, uartPacket)

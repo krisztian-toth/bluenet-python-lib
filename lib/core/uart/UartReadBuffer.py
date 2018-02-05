@@ -1,10 +1,9 @@
-import binascii
-
-from lib.containerClasses.UartPacket import UartPacket, OPCODE_SIZE, PREFIX_SIZE, WRAPPER_SIZE, CRC_SIZE
 from lib.core.uart.UartWrapper import BIT_FLIP_MASK, ESCAPE_TOKEN, START_TOKEN
+from lib.core.uart.uartPackets.UartPacket import PREFIX_SIZE, OPCODE_SIZE, WRAPPER_SIZE, CRC_SIZE, UartPacket
 from lib.util.Conversion import Conversion
 from lib.util.EventBus import eventBus, SystemTopics
 from lib.util.UartUtil import UartUtil
+
 
 class UartReadBuffer:
 	buffer = []

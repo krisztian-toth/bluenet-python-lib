@@ -1,6 +1,6 @@
 from enum import IntEnum
 
-class TxOpcode(IntEnum):
+class UartTxType(IntEnum):
 	CONTROL =                          1
 
 	ENABLE_ADVERTISEMENT =             10000
@@ -23,7 +23,7 @@ class TxOpcode(IntEnum):
 	POWER_LOG_FILTERED_VOLTAGE =       10203
 	POWER_LOG_POWER =                  10204
 
-class RxOpcode(IntEnum):
+class UartRxType(IntEnum):
 	ACK =                              0
 	POWER_SAMPLES =                    4
 	MESH_STATE_0 =                     100   # For 1st handle, next handle has opcode of 1 larger.

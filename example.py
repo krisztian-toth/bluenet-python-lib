@@ -14,7 +14,7 @@ def showPowerUsage(data):
 bluenet = Bluenet()
 
 # Start up the USB bridge
-bluenet.initializeUsbBridge("/dev/ttyUSB0")
+bluenet.initializeUsbBridge("/dev/tty.usbmodemFA1331")
 
 # Set up event listeners
 eventBus = bluenet.getEventBus()

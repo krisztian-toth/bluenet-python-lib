@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+  <title>Uart lib data flow</title>
+
+  <script type="text/javascript" src="./js/vis.js"></script>
+  <link href="./js/vis-network.min.css" rel="stylesheet" type="text/css" />
+
+  <style type="text/css">
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+
+    #mynetwork {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+    Data flow of the UART part of this Bluenet Python Lib
+
+  <div id="mynetwork"></div>
+  <script type="text/javascript">
+    let spacing = 275;
+    let counter = 0;
+    // create an array with nodes
+    var nodes = new vis.DataSet([
+      {fixed:{x:true}, x: spacing*counter++, id: 'uartDongle', label: 'Crownstone USB', shape: 'circle', color: '#007aff', font:{color:'#fff'}},
+      {fixed:{x:true}, x: spacing*counter++, id: 'UartBridge', label: 'UartBridge', shape: 'circle', color: '#007aff', font:{color:'#fff'}},
+      {fixed:{x:true}, x: spacing*counter++, id: 'UartReadBuffer', label: 'UartReadBuffer', shape: 'circle', color: '#007aff', font:{color:'#fff'}},
+      {fixed:{x:true}, x: spacing*counter++, id: 'UartParser', label: 'UartParser', shape: 'circle', color: '#007aff', font:{color:'#fff'}},
+      {x: spacing*counter, id: 'csPacket', label: 'Current Samples Packet', shape: 'circle', color: '#007aff', font:{color:'#fff'}},
+      {x: spacing*counter, id: 'vPacket', label: 'Voltage Samples Packet', shape: 'circle', color: '#007aff', font:{color:'#fff'}},
+      {x: spacing*counter, id: 'msPacket', label: 'Mesh State Packet', shape: 'circle', color: '#007aff', font:{color:'#fff'}},
+      {x: spacing*counter++, id: 'ssPacket', label: 'Stone State Packet', shape: 'circle', color: '#007aff', font:{color:'#fff'}},
+      {fixed:{x:true}, x: spacing*counter++, id: 'eventBus', label: 'Event Bus', shape: 'circle', color: '#007aff', font:{color:'#fff'}},
+    ]);
+
+    // create an array with edges
+    var edges = new vis.DataSet([
+      {from: 'uartDongle', to: 'UartBridge', label:'send\nCall'},
+      {from: 'UartBridge', to: 'UartReadBuffer', label:'collect bytes\nCall'},
+      {from: 'UartReadBuffer', to: 'UartParser', label:'on success\nSystemTopics.uartNewPackage'},
+      {from: 'UartParser',     to: 'csPacket',   label:'parse', color: {color:'#ff8400'}},
+      {from: 'UartParser',     to: 'vPacket',    label:'parse', color: {color:'#ff8400'}},
+      {from: 'UartParser',     to: 'msPacket',   label:'parse', color: {color:'#ff8400'}},
+      {from: 'msPacket',       to: 'ssPacket',   label:'parse', color: {color:'#ff8400'}},
+      {from: 'csPacket',       to: 'UartParser', label:'result', color: {color: '#a0eb58'}},
+      {from: 'vPacket',        to: 'UartParser', label:'result', color: {color: '#a0eb58'}},
+      {from: 'msPacket',       to: 'UartParser', label:'result', color: {color: '#a0eb58'}},
+      {from: 'ssPacket',       to: 'msPacket',   label:'result', color: {color: '#a0eb58'}},
+      {from: 'UartParser', to: 'eventBus', label:'send outward\nEventBus.Topics'},
+    ]);
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+    var data = {
+      nodes: nodes,
+      edges: edges
+    };
+    var options = {
+      layout:{ randomSeed: 77515},
+      edges: {arrows: 'to', font: {align:'middle'}, color: "#00263e"},
+      physics: { barnesHut: { gravitationalConstant: -30000}}};
+    var network = new vis.Network(container, data, options);
+  </script>
+</body>
+</html>

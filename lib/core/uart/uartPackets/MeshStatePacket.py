@@ -1,4 +1,4 @@
-from lib.containerClasses.StoneStatePacket import STONE_STATE_PACKET_SIZE, StoneStatePacket
+from lib.core.uart.uartPackets.StoneStatePacket import StoneStatePacket, STONE_STATE_PACKET_SIZE
 from lib.util.Conversion import Conversion
 
 MESH_STATE_PACKET_SIZE = 92
@@ -31,9 +31,11 @@ class MeshStatePacket:
 		for i in range(0,self.size):
 			self.stoneStates.append(StoneStatePacket(payload[8+i*STONE_STATE_PACKET_SIZE:8+(i+1)*STONE_STATE_PACKET_SIZE]))
 
-		self.checkForDeprecation()
+		# deprecation is when a stone id has multiple entrees in the data. Checking for this makes sure we only use the latest one.
+		self._checkForDeprecation()
 
-	def checkForDeprecation(self):
+
+	def _checkForDeprecation(self):
 		# point to the newest item in this meshStatePacket
 		newestItem = (self.head + self.size - 1) % MAX_STATE_ITEMS
 
@@ -53,6 +55,4 @@ class MeshStatePacket:
 			itemIndex = (itemIndex - 1 + MAX_STATE_ITEMS) % MAX_STATE_ITEMS;
 
 
-	def broadcastState(self):
-		for stoneState in self.stoneStates:
-			stoneState.broadcastState()
+
