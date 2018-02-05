@@ -1,5 +1,6 @@
-from lib.core.uart.uartPackets.StoneStatePacket import StoneStatePacket, STONE_STATE_PACKET_SIZE
-from lib.util.Conversion import Conversion
+from BluenetLib.lib.core.uart.uartPackets.StoneStatePacket import StoneStatePacket, STONE_STATE_PACKET_SIZE
+
+from BluenetLib.lib.util.Conversion import Conversion
 
 MESH_STATE_PACKET_SIZE = 92
 MAX_STATE_ITEMS = 6

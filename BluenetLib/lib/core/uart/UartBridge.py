@@ -1,11 +1,10 @@
-import json
 import threading
 
 import serial
+from BluenetLib.lib.core.uart.UartParser import UartParser
+from BluenetLib.lib.core.uart.UartReadBuffer import UartReadBuffer
 
-from lib.core.uart.UartParser import UartParser
-from lib.core.uart.UartReadBuffer import UartReadBuffer
-from lib.util.EventBus import eventBus, SystemTopics
+from BluenetLib.lib.util.EventBus import eventBus, SystemTopics
 
 
 class UartBridge (threading.Thread):

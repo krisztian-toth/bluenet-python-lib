@@ -1,6 +1,6 @@
 import unittest
 
-from lib.protocol.ControlPackets import ControlPacketsGenerator
+from BluenetLib.lib.protocol.ControlPackets import ControlPacketsGenerator
 
 
 class TestControlPackets(unittest.TestCase):

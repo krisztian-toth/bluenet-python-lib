@@ -1,8 +1,8 @@
 import unittest
 
-from lib.protocol.BluenetTypes import MeshKeepAliveTypes, MeshCommandType, IntentType, MeshMultiSwitchType
-from lib.protocol.MeshPackets import StoneKeepAlivePacket, MeshKeepAlivePacket, MeshCommandPacket, \
-	StoneMultiSwitchPacket, MeshMultiSwitchPacket
+from BluenetLib.lib import MeshKeepAliveTypes, MeshCommandType, IntentType, MeshMultiSwitchType
+from BluenetLib.lib import StoneKeepAlivePacket, MeshKeepAlivePacket, MeshCommandPacket, \
+    StoneMultiSwitchPacket, MeshMultiSwitchPacket
 
 
 class TestMeshPackets(unittest.TestCase):

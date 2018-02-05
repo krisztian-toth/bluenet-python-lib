@@ -1,14 +1,16 @@
-from lib.core.uart.UartWrapper import BIT_FLIP_MASK, ESCAPE_TOKEN, START_TOKEN
-from lib.core.uart.uartPackets.UartPacket import PREFIX_SIZE, OPCODE_SIZE, WRAPPER_SIZE, CRC_SIZE, UartPacket
-from lib.util.Conversion import Conversion
-from lib.util.EventBus import eventBus, SystemTopics
-from lib.util.UartUtil import UartUtil
+from BluenetLib.lib.core.uart.UartWrapper import BIT_FLIP_MASK, ESCAPE_TOKEN, START_TOKEN
+from BluenetLib.lib.core.uart.uartPackets.UartPacket import PREFIX_SIZE, OPCODE_SIZE, WRAPPER_SIZE, CRC_SIZE, UartPacket
+
+from BluenetLib.lib.util.Conversion import Conversion
+from BluenetLib.lib.util.UartUtil   import UartUtil
+from BluenetLib.lib.util.EventBus	import eventBus, SystemTopics
 
 
 class UartReadBuffer:
 	buffer = []
 	escapingNextToken = False
 	active = False
+	opCode = 0
 
 	length = 0
 

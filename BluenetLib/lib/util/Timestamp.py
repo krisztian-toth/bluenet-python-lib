@@ -1,6 +1,6 @@
 import time
 
-from lib.util.Conversion import Conversion
+from BluenetLib.lib.util.Conversion import Conversion
 
 
 def obtainTimestamp(fullTimeStamp, lsb):

@@ -1,5 +1,5 @@
-from lib.protocol.BluenetTypes import ControlType, OpCode
-from lib.util.Conversion import Conversion
+from BluenetLib.lib.protocol.BluenetTypes import ControlType, OpCode
+from BluenetLib.lib.util.Conversion import Conversion
 
 
 class BLEPacket:

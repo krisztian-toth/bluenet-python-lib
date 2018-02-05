@@ -1,4 +1,4 @@
-from lib.util.Conversion import Conversion
+from BluenetLib.lib.util.Conversion import Conversion
 
 OPCODE_SIZE = 2
 LENGTH_SIZE = 2

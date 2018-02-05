@@ -1,5 +1,5 @@
-from lib.util.Conversion import Conversion
-from lib.util.UartUtil import UartUtil
+from BluenetLib.lib.util.Conversion import Conversion
+from BluenetLib.lib.util.UartUtil import UartUtil
 
 ESCAPE_TOKEN = 0x5c
 BIT_FLIP_MASK = 0x40

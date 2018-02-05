@@ -1,9 +1,10 @@
-from lib.core.uart.UartTypes import UartRxType
-from lib.core.uart.uartPackets.CurrentSamplesPacket import CurrentSamplesPacket
-from lib.core.uart.uartPackets.MeshStatePacket 		import MeshStatePacket
-from lib.core.uart.uartPackets.PowerCalculationPacket import PowerCalculationPacket
-from lib.core.uart.uartPackets.VoltageSamplesPacket import VoltageSamplesPacket
-from lib.util.EventBus import eventBus, SystemTopics, Topics
+from BluenetLib.lib.core.uart.UartTypes import UartRxType
+from BluenetLib.lib.core.uart.uartPackets.CurrentSamplesPacket import CurrentSamplesPacket
+from BluenetLib.lib.core.uart.uartPackets.MeshStatePacket import MeshStatePacket
+from BluenetLib.lib.core.uart.uartPackets.PowerCalculationPacket import PowerCalculationPacket
+from BluenetLib.lib.core.uart.uartPackets.VoltageSamplesPacket import VoltageSamplesPacket
+
+from BluenetLib.lib.util.EventBus import eventBus, SystemTopics, Topics
 
 
 class UartParser:

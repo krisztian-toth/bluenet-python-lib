@@ -1,6 +1,7 @@
-from lib.protocol.BlePackets 	import ControlPacket, FactoryResetPacket, keepAliveStatePacket
-from lib.protocol.BluenetTypes 	import ControlType
-from lib.util.Conversion	 	import Conversion
+from BluenetLib.lib.protocol.BlePackets import ControlPacket, FactoryResetPacket, keepAliveStatePacket
+from BluenetLib.lib.protocol.BluenetTypes import ControlType
+
+from BluenetLib.lib.util.Conversion import Conversion
 
 
 class ControlPacketsGenerator:

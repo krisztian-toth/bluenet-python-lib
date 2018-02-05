@@ -1,4 +1,4 @@
-from lib.core.uart.uartPackets.CurrentSamplesPacket import CurrentSamplesPacket
+from BluenetLib.lib.core.uart.uartPackets.CurrentSamplesPacket import CurrentSamplesPacket
 
 class VoltageSamplesPacket(CurrentSamplesPacket):
 	def __init__(self, payload):

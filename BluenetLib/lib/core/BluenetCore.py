@@ -1,14 +1,15 @@
-from lib.core.bluenet_modules.control.ControlHandler import ControlHandler
-from lib.core.uart.UartBridge import UartBridge
-from lib.core.uart.UartTypes import UartTxType
-from lib.core.uart.UartWrapper import UartWrapper
-from lib.dataFlowManagers.StoneStateManager import StoneStateManager
-from lib.protocol.BlePackets import ControlPacket
-from lib.protocol.BluenetTypes import IntentType, MeshMultiSwitchType, ControlType
-from lib.protocol.MeshPackets import StoneMultiSwitchPacket, MeshMultiSwitchPacket
-from lib.util.EventBus import SystemTopics, eventBus, Topics
+import signal  # used to catch control C
 
-import signal # used to catch control C
+from BluenetLib.lib.core.bluenet_modules.control.ControlHandler import ControlHandler
+from BluenetLib.lib.core.uart.UartBridge import UartBridge
+from BluenetLib.lib.core.uart.UartTypes import UartTxType
+from BluenetLib.lib.core.uart.UartWrapper import UartWrapper
+from BluenetLib.lib.dataFlowManagers.StoneStateManager import StoneStateManager
+from BluenetLib.lib.protocol.BlePackets import ControlPacket
+from BluenetLib.lib.protocol.BluenetTypes import IntentType, MeshMultiSwitchType, ControlType
+from BluenetLib.lib.protocol.MeshPackets import StoneMultiSwitchPacket, MeshMultiSwitchPacket
+from BluenetLib.lib.util.EventBus import SystemTopics, eventBus, Topics
+
 
 class BluenetCore:
 	uartBridge = None

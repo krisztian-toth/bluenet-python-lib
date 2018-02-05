@@ -1,4 +1,4 @@
-from lib.util.Conversion import Conversion
+from BluenetLib.lib.util.Conversion import Conversion
 
 class PowerCalculationPacket:
 	amountOfSamples = 9
