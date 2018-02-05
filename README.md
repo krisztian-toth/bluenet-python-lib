@@ -199,18 +199,7 @@ The following Topics are currently available:
 | `newVoltageData` | Once a new measurement is received via the UART connection, this event will notify the new data. The data that is emitted is a dictionary: `{ "crownstoneId": int, "type" : "current", "data": [(time: int, data: int)]}`. | 
 | `newFilteredCurrentData` | Once a new measurement is received via the UART connection, this event will notify the new data. The data that is emitted is a dictionary: `{ "crownstoneId": int, "type" : "current", "data": [(time: int, data: int)]}`. | 
 | `newFilteredVoltageData` | Once a new measurement is received via the UART connection, this event will notify the new data. The data that is emitted is a dictionary: `{ "crownstoneId": int, "type" : "current", "data": [(time: int, data: int)]}`. | 
-| `newCalculatedPowerData` | Once a new measurement is received via the UART connection, this event will notify the new data. The data that is emitted is a dictionary: ```{	
-	"crownstoneId": int,
-	"currentRmsMA": int, 
-	"currentRmsMedianMA": int,
-	"filteredCurrentRmsMA": int,
-	"filteredCurrentRmsMedianMA": int,
-	"avgZeroVoltage": int,
-	"avgZeroCurrent": int,
-	"powerMilliWattApparent": int,
-	"powerMilliWattReal": int,
-	"avgPowerMilliWattReal": int
-}```. | 
+| `newCalculatedPowerData` | Once a new measurement is received via the UART connection, this event will notify the new data. The data that is emitted is a dictionary: `{<br>"crownstoneId": int,<br>"currentRmsMA": int,<br>"currentRmsMedianMA": int,<br>"filteredCurrentRmsMA": int,<br>"filteredCurrentRmsMedianMA": int,<br>"avgZeroVoltage": int,<br>"avgZeroCurrent": int,<br>"powerMilliWattApparent": int,<br>"powerMilliWattReal": int,<br>"avgPowerMilliWattReal": int<br>}`. | 
 
 ## EventBus API
 
