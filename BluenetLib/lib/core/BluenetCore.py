@@ -45,7 +45,7 @@ class BluenetCore:
 	def switchCrownstone(self, crownstoneId, on):
 		"""
 		:param crownstoneId:
-		:param on:  Boolean
+		:param on: Boolean
 		:return:
 		"""
 		state = 1

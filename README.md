@@ -51,7 +51,15 @@ An example is provided in the root of this repository.
 - First use the [phone app](https://crownstone.rocks/app) to setup your Crownstones and the Crownstone USB.
 - Make sure you update the Crownstones' firmware to at least 2.0.0.
 - Find out what port to use (e.g. `COM1`, `/dev/ttyUSB0`, or `/dev/tty.SLAB_USBtoUART`) and fill this in at `discoveryExample.py` and `example.py`.
+- install the BluenetLib library using the setup.py:
 
+```python
+python3 setup.py install
+
+# or:
+
+python setup.py install
+```
 
 ## Find the IDs of your Crownstones
 
