@@ -6,5 +6,4 @@ class Bluenet(BluenetCore):
     """
     
     def __init__(self):
-        print("HERE")
         super().__init__()

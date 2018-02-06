@@ -17,9 +17,9 @@ bluenet = Bluenet()
 bluenet.initializeUsbBridge("/dev/tty.usbmodemFA1331")
 
 # Set up event listeners
-eventBus = bluenet.getEventBus()
-topics   = bluenet.getTopics()
-eventBus.subscribe(topics.powerUsageUpdate, showPowerUsage)
+myEventBus = bluenet.getEventBus()
+myTopics   = bluenet.getTopics()
+myEventBus.subscribe(myTopics.powerUsageUpdate, showPowerUsage)
 
 # This is the id of the Crownstone we will be switching
 targetCrownstoneId = 1

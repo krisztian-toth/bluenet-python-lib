@@ -1,6 +1,7 @@
 import signal  # used to catch control C
 
 from BluenetLib.lib.core.bluenet_modules.control.ControlHandler import ControlHandler
+from BluenetLib.lib.core.bluenet_modules.control.UsbDevHandler import UsbDevHandler
 from BluenetLib.lib.core.uart.UartBridge import UartBridge
 from BluenetLib.lib.core.uart.UartTypes import UartTxType
 from BluenetLib.lib.core.uart.UartWrapper import UartWrapper
@@ -19,8 +20,9 @@ class BluenetCore:
 	def __init__(self):
 		self.stoneStateManager = StoneStateManager()
 		self.control = ControlHandler()
+		self._usbDev = UsbDevHandler()
 
-	def initializeUsbBridge(self, port, catchSIGINT = True):
+	def initializeUsbBridge(self, port, catchSIGINT = False):
 		# listen for CTRL+C and handle the exit cleanly.
 		if catchSIGINT:
 			signal.signal(signal.SIGINT, self.__stopAll)
