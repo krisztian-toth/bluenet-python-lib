@@ -5,7 +5,7 @@ from BluenetLib.lib.core.uart.uartPackets.PowerCalculationPacket import PowerCal
 from BluenetLib.lib.core.uart.uartPackets.ServiceDataPacket import ServiceDataPacket
 from BluenetLib.lib.core.uart.uartPackets.VoltageSamplesPacket import VoltageSamplesPacket
 
-from BluenetLib.lib.util.EventBus import eventBus, SystemTopics, Topics
+from BluenetLib.lib.util.EventBus import eventBus, SystemTopics, Topics, DevTopics
 
 
 class UartParser:
@@ -27,32 +27,32 @@ class UartParser:
         elif opCode == UartRxType.SERVICE_DATA:
             serviceData = ServiceDataPacket(dataPacket.payload)
             if serviceData.isValid():
-                eventBus.emit(Topics.newServiceData, serviceData.getDict())
+                eventBus.emit(DevTopics.newServiceData, serviceData.getDict())
   
         elif opCode == UartRxType.POWER_LOG_CURRENT:
             # type is CurrentSamples
             parsedData = CurrentSamplesPacket(dataPacket.payload)
-            eventBus.emit(Topics.newCurrentData, parsedData.getDict())
+            eventBus.emit(DevTopics.newCurrentData, parsedData.getDict())
             
         elif opCode == UartRxType.POWER_LOG_VOLTAGE:
             # type is VoltageSamplesPacket
             parsedData = VoltageSamplesPacket(dataPacket.payload)
-            eventBus.emit(Topics.newVoltageData, parsedData.getDict())
+            eventBus.emit(DevTopics.newVoltageData, parsedData.getDict())
             
         elif opCode == UartRxType.POWER_LOG_FILTERED_CURRENT:
             # type is CurrentSamples
             parsedData = CurrentSamplesPacket(dataPacket.payload)
-            eventBus.emit(Topics.newFilteredCurrentData, parsedData.getDict())
+            eventBus.emit(DevTopics.newFilteredCurrentData, parsedData.getDict())
             
         elif opCode == UartRxType.POWER_LOG_FILTERED_VOLTAGE:
             # type is VoltageSamplesPacket
             parsedData = VoltageSamplesPacket(dataPacket.payload)
-            eventBus.emit(Topics.newFilteredVoltageData, parsedData.getDict())
+            eventBus.emit(DevTopics.newFilteredVoltageData, parsedData.getDict())
             
         elif opCode == UartRxType.POWER_LOG_POWER:
             # type is PowerCalculationsPacket
             parsedData = PowerCalculationPacket(dataPacket.payload)
-            eventBus.emit(Topics.newCalculatedPowerData, parsedData.getDict())
+            eventBus.emit(DevTopics.newCalculatedPowerData, parsedData.getDict())
             
         else:
             print("Unknown OpCode", opCode)

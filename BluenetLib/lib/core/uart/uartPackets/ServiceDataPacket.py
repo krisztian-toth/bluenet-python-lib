@@ -20,8 +20,8 @@ class ServiceDataPacket:
             print("ERROR: INVALID SERVICE DATA LENGTH", len(payload), payload)
             return
         
-        self.opCode = payload[0]
-        self.dataType = payload[1]
+        self.opCode           = payload[0]
+        self.dataType         = payload[1]
         self.crownstoneId     = payload[2]
         self.switchState      = payload[3]
         self.flagBitmask      = payload[4]
@@ -33,7 +33,7 @@ class ServiceDataPacket:
         self.validation       = Conversion.uint8_array_to_int16(payload[15:15+2])
 
     def isValid(self):
-        if self.opCode == 3 and self.opCode == 0:
+        if self.opCode == 3 and self.dataType == 0:
             return True
         
         return False
@@ -41,6 +41,8 @@ class ServiceDataPacket:
     def getDict(self):
         dict = {}
         
+        dict["opCode"]           = self.opCode
+        dict["dataType"]         = self.dataType
         dict["crownstoneId"]     = self.crownstoneId
         dict["switchState"]      = self.switchState
         dict["flagBitmask"]      = self.flagBitmask
