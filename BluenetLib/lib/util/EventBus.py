@@ -24,6 +24,9 @@ class EventBus:
 
 
     def unsubscribe(self, subscriptionId):
+        if subscriptionId is None:
+            return
+        
         if subscriptionId in self.subscriberIds:
             topic = self.subscriberIds[subscriptionId]
             if topic in self.topics:
