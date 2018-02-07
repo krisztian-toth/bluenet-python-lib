@@ -12,7 +12,7 @@ class Conversion:
 	def uint8_to_int8(byte):
 		"""	Convert an unsigned byte to a signed byte """
 		res = byte
-		if (res > 127):
+		if res > 127:
 			res -= 256
 		return res
 
@@ -20,7 +20,7 @@ class Conversion:
 	def uint16_to_int16(val):
 		""" Convert an uint16 to a int16 """
 		res = val
-		if (res > 32767):
+		if res > 32767:
 			res -= 65536
 		return res
 
@@ -28,7 +28,7 @@ class Conversion:
 	def uint32_to_int32(val):
 		""" Convert an uint32 to a int32 """
 		res = val
-		if (res > 2147483647):
+		if res > 2147483647:
 			res -= 4294967296
 		return res
 
@@ -36,7 +36,7 @@ class Conversion:
 	def int8_to_uint8(byte):
 		"""	Convert a signed byte to an unsigned byte """
 		res = byte
-		if (res < 0):
+		if res < 0:
 			res += 256
 		return res
 
@@ -169,7 +169,7 @@ class Conversion:
 	########################
 	@staticmethod
 	def uint8_to_hex_string(val):
-		if (val > 255 or val < 0):
+		if val > 255 or val < 0:
 			raise Exception("Value must be of type uint8")
 		hex_str = "%02x" % val
 		return hex_str
@@ -266,7 +266,7 @@ class Conversion:
 		:rtype: list
 		"""
 		hexStrArr = addressStr.split(":")
-		if (len(hexStrArr) != 6):
+		if len(hexStrArr) != 6:
 			return []
 
 		arr8 = []

@@ -94,7 +94,7 @@ class ReadConfigPacket(BLEPacket):
     def getPacket(self):
         packet = []
         packet.append(self.type)
-        packet.append(self.getOpcode())
+        packet.append(self.getOpCode())
         packet += self.lengthAsUint8Array
         packet += self.payload
         return packet
@@ -114,7 +114,7 @@ class ReadStatePacket(BLEPacket):
     def getPacket(self):
         packet = []
         packet.append(self.type)
-        packet.append(self.getOpcode())
+        packet.append(self.getOpCode())
         packet += self.lengthAsUint8Array
         packet += self.payload
         return packet

@@ -53,7 +53,7 @@ class MeshStatePacket:
 				seenStoneIds.add(stoneId)
 
 			# point to the next newest item in the list
-			itemIndex = (itemIndex - 1 + MAX_STATE_ITEMS) % MAX_STATE_ITEMS;
+			itemIndex = (itemIndex - 1 + MAX_STATE_ITEMS) % MAX_STATE_ITEMS
 
 
 

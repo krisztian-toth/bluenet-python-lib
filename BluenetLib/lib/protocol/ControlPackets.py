@@ -56,7 +56,7 @@ class ControlPacketsGenerator:
 	@staticmethod
 	def getPwmSwitchPacket(switchState):
 		"""
-		:param state: number [0..1]
+		:param switchState: number [0..1]
 		:return:
 		"""
 		convertedSwitchState = int(min(1, max(0, switchState)) * 100)

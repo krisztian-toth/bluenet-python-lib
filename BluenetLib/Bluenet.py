@@ -1,5 +1,6 @@
 from BluenetLib.lib.core.BluenetCore import BluenetCore
 
+
 class Bluenet(BluenetCore):
     """
     This is a wrapper class to expose an API through the BluenetLib package.
@@ -7,3 +8,5 @@ class Bluenet(BluenetCore):
     
     def __init__(self):
         super().__init__()
+        
+

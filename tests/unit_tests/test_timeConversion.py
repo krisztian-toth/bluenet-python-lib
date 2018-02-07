@@ -1,6 +1,6 @@
 import unittest
 
-from BluenetLib.lib.util import reconstructTimestamp
+from BluenetLib.lib.util.Timestamp import reconstructTimestamp
 
 
 class TestTimeConversion(unittest.TestCase):

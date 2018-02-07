@@ -39,18 +39,18 @@ class ServiceDataPacket:
         return False
 
     def getDict(self):
-        dict = {}
+        data = {}
         
-        dict["opCode"]           = self.opCode
-        dict["dataType"]         = self.dataType
-        dict["crownstoneId"]     = self.crownstoneId
-        dict["switchState"]      = self.switchState
-        dict["flagBitmask"]      = self.flagBitmask
-        dict["temperature"]      = self.temperature
-        dict["powerFactor"]      = self.powerFactor
-        dict["powerUsageReal"]   = self.powerUsageReal
-        dict["energyUsed"]       = self.energyUsed
-        dict["partialTimestamp"] = self.partialTimestamp
-        dict["validation"]       = self.validation
+        data["opCode"]           = self.opCode
+        data["dataType"]         = self.dataType
+        data["crownstoneId"]     = self.crownstoneId
+        data["switchState"]      = self.switchState
+        data["flagBitmask"]      = self.flagBitmask
+        data["temperature"]      = self.temperature
+        data["powerFactor"]      = self.powerFactor
+        data["powerUsageReal"]   = self.powerUsageReal
+        data["energyUsed"]       = self.energyUsed
+        data["partialTimestamp"] = self.partialTimestamp
+        data["validation"]       = self.validation
         
-        return dict
+        return data

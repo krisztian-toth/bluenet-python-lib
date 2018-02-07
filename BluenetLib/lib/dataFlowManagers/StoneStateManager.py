@@ -1,11 +1,13 @@
-from BluenetLib.lib.util.EventBus import eventBus, SystemTopics, Topics
+from BluenetLib._EventBusInstance import BluenetEventBus
+from BluenetLib.lib.topics.SystemTopics import SystemTopics
+from BluenetLib.lib.topics.Topics import Topics
 
 
 class StoneStateManager:
 	stones = {}
 
 	def __init__(self):
-		eventBus.subscribe(SystemTopics.stateUpdate, self.handleStateUpdate)
+		BluenetEventBus.subscribe(SystemTopics.stateUpdate, self.handleStateUpdate)
 
 	def handleStateUpdate(self,data):
 		stoneId = data[0]
@@ -17,13 +19,13 @@ class StoneStateManager:
 				self.stones[stoneId]["data"] = data[1].getDict()
 				self.emitNewData(data)
 		else:
-			eventBus.emit(Topics.newCrownstoneFound, data[0])
+			BluenetEventBus.emit(Topics.newCrownstoneFound, data[0])
 			self.stones[stoneId] = {"timestampLastSeen":state.timestamp, "data": data[1].getDict()}
-			self.emitNewData(data);
-
+			self.emitNewData(data)
+	
 	def emitNewData(self, data):
-		eventBus.emit(Topics.powerUsageUpdate,  {"crownstoneId": data[0], "powerUsage":  data[1].powerUsageReal})
-		eventBus.emit(Topics.switchStateUpdate, {"crownstoneId": data[0], "switchState": data[1].switchState})
+		BluenetEventBus.emit(Topics.powerUsageUpdate,  {"crownstoneId": data[0], "powerUsage":  data[1].powerUsageReal})
+		BluenetEventBus.emit(Topics.switchStateUpdate, {"crownstoneId": data[0], "switchState": data[1].switchState})
 
 	def getIds(self):
 		ids = []

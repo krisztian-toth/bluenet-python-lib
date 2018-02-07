@@ -10,10 +10,10 @@ from BluenetLib import Bluenet
 bluenet = Bluenet()
 
 # Start up the USB bridge
-bluenet.initializeUsbBridge("/dev/tty.usbmodemFA1331")
+bluenet.initializeUsbBridge("/dev/tty.usbmodemFA1331", catchSIGINT=True)
 
 # List the ids that have been seen
-while bluenet.isRunning:
+while bluenet.running:
 	time.sleep(2)
 	ids = bluenet.getCrownstoneIds()
 	print("Crownstone IDs:", ids)

@@ -1,7 +1,8 @@
 import signal  # used to catch control C
 
-from BluenetLib.lib.core.bluenet_modules.control.ControlHandler import ControlHandler
-from BluenetLib.lib.core.bluenet_modules.control.UsbDevHandler import UsbDevHandler
+from BluenetLib._EventBusInstance import BluenetEventBus
+from BluenetLib.lib.core.bluenet_modules.UsbDevHandler import UsbDevHandler
+from BluenetLib.lib.core.bluenet_modules.ControlHandler import ControlHandler
 from BluenetLib.lib.core.uart.UartBridge import UartBridge
 from BluenetLib.lib.core.uart.UartTypes import UartTxType
 from BluenetLib.lib.core.uart.UartWrapper import UartWrapper
@@ -9,13 +10,14 @@ from BluenetLib.lib.dataFlowManagers.StoneStateManager import StoneStateManager
 from BluenetLib.lib.protocol.BlePackets import ControlPacket
 from BluenetLib.lib.protocol.BluenetTypes import IntentType, MeshMultiSwitchType, ControlType
 from BluenetLib.lib.protocol.MeshPackets import StoneMultiSwitchPacket, MeshMultiSwitchPacket
-from BluenetLib.lib.util.EventBus import SystemTopics, eventBus, Topics
+from BluenetLib.lib.topics.SystemTopics import SystemTopics
+from BluenetLib.lib.topics.Topics import Topics
 
 
 class BluenetCore:
 	uartBridge = None
 	stoneStateManager = None
-	isRunning = True
+	running = True
 
 	def __init__(self):
 		self.stoneStateManager = StoneStateManager()
@@ -41,7 +43,7 @@ class BluenetCore:
 	def stop(self):
 		print("Quitting BluenetLib...")
 		self.uartBridge.stop()
-		self.isRunning = False
+		self.running = False
 
 
 	def switchCrownstone(self, crownstoneId, on):
@@ -65,7 +67,7 @@ class BluenetCore:
 
 
 	def getEventBus(self):
-		return eventBus
+		return BluenetEventBus
 
 
 	def getTopics(self):
@@ -76,7 +78,7 @@ class BluenetCore:
 		return self.stoneStateManager.getIds()
 
 	def isRunning(self):
-		return self.isRunning
+		return self.running
 
 	def getLatestCrownstoneData(self, crownstoneId):
 		self.stoneStateManager.getLatestCrownstoneData(crownstoneId)
@@ -106,4 +108,4 @@ class BluenetCore:
 		uartPacket 				= UartWrapper(UartTxType.CONTROL, controlPacket).getPacket()
 
 		# send over uart
-		eventBus.emit(SystemTopics.uartWriteData, uartPacket)
+		BluenetEventBus.emit(SystemTopics.uartWriteData, uartPacket)

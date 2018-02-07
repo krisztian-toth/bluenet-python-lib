@@ -48,17 +48,17 @@ class PowerCalculationPacket:
 		self.avgPowerMilliWattReal 		= Conversion.uint8_array_to_int32(payload[i:i+self.sampleSize])
 
 	def getDict(self):
-		dict = {}
+		data = {}
 
-		dict["crownstoneId"] = 0  # TODO: get the Crownstone ID here.
-		dict["currentRmsMA"] = self.currentRmsMA
-		dict["currentRmsMedianMA"] = self.currentRmsMedianMA
-		dict["filteredCurrentRmsMA"] = self.filteredCurrentRmsMA
-		dict["filteredCurrentRmsMedianMA"] = self.filteredCurrentRmsMedianMA
-		dict["avgZeroVoltage"] = self.avgZeroVoltage
-		dict["avgZeroCurrent"] = self.avgZeroCurrent
-		dict["powerMilliWattApparent"] = self.powerMilliWattApparent
-		dict["powerMilliWattReal"] = self.powerMilliWattReal
-		dict["avgPowerMilliWattReal"] = self.avgPowerMilliWattReal
+		data["crownstoneId"] = 0  # TODO: get the Crownstone ID here.
+		data["currentRmsMA"] = self.currentRmsMA
+		data["currentRmsMedianMA"] = self.currentRmsMedianMA
+		data["filteredCurrentRmsMA"] = self.filteredCurrentRmsMA
+		data["filteredCurrentRmsMedianMA"] = self.filteredCurrentRmsMedianMA
+		data["avgZeroVoltage"] = self.avgZeroVoltage
+		data["avgZeroCurrent"] = self.avgZeroCurrent
+		data["powerMilliWattApparent"] = self.powerMilliWattApparent
+		data["powerMilliWattReal"] = self.powerMilliWattReal
+		data["avgPowerMilliWattReal"] = self.avgPowerMilliWattReal
 
-		return dict
+		return data

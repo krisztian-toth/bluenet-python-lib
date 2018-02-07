@@ -1,6 +1,7 @@
 from BluenetLib.lib.core.uart.UartTypes import UartTxType
 from BluenetLib.lib.core.uart.UartWrapper import UartWrapper
-from BluenetLib.lib.util.EventBus import eventBus, SystemTopics
+from BluenetLib._EventBusInstance import BluenetEventBus
+from BluenetLib.lib.topics.SystemTopics import SystemTopics
 
 
 class UsbDevHandler:
@@ -134,14 +135,14 @@ class UsbDevHandler:
 
     # MARK: internal methods
     
-    def _getPayload(self, bool):
+    def _getPayload(self, boolean):
         payload = 0
-        if bool:
+        if boolean:
             payload = 1
             
         return [payload]
 
     def _send(self, uartPacket):
         # send over uart
-        eventBus.emit(SystemTopics.uartWriteData, uartPacket)
+        BluenetEventBus.emit(SystemTopics.uartWriteData, uartPacket)
         

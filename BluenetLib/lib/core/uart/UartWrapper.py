@@ -19,9 +19,9 @@ class UartWrapper:
 		escapedPayload = []
 		for byte in payload:
 			if byte is ESCAPE_TOKEN or byte is START_TOKEN:
-				escapedPayload.push(ESCAPE_TOKEN)
+				escapedPayload.append(ESCAPE_TOKEN)
 				escapedByte = byte ^ BIT_FLIP_MASK
-				escapedPayload.push(escapedByte)
+				escapedPayload.append(escapedByte)
 			else:
 				escapedPayload.append(byte)
 

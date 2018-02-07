@@ -21,10 +21,10 @@ class CurrentSamplesPacket:
 			self.samples.append((0, Conversion.uint8_array_to_int16(payload[i:i+self.sampleSize])))
 
 	def getDict(self):
-		dict = {}
+		data = {}
 
-		dict["crownstoneId"] = 0 # TODO: get the Crownstone ID here.
-		dict["type"] = self.typeDescription
-		dict["data"] = self.samples
+		data["crownstoneId"] = 0 # TODO: get the Crownstone ID here.
+		data["type"] = self.typeDescription
+		data["data"] = self.samples
 
-		return dict
+		return data

@@ -1,3 +1,4 @@
+
 from BluenetLib.lib.core.uart.UartTypes import UartRxType
 from BluenetLib.lib.core.uart.uartPackets.CurrentSamplesPacket import CurrentSamplesPacket
 from BluenetLib.lib.core.uart.uartPackets.MeshStatePacket import MeshStatePacket
@@ -5,12 +6,14 @@ from BluenetLib.lib.core.uart.uartPackets.PowerCalculationPacket import PowerCal
 from BluenetLib.lib.core.uart.uartPackets.ServiceDataPacket import ServiceDataPacket
 from BluenetLib.lib.core.uart.uartPackets.VoltageSamplesPacket import VoltageSamplesPacket
 
-from BluenetLib.lib.util.EventBus import eventBus, SystemTopics, Topics, DevTopics
+from BluenetLib._EventBusInstance import BluenetEventBus
+from BluenetLib.lib.topics.DevTopics import DevTopics
+from BluenetLib.lib.topics.SystemTopics import SystemTopics
 
 
 class UartParser:
     def __init__(self):
-        eventBus.subscribe(SystemTopics.uartNewPackage, self.parse)
+        BluenetEventBus.subscribe(SystemTopics.uartNewPackage, self.parse)
 
     def parse(self, dataPacket):
 
@@ -27,32 +30,32 @@ class UartParser:
         elif opCode == UartRxType.SERVICE_DATA:
             serviceData = ServiceDataPacket(dataPacket.payload)
             if serviceData.isValid():
-                eventBus.emit(DevTopics.newServiceData, serviceData.getDict())
+                BluenetEventBus.emit(DevTopics.newServiceData, serviceData.getDict())
   
         elif opCode == UartRxType.POWER_LOG_CURRENT:
             # type is CurrentSamples
             parsedData = CurrentSamplesPacket(dataPacket.payload)
-            eventBus.emit(DevTopics.newCurrentData, parsedData.getDict())
+            BluenetEventBus.emit(DevTopics.newCurrentData, parsedData.getDict())
             
         elif opCode == UartRxType.POWER_LOG_VOLTAGE:
             # type is VoltageSamplesPacket
             parsedData = VoltageSamplesPacket(dataPacket.payload)
-            eventBus.emit(DevTopics.newVoltageData, parsedData.getDict())
+            BluenetEventBus.emit(DevTopics.newVoltageData, parsedData.getDict())
             
         elif opCode == UartRxType.POWER_LOG_FILTERED_CURRENT:
             # type is CurrentSamples
             parsedData = CurrentSamplesPacket(dataPacket.payload)
-            eventBus.emit(DevTopics.newFilteredCurrentData, parsedData.getDict())
+            BluenetEventBus.emit(DevTopics.newFilteredCurrentData, parsedData.getDict())
             
         elif opCode == UartRxType.POWER_LOG_FILTERED_VOLTAGE:
             # type is VoltageSamplesPacket
             parsedData = VoltageSamplesPacket(dataPacket.payload)
-            eventBus.emit(DevTopics.newFilteredVoltageData, parsedData.getDict())
+            BluenetEventBus.emit(DevTopics.newFilteredVoltageData, parsedData.getDict())
             
         elif opCode == UartRxType.POWER_LOG_POWER:
             # type is PowerCalculationsPacket
             parsedData = PowerCalculationPacket(dataPacket.payload)
-            eventBus.emit(DevTopics.newCalculatedPowerData, parsedData.getDict())
+            BluenetEventBus.emit(DevTopics.newCalculatedPowerData, parsedData.getDict())
             
         else:
             print("Unknown OpCode", opCode)

@@ -1,9 +1,10 @@
+from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.core.uart.UartWrapper import BIT_FLIP_MASK, ESCAPE_TOKEN, START_TOKEN
 from BluenetLib.lib.core.uart.uartPackets.UartPacket import PREFIX_SIZE, OPCODE_SIZE, WRAPPER_SIZE, CRC_SIZE, UartPacket
+from BluenetLib.lib.topics.SystemTopics import SystemTopics
 
 from BluenetLib.lib.util.Conversion import Conversion
 from BluenetLib.lib.util.UartUtil   import UartUtil
-from BluenetLib.lib.util.EventBus	import eventBus, SystemTopics
 
 
 class UartReadBuffer:
@@ -76,7 +77,7 @@ class UartReadBuffer:
 
 		packet = UartPacket(self.buffer)
 
-		eventBus.emit(SystemTopics.uartNewPackage, packet)
+		BluenetEventBus.emit(SystemTopics.uartNewPackage, packet)
 		self.reset()
 
 

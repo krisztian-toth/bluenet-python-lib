@@ -1,14 +1,15 @@
 import threading
 
 import serial
+
+from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.core.uart.UartParser import UartParser
 from BluenetLib.lib.core.uart.UartReadBuffer import UartReadBuffer
-
-from BluenetLib.lib.util.EventBus import eventBus, SystemTopics
+from BluenetLib.lib.topics.SystemTopics import SystemTopics
 
 
 class UartBridge (threading.Thread):
-	baudrate = 38400
+	baudrate = 230400
 	port = 'COM1'
 	serialController = None
 	parser = None
@@ -25,15 +26,14 @@ class UartBridge (threading.Thread):
 
 
 	def run(self):
-		self.eventId = eventBus.subscribe(SystemTopics.uartWriteData, self.writeToUart)
+		self.eventId = BluenetEventBus.subscribe(SystemTopics.uartWriteData, self.writeToUart)
 		self.parser = UartParser()
 		self.startReading()
 
 	def stop(self):
 		self.running = False
-		eventBus.unsubscribe(self.eventId);
-
-
+		BluenetEventBus.unsubscribe(self.eventId)
+	
 	def startSerial(self):
 		print("initializing serial on port ", self.port, ' with baudrate ', self.baudrate)
 		self.serialController = serial.Serial()
