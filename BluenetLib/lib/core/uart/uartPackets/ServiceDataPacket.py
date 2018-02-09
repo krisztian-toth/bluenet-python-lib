@@ -14,6 +14,8 @@ class ServiceDataPacket:
     energyUsed = 0
     partialTimestamp = 0
     validation = 0
+    relayState = 0
+    igbtState = 0
     
     def __init__(self, payload):
         if len(payload) != SERVICE_DATA_SIZE:
@@ -24,6 +26,12 @@ class ServiceDataPacket:
         self.dataType         = payload[1]
         self.crownstoneId     = payload[2]
         self.switchState      = payload[3]
+        
+        # TODO: make less ugly
+        if self.switchState > 100:
+            self.relayState = 1
+            self.igbtState = float(self.switchState - 128)/100.0
+        
         self.flagBitmask      = payload[4]
         self.temperature      = Conversion.uint8_to_int8(payload[5])
         self.powerFactor      = float(Conversion.uint8_to_int8(payload[6])) / 127
