@@ -37,3 +37,6 @@ class UartRxType(IntEnum):
 	POWER_LOG_FILTERED_CURRENT =       10202
 	POWER_LOG_FILTERED_VOLTAGE =       10203
 	POWER_LOG_POWER =                  10204
+	
+	
+	ASCII_LOG =               		   20000

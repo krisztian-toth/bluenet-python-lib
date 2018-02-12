@@ -1,3 +1,4 @@
+import sys
 
 from BluenetLib.lib.core.uart.UartTypes import UartRxType
 from BluenetLib.lib.core.uart.uartPackets.CurrentSamplesPacket import CurrentSamplesPacket
@@ -16,7 +17,6 @@ class UartParser:
         BluenetEventBus.subscribe(SystemTopics.uartNewPackage, self.parse)
 
     def parse(self, dataPacket):
-
         opCode = dataPacket.opCode
 
         if opCode == UartRxType.MESH_STATE_0 or opCode == UartRxType.MESH_STATE_1:
@@ -26,7 +26,6 @@ class UartParser:
             # have each stone in the meshPacket broadcast it's state
             for stoneState in meshPacket.stoneStates:
                 stoneState.broadcastState()
-                
         elif opCode == UartRxType.SERVICE_DATA:
             serviceData = ServiceDataPacket(dataPacket.payload)
             if serviceData.isValid():
@@ -56,7 +55,12 @@ class UartParser:
             # type is PowerCalculationsPacket
             parsedData = PowerCalculationPacket(dataPacket.payload)
             BluenetEventBus.emit(DevTopics.newCalculatedPowerData, parsedData.getDict())
-            
+        elif opCode == UartRxType.ASCII_LOG:
+            stringResult = ""
+            for byte in dataPacket.payload:
+                stringResult += chr(byte)
+            sys.stdout.write("LOG:")
+            sys.stdout.write(stringResult)
         else:
             print("Unknown OpCode", opCode)
 

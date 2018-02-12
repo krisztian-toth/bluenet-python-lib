@@ -78,7 +78,6 @@ class UartReadBuffer:
             return
 
         packet = UartPacket(self.buffer)
-
         BluenetEventBus.emit(SystemTopics.uartNewPackage, packet)
         self.reset()
 

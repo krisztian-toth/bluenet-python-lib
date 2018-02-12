@@ -31,6 +31,7 @@ class UartBridge (threading.Thread):
         self.startReading()
 
     def stop(self):
+        print("Stopping UartBridge")
         self.running = False
         BluenetEventBus.unsubscribe(self.eventId)
     
