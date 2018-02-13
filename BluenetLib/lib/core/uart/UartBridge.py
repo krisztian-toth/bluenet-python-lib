@@ -40,7 +40,7 @@ class UartBridge (threading.Thread):
         self.serialController = serial.Serial()
         self.serialController.port = self.port
         self.serialController.baudrate = int(self.baudrate)
-        self.serialController.timeout = 0
+        self.serialController.timeout = None
         self.serialController.open()
 
 
@@ -50,7 +50,7 @@ class UartBridge (threading.Thread):
         while self.running:
             byte  = self.serialController.read()
             if byte:
-                readBuffer.add(byte)
+                readBuffer.addByteArray(byte)
 
         print("Cleaning up")
         self.serialController.close()

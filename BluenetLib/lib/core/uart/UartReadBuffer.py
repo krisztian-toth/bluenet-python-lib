@@ -8,7 +8,6 @@ from BluenetLib.lib.util.UartUtil   import UartUtil
 
 
 class UartReadBuffer:
-    # debugBuffer = []
     buffer = []
     escapingNextToken = False
     active = False
@@ -19,11 +18,13 @@ class UartReadBuffer:
     def __init__(self):
         pass
 
-    def add(self, rawByteArray):
-        byte = rawByteArray[0]
+    def addByteArray(self, rawByteArray):
+        for byte in rawByteArray:
+            self.add(byte)
+
+    def add(self, byte):
         # if we have a start token and we are not active
         if byte is START_TOKEN:
-            # self.debugBuffer.append(byte)
             if self.active:
                 print("WARN: MULTIPLE START TOKENS")
                 self.reset()
@@ -52,7 +53,6 @@ class UartReadBuffer:
 
 
         self.buffer.append(byte)
-        # self.debugBuffer.append(byte)
         bufferSize = len(self.buffer)
 
         if bufferSize == PREFIX_SIZE:
@@ -83,7 +83,6 @@ class UartReadBuffer:
 
 
     def reset(self):
-        self.debugBuffer = []
         self.buffer = []
         self.escapingNextToken = False
         self.active = False
