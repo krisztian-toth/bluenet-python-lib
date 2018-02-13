@@ -23,10 +23,11 @@ class UartParser:
         if opCode == UartRxType.MESH_STATE_0 or opCode == UartRxType.MESH_STATE_1:
             # unpack the mesh packet
             meshPacket = MeshStatePacket(dataPacket.payload)
-
+            
             # have each stone in the meshPacket broadcast it's state
             for stoneState in meshPacket.stoneStates:
                 stoneState.broadcastState()
+                
         elif opCode == UartRxType.SERVICE_DATA:
             serviceData = ServiceDataPacket(dataPacket.payload)
             if serviceData.isValid():

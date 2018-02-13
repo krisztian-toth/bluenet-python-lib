@@ -24,12 +24,10 @@ class BluenetCore:
 		self.control = ControlHandler()
 		self._usbDev = UsbDevHandler()
 
-	def initializeUsbBridge(self, port, catchSIGINT = False):
+	def initializeUsbBridge(self, port, baudrate=38400, catchSIGINT=False):
 		# listen for CTRL+C and handle the exit cleanly.
 		if catchSIGINT:
 			signal.signal(signal.SIGINT, self.__stopAll)
-
-		baudrate = 230400
 
 		# init the uart bridge
 		self.uartBridge = UartBridge(port, baudrate)

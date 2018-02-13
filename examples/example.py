@@ -14,7 +14,7 @@ def showPowerUsage(data):
 bluenet = Bluenet()
 
 # Start up the USB bridge
-bluenet.initializeUsbBridge("/dev/tty.usbmodemFD131", catchSIGINT=True)
+bluenet.initializeUsbBridge("/dev/tty.SLAB_USBtoUART", catchSIGINT=True)
 
 # Set up event listeners
 myEventBus = bluenet.getEventBus()
@@ -22,7 +22,7 @@ myTopics   = bluenet.getTopics()
 myEventBus.subscribe(myTopics.powerUsageUpdate, showPowerUsage)
 
 # This is the id of the Crownstone we will be switching
-targetCrownstoneId = 1
+targetCrownstoneId = 10
 
 # Switch this Crownstone on and off.
 switchState = True

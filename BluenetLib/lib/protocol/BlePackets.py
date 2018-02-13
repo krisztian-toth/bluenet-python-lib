@@ -8,7 +8,7 @@ class BLEPacket:
     payload = []
 
     def __init__(self, packetType):
-        self.type = packetType
+        self.type = packetType.value
 
     def loadString(self, string):
         self.payload = Conversion.string_to_uint8_array(string)
@@ -94,7 +94,7 @@ class ReadConfigPacket(BLEPacket):
     def getPacket(self):
         packet = []
         packet.append(self.type)
-        packet.append(self.getOpCode())
+        packet.append(self.getOpCode().value)
         packet += self.lengthAsUint8Array
         packet += self.payload
         return packet
@@ -114,7 +114,7 @@ class ReadStatePacket(BLEPacket):
     def getPacket(self):
         packet = []
         packet.append(self.type)
-        packet.append(self.getOpCode())
+        packet.append(self.getOpCode().value)
         packet += self.lengthAsUint8Array
         packet += self.payload
         return packet
