@@ -48,9 +48,13 @@ class UartBridge (threading.Thread):
         readBuffer = UartReadBuffer()
         print("Read starting on serial port.")
         while self.running:
-            byte  = self.serialController.read()
-            if byte:
-                readBuffer.addByteArray(byte)
+            bytes = self.serialController.read()
+            if bytes:
+                # clear out the entire read buffer
+                if self.serialController.in_waiting > 0:
+                    additionalBytes = self.serialController.read(self.serialController.in_waiting)
+                    bytes = bytes + additionalBytes
+                readBuffer.addByteArray(bytes)
 
         print("Cleaning up")
         self.serialController.close()
