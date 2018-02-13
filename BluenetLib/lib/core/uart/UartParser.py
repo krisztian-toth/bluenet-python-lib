@@ -1,5 +1,7 @@
 import sys
 
+import time
+
 from BluenetLib.lib.core.uart.UartTypes import UartRxType
 from BluenetLib.lib.core.uart.uartPackets.AdcConfigPacket import AdcConfigPacket
 from BluenetLib.lib.core.uart.uartPackets.CurrentSamplesPacket import CurrentSamplesPacket
@@ -67,7 +69,9 @@ class UartParser:
             stringResult = ""
             for byte in dataPacket.payload:
                 stringResult += chr(byte)
-            sys.stdout.write("LOG:")
+            sys.stdout.write("LOG: ")
+            sys.stdout.write(str(round(time.time(),3)))
+            sys.stdout.write(" - ")
             sys.stdout.write(stringResult)
         else:
             print("Unknown OpCode", opCode)

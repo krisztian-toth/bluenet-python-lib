@@ -8,7 +8,7 @@ from BluenetLib.lib.util.Conversion import Conversion
 class AdcConfigPacket:
     amountOfChannels = 2
     channelSize = 6 
-    packetSize = amountOfChannels * channelSize
+    packetSize = amountOfChannels * channelSize + 1 + 4 # 4 for sampling period, 1 for count
  
     channels = []
     samplingPeriod = 0
@@ -22,17 +22,17 @@ class AdcConfigPacket:
         index = 0
         self.amountOfChannels = payload[index]
         index += 1
-        self.packetSize = self.amountOfChannels * self.channelSize
+        self.packetSize = self.amountOfChannels * self.channelSize + 1 + 4 # 4 for sampling period, 1 for count
         
         if len(payload) < self.packetSize:
             print("ERROR: INVALID PAYLOAD LENGTH", len(payload), payload)
             return
         
         for i in range(0,self.amountOfChannels):
-            self.channels.append(AdcChannelPacket(payload[ index : index+self.channelSize], i))
+            self.channels.append(AdcChannelPacket(payload[ index : index+self.channelSize ], i))
             index += self.channelSize
         
-        self.samplingPeriod = Conversion.uint8_array_to_uint32([payload[index:index+4]])
+        self.samplingPeriod = Conversion.uint8_array_to_uint32(payload[index:index+4])
 
 
     def getDict(self):
