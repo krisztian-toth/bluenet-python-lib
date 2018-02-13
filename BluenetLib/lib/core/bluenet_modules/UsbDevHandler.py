@@ -91,6 +91,14 @@ class UsbDevHandler:
         """
         self._send(UartWrapper(UartTxType.ADC_CONFIG_VOLTAGE_PIN, [pin]).getPacket())
 
+    def toggleVoltageChannelPin(self):
+        """
+            Select the measurement pin for the voltage sensing
+            :param pin: int [0 .. 255]
+            :return:
+        """
+        self._send(UartWrapper(UartTxType.ADC_CONFIG_VOLTAGE_PIN, []).getPacket())
+
     def setSendCurrentSamples(self, enabled):
         """
             Enable/ disable the sending of the measured current buffer.

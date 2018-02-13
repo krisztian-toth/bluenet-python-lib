@@ -1,6 +1,7 @@
 import sys
 
 from BluenetLib.lib.core.uart.UartTypes import UartRxType
+from BluenetLib.lib.core.uart.uartPackets.AdcConfigPacket import AdcConfigPacket
 from BluenetLib.lib.core.uart.uartPackets.CurrentSamplesPacket import CurrentSamplesPacket
 from BluenetLib.lib.core.uart.uartPackets.MeshStatePacket import MeshStatePacket
 from BluenetLib.lib.core.uart.uartPackets.PowerCalculationPacket import PowerCalculationPacket
@@ -55,6 +56,12 @@ class UartParser:
             # type is PowerCalculationsPacket
             parsedData = PowerCalculationPacket(dataPacket.payload)
             BluenetEventBus.emit(DevTopics.newCalculatedPowerData, parsedData.getDict())
+            
+        elif opCode == UartRxType.ADC_CONFIG:
+            # type is PowerCalculationsPacket
+            parsedData = AdcConfigPacket(dataPacket.payload)
+            BluenetEventBus.emit(DevTopics.newAdcConfigPacket, parsedData.getDict())
+            
         elif opCode == UartRxType.ASCII_LOG:
             stringResult = ""
             for byte in dataPacket.payload:
