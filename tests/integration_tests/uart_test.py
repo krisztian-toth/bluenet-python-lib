@@ -1,12 +1,12 @@
 import signal
 from random import randint
 
-
 # lets start all modules one by one.
 from lib.core.uart.UartBridge import UartBridge
-from lib.util.UartUtil import UartUtil
-from lib.util.Conversion import Conversion
-from lib.util.EventBus import SystemTopics, eventBus
+
+from BluenetLib.lib.util import Conversion
+from BluenetLib.lib.util import SystemTopics, eventBus
+from BluenetLib.lib.util import UartUtil
 
 
 class UartTest:

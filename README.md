@@ -12,12 +12,11 @@ This module is written in Python 3 and needs Python 3.5 or higher. The reason fo
 
 Pip is used for package management. You can install all dependencies by running:
 ```
-pip install -r requirements.txt
-```
+python setup.py install
 
-Make sure pip here is for Python 3. If you're not sure, you can try running:
-```
-pip3 install -r requirements.txt
+# or
+
+python3 setup.py install
 ```
 
 ## Requirements for the Crownstone USB
@@ -51,7 +50,15 @@ An example is provided in the root of this repository.
 - First use the [phone app](https://crownstone.rocks/app) to setup your Crownstones and the Crownstone USB.
 - Make sure you update the Crownstones' firmware to at least 2.0.0.
 - Find out what port to use (e.g. `COM1`, `/dev/ttyUSB0`, or `/dev/tty.SLAB_USBtoUART`) and fill this in at `discoveryExample.py` and `example.py`.
+- install the BluenetLib library using the setup.py:
 
+```python
+python3 setup.py install
+
+# or:
+
+python setup.py install
+```
 
 ## Find the IDs of your Crownstones
 
