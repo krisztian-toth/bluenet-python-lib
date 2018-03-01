@@ -22,7 +22,7 @@ myTopics   = bluenet.getTopics()
 myEventBus.subscribe(myTopics.powerUsageUpdate, showPowerUsage)
 
 # This is the id of the Crownstone we will be switching
-targetCrownstoneId = 1
+targetCrownstoneId = 3
 
 # Switch this Crownstone on and off.
 switchState = True
