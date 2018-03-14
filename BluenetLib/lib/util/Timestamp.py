@@ -2,7 +2,6 @@ import time
 
 from BluenetLib.lib.util.Conversion import Conversion
 
-
 def obtainTimestamp(fullTimeStamp, lsb):
 	timestampBytes = Conversion.uint32_to_uint8_array(int(fullTimeStamp))
 	lsbBytes = Conversion.uint16_to_uint8_array(lsb)

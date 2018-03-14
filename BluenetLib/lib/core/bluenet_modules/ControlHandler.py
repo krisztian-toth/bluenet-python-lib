@@ -7,7 +7,9 @@ class ControlHandler:
 
 	def allowDimming(self):
 		pass
-
+		
+		
+  
 
 # Bluenet.setSwitch(cid1, 1)
 # Bluenet.setSwitch(cid2, 1)

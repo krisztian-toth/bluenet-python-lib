@@ -5,3 +5,5 @@ class Topics(Enum):
     powerUsageUpdate = "powerUsageReal"  # data is dictionary: { crownstoneId: int, powerUsage  : number }
     switchStateUpdate = "switchState"  # data is dictionary: { crownstoneId: int, switchState : number }
 
+    advertisement = "advertisement"
+

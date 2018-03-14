@@ -273,3 +273,31 @@ class Conversion:
 		for p in reversed(hexStrArr):
 			arr8.append(Conversion.hex_string_to_uint8_array(p)[0])
 		return bytearray(arr8)
+
+
+	@staticmethod
+	def uint8_to_bit_array(val):
+		result = [False, False, False, False, False, False, False, False]
+		
+		one = 1
+		
+		result[0] = (val & (one << 0)) != 0
+		result[1] = (val & (one << 1)) != 0
+		result[2] = (val & (one << 2)) != 0
+		result[3] = (val & (one << 3)) != 0
+		result[4] = (val & (one << 4)) != 0
+		result[5] = (val & (one << 5)) != 0
+		result[6] = (val & (one << 6)) != 0
+		result[7] = (val & (one << 7)) != 0
+		
+		return result
+	
+	@staticmethod
+	def uint32_to_bit_array(val):
+		result = [False] * 32
+		one = 1
+		
+		for i in range(0,32):
+			result[i] = (val & (one << i)) != 0
+		
+		return result
