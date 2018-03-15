@@ -105,8 +105,6 @@ class WriteConfigPacket(ReadConfigPacket):
 
 
 
-
-
 class ReadStatePacket(BLEPacket):
     def getOpCode(self):
         return OpCode.READ

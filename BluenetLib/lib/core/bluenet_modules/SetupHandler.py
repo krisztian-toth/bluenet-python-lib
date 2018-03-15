@@ -1,6 +1,7 @@
 
 
 class SetupHandler:
-    
-    def __init__(self):
-        pass
+    core = None
+
+    def __init__(self, bluetoothCore):
+        self.core = bluetoothCore

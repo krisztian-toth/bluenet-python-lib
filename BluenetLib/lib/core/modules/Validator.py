@@ -1,6 +1,6 @@
 
 from BluenetLib._EventBusInstance import BluenetEventBus
-from BluenetLib.lib.core.logic.StoneTracker import StoneTracker
+from BluenetLib.lib.core.modules.StoneTracker import StoneTracker
 from BluenetLib.lib.topics.SystemBleTopics import SystemBleTopics
 from BluenetLib.lib.topics.Topics import Topics
 

@@ -157,11 +157,10 @@ class Conversion:
 
 	@staticmethod
 	def string_to_uint8_array(string):
-#		arr8 = []
-#		for i in range(0, len(string)):
-#			arr8.append(ord(string[i]))
-#		return arr8
-		return bytearray(string)
+		arr8 = []
+		for i in range(0, len(string)):
+			arr8.append(ord(string[i]))
+		return bytes(arr8)
 
 
 	########################
@@ -196,6 +195,15 @@ class Conversion:
 	#######################
 	# Hex string to array #
 	#######################
+	
+	@staticmethod
+	def ascii_or_hex_string_to_16_byte_array(input):
+		if len(input) == 16:
+			return Conversion.string_to_uint8_array(input)
+		else :
+			return Conversion.hex_string_to_uint8_array(input)
+	
+	
 	@staticmethod
 	def hex_string_to_uint8_array(hexStr):
 #		""" Convert a string which represents a hex byte buffer to an uint8 array """

@@ -21,7 +21,6 @@ class BluenetCore:
 
 	def __init__(self):
 		self.stoneStateManager = StoneStateManager()
-		self.control = ControlHandler()
 		self._usbDev = UsbDevHandler()
 
 	def initializeUsbBridge(self, port, baudrate=38400, catchSIGINT=False):

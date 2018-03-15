@@ -19,7 +19,6 @@ class ScanDelegate(DefaultDelegate):
         if valueText is not None:
             self.parsePayload(dev.addr, dev.rssi, nameText, valueText)
           
-    
     def parsePayload(self, address, rssi, nameText, valueText):
         advertisement = Advertisement(address, rssi, nameText, valueText)
         if advertisement.isCrownstoneFamily():
