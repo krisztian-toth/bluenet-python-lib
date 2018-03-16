@@ -21,6 +21,9 @@ class StoneTracker:
     rssiTimeout = 3  # seconds
     consecutiveMatches = 0
     
+    timeoutTimers = {}
+    rssiTimers = {}
+    
     def __init__(self, cleanupCallback):
         self.cleanupCallback = cleanupCallback
     
@@ -35,8 +38,8 @@ class StoneTracker:
     def handlePayload(self, advertisement):
         self.rssi = advertisement.rssi
     
-        updatetime = time.time()
-        self.lastUpdate = updatetime
+        updateTime = time.time()
+        self.lastUpdate = updateTime
     
         self.rssiHistory[self.lastUpdate] = self.rssi
     
@@ -49,19 +52,31 @@ class StoneTracker:
         
     
         self.calculateRssiAverage()
+        
+        self.timeoutTimers[updateTime] = Timer(self.timeout,     lambda: self.checkTimeout(updateTime), ())
+        self.rssiTimers[updateTime]    = Timer(self.rssiTimeout, lambda: self.clearRSSI(   updateTime), ())
 
-        Timer(self.timeout,     lambda: self.checkTimeout(updatetime), ()).start()
-        Timer(self.rssiTimeout, lambda: self.clearRSSI(   updatetime), ()).start()
+        self.timeoutTimers[updateTime].start()
+        self.rssiTimers[updateTime].start()
 
+
+    def cancelRunningTimers(self):
+        for time, timer in self.timeoutTimers.items():
+            timer.cancel()
+
+        for time, timer in self.rssiTimers.items():
+            timer.cancel()
 
     def checkTimeout(self, referenceTime):
         # if they are equal, no update has happened since the scheduling of this check.
+        del self.timeoutTimers[referenceTime]
         if self.lastUpdate == referenceTime:
             self.cleanupCallback()
 
 
     def clearRSSI(self, referenceTime):
         del self.rssiHistory[referenceTime]
+        del self.rssiTimers[referenceTime]
         self.calculateRssiAverage()
 
 
@@ -117,5 +132,9 @@ class StoneTracker:
             self.avgRssi = total / float(count)
         else:
             self.avgRssi = 0
+        
+    def shutDown(self):
+        self.cancelRunningTimers()
+        
         
         

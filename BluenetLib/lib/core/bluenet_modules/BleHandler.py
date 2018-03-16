@@ -1,10 +1,15 @@
 from bluepy.btle import Scanner, Peripheral, ADDR_TYPE_RANDOM, BTLEException
 
 from BluenetLib import BluenetBleException
+from BluenetLib.Exceptions import BleError
+from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.core.bluetooth_delegates.SingleNotificationDelegate import PeripheralDelegate
 from BluenetLib.lib.core.bluetooth_delegates.ScanDelegate import ScanDelegate
 from BluenetLib.lib.core.modules.Validator import Validator
+from BluenetLib.lib.topics.SystemBleTopics import SystemBleTopics
 from BluenetLib.lib.util.EncryptionHandler import EncryptionHandler
+
+from threading import Timer
 
 CCCD_UUID = 0x2902
 
@@ -18,11 +23,23 @@ class BleHandler:
     notificationLoopActive = False
     notificationResult = None
     
+    scanningActive = False
+    scanAborted = False
+    
+    subscriptionIds = []
     
     def __init__(self, settings):
         self.scanner = Scanner().withDelegate(ScanDelegate())
         self.validator = Validator()
         self.settings = settings
+        self.subscriptionIds.append(BluenetEventBus.subscribe(SystemBleTopics.abortScanning, lambda x: self.abortScanning()))
+        
+    
+    def shutDown(self):
+        for subscriptionId in self.subscriptionIds:
+            BluenetEventBus.unsubscribe(subscriptionId)
+            
+        self.validator.shutDown()
     
     
     def connect(self, address):
@@ -44,15 +61,30 @@ class BleHandler:
             print("Cleaned up")
     
     
-    def startScanning(self):
-        self.scanner.start()
-        self.scanner.process(3)
-        self.scanner.stop()
+    def startScanning(self, timeout=3):
+        if not self.scanningActive:
+            self.scanner.start()
+            self.scanningActive = True
+            self.scanAborted = False
+            scanTime = 0
+            while self.scanningActive and scanTime < timeout and not self.scanAborted:
+                scanTime += 0.5
+                self.scanner.process(scanTime)
+            
+            self.stopScanning()
+
+    def startScanningBackground(self, timeout=3):
+        Timer(0.0001, lambda: self.startScanning(timeout))
 
     
     def stopScanning(self):
-        self.scanner.stop()
-    
+        if self.scanningActive:
+            self.scanner.stop()
+            self.scanningActive = False
+            
+    def abortScanning(self):
+        if self.scanningActive:
+            self.scanAborted = True
     
     def enableNotifications(self):
         print("ENABLE NOTIFICATIONS IS NOT IMPLEMENTED YET")
@@ -68,7 +100,8 @@ class BleHandler:
 
     def readCharacteristic(self, serviceUUID, characteristicUUID):
         data = self.readCharacteristicWithoutEncryption(serviceUUID, characteristicUUID)
-        
+        if self.settings.isEncryptionEnabled():
+            return EncryptionHandler.decrypt(data, self.settings)
 
 
     def readCharacteristicWithoutEncryption(self, serviceUUID, characteristicUUID):
@@ -84,16 +117,16 @@ class BleHandler:
             try:
                 service = peripheral.getServiceByUUID(serviceUUID)
             except BTLEException:
-                raise BluenetBleException("Can not find service", serviceUUID)
+                raise BluenetBleException(BleError.CAN_NOT_FIND_SERVICE, "Can not find service: " + serviceUUID)
         
             characteristics = service.getCharacteristics(characteristicUUID)
             if len(characteristics) == 0:
-                raise BluenetBleException("Can not find characteristic", characteristicUUID)
+                raise BluenetBleException(BleError.CAN_NOT_FIND_CHACTERISTIC, "Can not find characteristic: " + characteristicUUID)
 
             return characteristics[0]
         
         else:
-            raise BluenetBleException("Can't get characteristic: Not connected.")
+            raise BluenetBleException(BleError.CAN_NOT_GET_CHACTERISTIC, "Can't get characteristic: Not connected.")
         
         
     def setupSingleNotification(self, serviceUUID, characteristicUUID, writeCommand):
@@ -104,7 +137,7 @@ class BleHandler:
         
         characteristicCCCDList = characteristic.getDescriptors(forUUID=CCCD_UUID)
         if len(characteristicCCCDList) == 0:
-            raise BluenetBleException("Can not find CCCD handle to use notifications for characteristic: ", characteristicUUID)
+            raise BluenetBleException(BleError.CAN_NOT_FIND_CCCD, "Can not find CCCD handle to use notifications for characteristic: " + characteristicUUID)
         
         characteristicCCCD = characteristicCCCDList[0]
         
@@ -123,7 +156,7 @@ class BleHandler:
 
 
         if self.notificationResult is None:
-            raise BluenetBleException("No notification data received.")
+            raise BluenetBleException(BleError.NO_NOTIFICATION_DATA_RECEIVED, "No notification data received.")
         
         result = self.notificationResult
         self.notificationResult = None

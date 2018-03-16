@@ -46,6 +46,10 @@ class Advertisement:
     def hasScanResponse(self):
         return self.serviceData is not None
     
+    def getCrownstoneId(self):
+        if self.hasScanResponse() and self.isCrownstoneFamily():
+            return self.serviceData.crownstoneId
+    
     def decrypt(self, key):
         if self.serviceData:
             self.serviceData.decrypt(key)
@@ -54,10 +58,14 @@ class Advertisement:
         data = {}
     
         data["name"] = self.name
-        data["rssi "] = self.rssi
+        data["rssi"] = self.rssi
         data["address"] = self.address
-        data["serviceUUID"] = self.serviceUUID
-        data["serviceData"] = self.serviceData.getDictionary()
+        
+        if self.serviceUUID is not None:
+            data["serviceUUID"] = self.serviceUUID
+            
+        if self.serviceData is not None:
+            data["serviceData"] = self.serviceData.getDictionary()
     
         return data
     

@@ -1,20 +1,39 @@
 #!/usr/bin/env python
+import time
+from BluenetLib.lib.core.BluetoothCore import BluetoothCore
 
-"""An example that switches a Crownstone, and prints the power usage of all Crownstones."""
 
 print("\n\n\nStarting Example")
 
-from BluenetLib import Bluenet
-
-# Create new instance of Bluenet
-from BluenetLib.lib.core.BluetoothCore import BluetoothCore
-
-bluenet = Bluenet()
-
+# initialize the Bluetooth Core
 core = BluetoothCore()
-core.setSettings(True, "f40a7ab9eb1c9909a35e4b5bb1c07bcd", "dcad9f07f4a13339db066b4acf437646", "9332b7abf19b86f548156d88c687def6", "test")
-core.connect("f2:6d:08:1c:a9:0c")
-core.control.disconnect()
+core.setSettings(True, "adminKeyForCrown", "memberKeyForHome", "guestKeyForGirls")
 
+#get the nearest crownstone in setup mode. We expect it to be atleast within the -70db range
+nearestStone = core.getNearestSetupCrownstone(rssiAtLeast=-70, returnFirstAcceptable=True)
+
+if nearestStone is not None:
+    # setup the nearest Crownstone if we can find one
+    core.setupCrownstone(
+        nearestStone["address"],
+        crownstoneId=1,
+        meshAccessAddress="4f745905",
+        ibeaconUUID="1843423e-e175-4af0-a2e4-31e32f729a8a",
+        ibeaconMajor=123,
+        ibeaconMinor=456
+    )
+    
+    # wait for setup to finish and the crownstone to reboot
+    print("Sleeping until Crownstone is in Normal mode and ready.")
+    time.sleep(10)
+    
+    # reset the Crownstone back into setup mode
+    print("Starting the Factory Reset Process")
+    core.connect(nearestStone["address"])
+    core.control.commandFactoryReset()
+    core.control.disconnect()
+
+#clean up all pending processes
+core.shutDown()
 
 print("\n\n\nFinished Example")

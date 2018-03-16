@@ -197,11 +197,22 @@ class Conversion:
 	#######################
 	
 	@staticmethod
-	def ascii_or_hex_string_to_16_byte_array(input):
-		if len(input) == 16:
-			return Conversion.string_to_uint8_array(input)
+	def ibeaconUUIDString_to_uint8_array(inputStr):
+		hexStr = inputStr.replace(":","").replace("-","")
+		return Conversion.hex_string_to_uint8_array(hexStr)
+	
+	@staticmethod
+	def ibeaconUUIDString_to_reversed_uint8_array(inputStr):
+		arr = Conversion.ibeaconUUIDString_to_uint8_array(inputStr)
+		arr.reverse()
+		return arr
+	
+	@staticmethod
+	def ascii_or_hex_string_to_16_byte_array(inputStr):
+		if len(inputStr) == 16:
+			return Conversion.string_to_uint8_array(inputStr)
 		else :
-			return Conversion.hex_string_to_uint8_array(input)
+			return Conversion.hex_string_to_uint8_array(inputStr)
 	
 	
 	@staticmethod

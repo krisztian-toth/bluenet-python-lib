@@ -3,7 +3,7 @@ import random
 import math
 import pyaes
 
-from BluenetLib.Exceptions import BluenetBleException
+from BluenetLib.Exceptions import BluenetBleException, BleError
 from BluenetLib.lib.core.modules.BluenetSettings import UserLevel
 from BluenetLib.lib.util.Conversion import Conversion
 
@@ -24,7 +24,7 @@ class SessionData:
     
     def __init__(self, sessionData):
         if len(sessionData) != SESSION_DATA_LENGTH:
-            raise BluenetBleException("Invalid Session Data", sessionData)
+            raise BluenetBleException(BleError.INVALID_SESSION_DATA, "Invalid Session Data")
         
         self.sessionNonce  = [0] * SESSION_DATA_LENGTH
         self.validationKey = [0] * SESSION_KEY_LENGTH
@@ -46,7 +46,7 @@ class EncryptedPackage:
         prefixLength = PACKET_NONCE_LENGTH + PACKET_USER_LEVEL_LENGTH
         # 20 is the minimal size of a packet (3+1+16)
         if len(dataArray) < 20:
-            raise BluenetBleException("Invalid package for encryption. It is too short (min length 20) got " + str(len(dataArray)) + " bytes.")
+            raise BluenetBleException(BleError.INVALID_ENCRYPTION_PACKAGE, "Invalid package for encryption. It is too short (min length 20) got " + str(len(dataArray)) + " bytes.")
 
         self.nonce = [0] * PACKET_NONCE_LENGTH
         
@@ -54,19 +54,19 @@ class EncryptedPackage:
             self.nonce[i] = dataArray[i]
             
         if dataArray[PACKET_NONCE_LENGTH] > 2 and dataArray[PACKET_NONCE_LENGTH] != UserLevel.setup.value:
-            raise BluenetBleException("User level in read packet is invalid:", dataArray[PACKET_NONCE_LENGTH])
+            raise BluenetBleException(BleError.INVALID_ENCRYPTION_USER_LEVEL, "User level in read packet is invalid:" + str(dataArray[PACKET_NONCE_LENGTH]))
         
         try:
             self.userLevel = UserLevel(dataArray[PACKET_NONCE_LENGTH])
         except ValueError:
-            raise BluenetBleException("User level in read packet is invalid:", dataArray[PACKET_NONCE_LENGTH])
+            raise BluenetBleException(BleError.INVALID_ENCRYPTION_USER_LEVEL, "User level in read packet is invalid:" + str(dataArray[PACKET_NONCE_LENGTH]))
         
         payload = [0] * (len(dataArray) - prefixLength)
         for i in range(0, (len(dataArray) - prefixLength)):
             payload[i] = dataArray[i + prefixLength]
             
         if len(payload) % 16 != 0:
-            raise BluenetBleException("Invalid size for encrypted payload")
+            raise BluenetBleException(BleError.INVALID_ENCRYPTION_PACKAGE, "Invalid size for encrypted payload")
         
         self.payload = payload
 
@@ -81,10 +81,10 @@ class EncryptionHandler:
             if checksum == CHECKSUM:
                 return [decrypted[4], decrypted[5], decrypted[6], decrypted[7], decrypted[8]]
             else:
-                raise BluenetBleException("Could not validate the session nonce.")
+                raise BluenetBleException(BleError.COULD_NOT_VALIDATE_SESSION_NONCE, "Could not validate the session nonce.")
     
         else:
-            raise BluenetBleException("Could not read session nonce, maybe encryption is disabled?")
+            raise BluenetBleException(BleError.COULD_NOT_READ_SESSION_NONCE, "Could not read session nonce, maybe encryption is disabled?")
     
     
     @staticmethod
@@ -125,14 +125,15 @@ class EncryptionHandler:
     @staticmethod
     def decrypt(data, settings):
         if settings.sessionNonce is None:
-            raise BluenetBleException("Can't Decrypt: No session nonce set")
+            raise BluenetBleException(BleError.NO_SESSION_NONCE_SET, "Can't Decrypt: No session nonce set")
     
         if settings.userLevel == UserLevel.unknown:
-            raise BluenetBleException("Can't Decrypt: No encryption keys set.")
+            raise BluenetBleException(BleError.NO_ENCRYPTION_KEYS_SET, "Can't Decrypt: No encryption keys set.")
         
         #unpack the session data
         sessionData = SessionData(settings.sessionNonce)
         package = EncryptedPackage(data)
+        
         key = EncryptionHandler._getKeyForLevel(package.userLevel, settings)
     
         # decrypt data
@@ -152,7 +153,7 @@ class EncryptionHandler:
             return result
     
         else:
-            raise BluenetBleException("Failed to validate result, Could not decrypt")
+            raise BluenetBleException(BleError.ENCRYPTION_VALIDATION_FAILED, "Failed to validate result, Could not decrypt")
             
     
     @staticmethod
@@ -192,10 +193,10 @@ class EncryptionHandler:
     @staticmethod
     def encrypt(dataArray, settings):
         if settings.sessionNonce is None:
-            raise BluenetBleException("Can't Encrypt: No session nonce set")
-        
+            raise BluenetBleException(BleError.NO_SESSION_NONCE_SET, "Can't Decrypt: No session nonce set")
+    
         if settings.userLevel == UserLevel.unknown:
-            raise BluenetBleException("Can't Encrypt: No encryption keys set.")
+            raise BluenetBleException(BleError.NO_ENCRYPTION_KEYS_SET, "Can't Decrypt: No encryption keys set.")
 
         packetNonce = [0] * PACKET_NONCE_LENGTH
         # create a random nonce
@@ -220,7 +221,7 @@ class EncryptionHandler:
     @staticmethod
     def _getKeyForLevel(userLevel, settings):
         if settings.initializedKeys == False and userLevel != UserLevel.setup:
-            raise BluenetBleException("Could not encrypt: Keys not set.")
+            raise BluenetBleException(BleError.NO_ENCRYPTION_KEYS_SET, "Could not encrypt: Keys not set.")
     
         key = None
         if userLevel == UserLevel.admin:
@@ -232,10 +233,10 @@ class EncryptionHandler:
         elif userLevel == UserLevel.setup:
             key = settings.setupKey
         else:
-            raise BluenetBleException("Could not encrypt: Invalid key for encryption.")
+            raise BluenetBleException(BleError.NO_ENCRYPTION_KEYS_SET, "Could not encrypt: Invalid key for encryption.")
     
         if key is None:
-            raise BluenetBleException("Could not encrypt: Keys not set.")
+            raise BluenetBleException(BleError.NO_ENCRYPTION_KEYS_SET, "Could not encrypt: Keys not set.")
     
         return key
         
@@ -243,7 +244,7 @@ class EncryptionHandler:
     @staticmethod
     def generateIV(packetNonce, sessionData):
         if len(packetNonce) != PACKET_NONCE_LENGTH:
-            raise BluenetBleException("Invalid size for session nonce packet")
+            raise BluenetBleException(BleError.INVALID_SESSION_NONCE, "Invalid size for session nonce packet")
         
         IV = [0] * NONCE_LENGTH
         

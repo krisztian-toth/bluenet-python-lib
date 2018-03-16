@@ -23,4 +23,7 @@ class Validator:
         if self.trackedCrownstones[advertisement.address].verified:
             BluenetEventBus.emit(Topics.advertisement, advertisement.getDictionary())
             
+    def shutDown(self):
+        for address, tracker in self.trackedCrownstones.items():
+            tracker.shutDown()
         
