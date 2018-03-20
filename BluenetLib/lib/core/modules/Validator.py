@@ -1,6 +1,6 @@
 
 from BluenetLib._EventBusInstance import BluenetEventBus
-from BluenetLib.lib.core.modules.StoneTracker import StoneTracker
+from BluenetLib.lib.core.modules.StoneAdvertisementTracker import StoneAdvertisementTracker
 from BluenetLib.lib.topics.SystemBleTopics import SystemBleTopics
 from BluenetLib.lib.topics.Topics import Topics
 
@@ -16,7 +16,7 @@ class Validator:
     
     def checkAdvertisement(self, advertisement):
         if advertisement.address not in self.trackedCrownstones:
-            self.trackedCrownstones[advertisement.address] = StoneTracker(lambda: self.removeStone(advertisement.address))
+            self.trackedCrownstones[advertisement.address] = StoneAdvertisementTracker(lambda: self.removeStone(advertisement.address))
             
         self.trackedCrownstones[advertisement.address].update(advertisement)
         

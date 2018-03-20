@@ -3,7 +3,7 @@ from threading import Timer
 
 AMOUNT_OF_REQUIRED_MATCHES = 3
 
-class StoneTracker:
+class StoneAdvertisementTracker:
     rssiHistory = {}
     rssi = None
     name = ""
