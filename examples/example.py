@@ -14,7 +14,7 @@ def showPowerUsage(data):
 bluenet = Bluenet()
 
 # Start up the USB bridge
-bluenet.initializeUsbBridge("/dev/tty.SLAB_USBtoUART", catchSIGINT=True)
+bluenet.initializeUsbBridge("/dev/tty.SLAB_USBtoUART")
 
 # Set up event listeners
 myEventBus = bluenet.getEventBus()

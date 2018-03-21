@@ -12,6 +12,11 @@ setup(
     install_requires=[
         'pyserial==3.4.0',
         'bluepy==1.1.4',
+        'pyaes==1.6.1',
+        'requests==2.18.4'
     ],
-    dependency_links=['http://github.com/crownstone/bluepy/tarball/master#egg=bluepy-1.1.4']
+    dependency_links=[
+        'http://github.com/crownstone/bluepy/tarball/master#egg=bluepy-1.1.4',
+        'http://github.com/requests/requests/tarball/a3d7cf3f27e74c28ef30f01e9f2e483570ab042e#egg=requests-2.18.4'
+    ]
 )

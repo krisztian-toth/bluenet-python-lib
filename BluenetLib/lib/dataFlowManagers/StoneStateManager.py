@@ -33,9 +33,3 @@ class StoneStateManager:
 			ids.append(stoneId)
 
 		return ids
-
-	def getLatestCrownstoneData(self, crownstoneId):
-		if crownstoneId in self.stones:
-			return self.stones[crownstoneId].data
-		else:
-			return None

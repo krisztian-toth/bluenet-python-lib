@@ -1,5 +1,8 @@
 import json
+import sys
+import os
 
+__location__ = sys.path[0]
 
 class JsonFileStore:
     memoryStore = {}
@@ -12,7 +15,7 @@ class JsonFileStore:
     
     
     def _loadData(self):
-        fileHandle = open(self.filename,'r')
+        fileHandle = open(os.path.join(__location__, self.filename),'r')
         data = fileHandle.read()
         self.memoryStore = json.loads(data)
         fileHandle.close()
@@ -30,6 +33,10 @@ class JsonFileStore:
     def removeEntry(self, key):
         del self.memoryStore[key]
      
+     
+    def getData(self):
+        return self.memoryStore
+    
      
     def _persist(self):
         jsonString = json.dumps(self.memoryStore)
