@@ -68,10 +68,15 @@ class CloudSphereHandler(CloudBase):
             
             
     
-    def startPollingPresence(self, interval=10):
-        # if interval < 10:
-        #     interval = 10
-        #     print("Forcing presence polling interval back to 10 to avoid overloading server.")
+    def startPollingPresence(self, interval=10, firstRun=True):
+        if interval < 10:
+            interval = 10
+            print("Forcing presence polling interval back to 10 to avoid overloading server.")
+        
+        # start with a syncing run for the presenceManager.
+        if firstRun:
+            self.getPresence()
+        
         self.pollingEnabled = True
         self.pendingTimer = Timer(interval, lambda: self._presencePoller(interval))
         self.pendingTimer.start()
@@ -80,7 +85,7 @@ class CloudSphereHandler(CloudBase):
     def _presencePoller(self, interval):
         self.getPresence()
         if self.pollingEnabled:
-            self.startPollingPresence(interval)
+            self.startPollingPresence(interval, False)
         elif self.pendingTimer is not None:
             self.pendingTimer.cancel()
             

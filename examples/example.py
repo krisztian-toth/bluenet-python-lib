@@ -3,8 +3,8 @@
 """An example that switches a Crownstone, and prints the power usage of all Crownstones."""
 
 import time
+from BluenetLib import Bluenet, BluenetEventBus, Topics
 
-from BluenetLib import Bluenet
 
 # Function that's called when the power usage is updated.
 def showPowerUsage(data):
@@ -17,9 +17,7 @@ bluenet = Bluenet()
 bluenet.initializeUsbBridge("/dev/tty.SLAB_USBtoUART")
 
 # Set up event listeners
-myEventBus = bluenet.getEventBus()
-myTopics   = bluenet.getTopics()
-myEventBus.subscribe(myTopics.powerUsageUpdate, showPowerUsage)
+BluenetEventBus.subscribe(Topics.powerUsageUpdate, showPowerUsage)
 
 # This is the id of the Crownstone we will be switching
 targetCrownstoneId = 10

@@ -1,24 +1,22 @@
 import time
 
-from BluenetLib import Cloud, Bluenet
+from BluenetLib import CrownstoneCloud, Bluenet, BluenetEventBus, Topics
 
 bluenet = Bluenet(catchSIGINT=True)
-cloud = Cloud()
+cloud = CrownstoneCloud()
 
 cloud.loadConfigFromFile('user.json')
 
 sphereHandler = cloud.getSphereHandler('58de6bda62a2241400f10c67')
 
-def showEvent(topic, data):
-    print("Topic", topic, data)
+def printEvent(topic, data):
+    print("Got Event:", topic, data)
 
-myEventBus = bluenet.getEventBus()
-myTopics   = bluenet.getTopics()
-myEventBus.subscribe(myTopics.personEnteredLocation, lambda x: showEvent(myTopics.personEnteredLocation, x))
-myEventBus.subscribe(myTopics.personLeftLocation, lambda x: showEvent(myTopics.personLeftLocation, x))
+BluenetEventBus.subscribe(Topics.personEnteredLocation, lambda x: printEvent(Topics.personEnteredLocation, x))
+BluenetEventBus.subscribe(Topics.personLeftLocation,    lambda x: printEvent(Topics.personLeftLocation, x))
 
 print("Start Polling Presence")
-sphereHandler.startPollingPresence(2)
+sphereHandler.startPollingPresence()
 
 
 

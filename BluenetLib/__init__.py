@@ -1,4 +1,6 @@
 from BluenetLib.Bluenet           import Bluenet
-from BluenetLib.Cloud             import Cloud
+from BluenetLib.CrownstoneCloud   import CrownstoneCloud
 from BluenetLib.Exceptions        import BluenetBleException, BluenetException
 from BluenetLib.lib.util.EventBus import EventBus
+from BluenetLib._EventBusInstance import BluenetEventBus
+from BluenetLib.lib.topics.Topics import Topics

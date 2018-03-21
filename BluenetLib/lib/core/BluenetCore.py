@@ -65,14 +65,6 @@ class BluenetCore:
         self.__switchCrownstone(crownstoneId, value)
 
 
-    def getEventBus(self):
-        return BluenetEventBus
-
-
-    def getTopics(self):
-        return Topics
-
-
     def getCrownstoneIds(self):
         return self.stoneManager.getIds()
     

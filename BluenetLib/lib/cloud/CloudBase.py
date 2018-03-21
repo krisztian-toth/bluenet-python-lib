@@ -20,6 +20,17 @@ class CloudBase:
         pass
     
     
+    def inputUserInformation(self, email, password=None, sha1Password=None):
+        self.email = email
+        self.password = password
+        self.sha1Password = sha1Password
+
+        self.validateUserData()
+    
+    def setAccessToken(self, token):
+        self.accessToken = token
+        self.validateUserData()
+    
     def loadConfigFromFile(self, path):
         fileReader = JsonFileStore(path)
         data = fileReader.getData()
@@ -46,29 +57,26 @@ class CloudBase:
         if "accessToken" in data:
             if data["accessToken"] != "":
                 self.accessToken = data["accessToken"]
+                
+        self.validateUserData()
         
         
+    def validateUserData(self):
         if self.accessToken is not None:
-            self.initialized = True
-            return
-        
-        
-        if self.email is None:
+            pass
+        elif self.email is None:
             print("Config requires either email or accesstoken fields.")
-            return
-        
-        
-        if self.password is None and self.sha1Password is None:
+        elif self.password is None and self.sha1Password is None:
             print("Config requires either password or sha1Password fields to use with the provided email address.")
-            return
-        
-        if self.password is not None and self.sha1Password is None:
-            print("self.password", self.password)
+        elif self.password is not None and self.sha1Password is None:
             self.sha1Password = hashlib.sha1(self.password.encode('utf-8')).hexdigest()
-        
+        else:
+            self.initialized = False
+            print("We do not have enough information to access the Crownstone Cloud.")
+            return
+    
         self.logIn()
         self.initialized = True
-        
         
     def logIn(self):
         r = requests.post('https://my.crownstone.rocks/api/users/login', data={"email": self.email, "password": self.sha1Password})
@@ -88,8 +96,7 @@ class CloudBase:
 
 
     def getSpheres(self):
-        r = requests.get(
-            'https://my.crownstone.rocks/api/users/' + self.userId + '/spheres?access_token=' + self.accessToken)
+        r = requests.get('https://my.crownstone.rocks/api/users/' + self.userId + '/spheres?access_token=' + self.accessToken)
         spheres = []
     
         if r.status_code == 200:
