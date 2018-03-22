@@ -7,7 +7,7 @@ print("\n\n\nStarting Example")
 
 # initialize the Bluetooth Core
 core = BluetoothCore()
-core.setSettings(True, "adminKeyForCrown", "memberKeyForHome", "guestKeyForGirls")
+core.setSettings("adminKeyForCrown", "memberKeyForHome", "guestKeyForOther")
 
 #get the nearest crownstone in setup mode. We expect it to be atleast within the -70db range
 nearestStone = core.getNearestSetupCrownstone(rssiAtLeast=-70, returnFirstAcceptable=True)

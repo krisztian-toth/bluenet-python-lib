@@ -14,8 +14,8 @@ class CloudSphereHandler(CloudBase):
     pendingTimer = None
     pollingEnabled = False
     
-    def __init__(self, sphereId):
-        super().__init__()
+    def __init__(self, sphereId, eventBus):
+        super().__init__(eventBus)
         self.sphereId = sphereId
         BluenetEventBus.subscribe(SystemTopics.cleanUp, lambda x: self.stopPollingPresence())
     
@@ -29,7 +29,19 @@ class CloudSphereHandler(CloudBase):
             
             for stone in reply:
                 if stone["sphereId"] == self.sphereId:
-                    BluenetEventBus.emit(SystemCloudTopics.stoneDownloadedFromCloud, stone)
+                    stoneData = {
+                        "id": stone["uid"],
+                        "name": stone["name"],
+                        "cloudId": stone["id"],
+                        "address": stone["address"],
+                        "type": stone["type"],
+                        "dimmingEnabled": stone["dimmingEnabled"],
+                        "major": stone["major"],
+                        "minor": stone["minor"],
+                        "firmwareVersion": stone["firmwareVersion"],
+                    }
+                    
+                    BluenetEventBus.emit(SystemCloudTopics.stoneDownloadedFromCloud, stoneData)
                     stones.append(stone)
         else:
             print(r.text)

@@ -4,24 +4,35 @@ from BluenetLib.lib.cloud.CloudSphereHandler import CloudSphereHandler
 
 class CloudHandler(CloudBase):
     
-    def __init__(self):
-        super().__init__()
+    def __init__(self, eventBus):
+        super().__init__(eventBus)
         pass
     
     def getSphereHandler(self, sphereId):
-        sphereHandler = CloudSphereHandler(sphereId)
+        sphereHandler = CloudSphereHandler(sphereId, self.eventBus)
 
-        sphereHandler.email        = self.email
-        sphereHandler.password     = self.password
-        sphereHandler.sha1Password = self.sha1Password
-        sphereHandler.accessToken  = self.accessToken
-        sphereHandler.userId       = self.userId
-        sphereHandler.initialized  = self.initialized
-        
-        return sphereHandler
+        return self._loadDataIntoSphereHandler(sphereHandler)
+    
     
     def getSphereHandlerByName(self, sphereName):
-        pass
+        spheres = self.getSpheres()
+        
+        for sphere in spheres:
+            if sphere["name"] == sphereName:
+                return self.getSphereHandler(sphere["id"])
+        
+        return None
+    
+    
+    def _loadDataIntoSphereHandler(self, sphereHandler):
+        sphereHandler.email = self.email
+        sphereHandler.password = self.password
+        sphereHandler.sha1Password = self.sha1Password
+        sphereHandler.accessToken = self.accessToken
+        sphereHandler.userId = self.userId
+        sphereHandler.initialized = self.initialized
+    
+        return sphereHandler
     
     def getStones(self, sphereId):
         pass

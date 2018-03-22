@@ -33,9 +33,11 @@ class StoneManager:
         else:
             self.stones[stoneId] = {"available": True}
             
+        BluenetEventBus.subscribe(Topics.crownstoneAvailable, self.stones[stoneId])
+        
             
     def handleStoneFromCloud(self, stoneData):
-        stoneId = stoneData["uid"]
+        stoneId = stoneData["id"]
         
         available = False
         if stoneId in self.stones:

@@ -28,7 +28,7 @@ class UartBridge (threading.Thread):
     def run(self):
         self.eventId = BluenetEventBus.subscribe(SystemTopics.uartWriteData, self.writeToUart)
         
-        BluenetEventBus.subscribe(SystemTopics.cleanup, lambda x: self.stop())
+        BluenetEventBus.subscribe(SystemTopics.cleanUp, lambda x: self.stop())
         
         self.parser = UartParser()
         self.startReading()

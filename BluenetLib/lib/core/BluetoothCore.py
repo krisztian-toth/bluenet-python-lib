@@ -1,5 +1,7 @@
+from BluenetLib.lib.util.JsonFileStore import JsonFileStore
+
 from BluenetLib import BluenetBleException
-from BluenetLib.Exceptions import BleError
+from BluenetLib.Exceptions import BleError, BluenetError
 from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.core.bluenet_modules.BleHandler import BleHandler
 from BluenetLib.lib.core.bluenet_modules.ControlHandler import ControlHandler
@@ -30,9 +32,24 @@ class BluetoothCore:
     def shutDown(self):
         self.ble.shutDown()
     
-    def setSettings(self, encryptionEnabled, adminKey, memberKey, guestKey, referenceId="PythonLib"):
+    def setSettings(self, adminKey, memberKey, guestKey, referenceId="PythonLib", encryptionEnabled=True):
         self.settings.loadKeys(encryptionEnabled, adminKey, memberKey, guestKey, referenceId)
-    
+        
+        
+    def loadSettingsFromFile(self, path):
+        fileReader = JsonFileStore(path)
+        data = fileReader.getData()
+        
+        if "admin" not in data:
+            raise BluenetBleException(BluenetError.ADMIN_KEY_REQURED)
+        if "member" not in data:
+            raise BluenetBleException(BluenetError.MEMBER_KEY_REQUIRED)
+        if "guest" not in data:
+            raise BluenetBleException(BluenetError.GUEST_KEY_REQURED)
+        
+        self.setSettings(data["admin"], data["member"], data["guest"])
+        
+
     def connect(self, address):
         self.ble.connect(address)
         if self.settings.encryptionEnabled:

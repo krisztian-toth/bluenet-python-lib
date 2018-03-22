@@ -1,8 +1,7 @@
 import hashlib
 import requests
 
-from BluenetLib._EventBusInstance import BluenetEventBus
-from BluenetLib.lib.topics.SystemCloudTopics import SystemCloudTopics
+from BluenetLib import EventBus
 from BluenetLib.lib.util.JsonFileStore import JsonFileStore
 
 
@@ -13,25 +12,48 @@ class CloudBase:
     accessToken = None
     
     userId = None
-    
     initialized = False
+    eventBus = None
     
-    def __init__(self):
-        pass
-    
-    
-    def inputUserInformation(self, email, password=None, sha1Password=None):
-        self.email = email
-        self.password = password
-        self.sha1Password = sha1Password
+    def __init__(self, eventBus=None):
+        if eventBus is not None:
+            self.eventBus = eventBus
+        else:
+            self.eventBus = EventBus()
 
+    def getEventBus(self):
+        return self.eventBus
+    
+    
+    def setUserInformation(self, email=None, password=None, sha1Password=None, accessToken=None):
+        self.email = None
+        self.password = None
+        self.sha1Password = None
+        self.accessToken = None
+        self.userId = False
+        self.initialized = False
+    
+        if email != "":
+            self.email = email
+
+        if password != "":
+            self.password = password
+
+        if sha1Password != "":
+            self.sha1Password = sha1Password
+
+        if accessToken != "":
+            self.accessToken = accessToken
+        
         self.validateUserData()
+        
     
     def setAccessToken(self, token):
         self.accessToken = token
         self.validateUserData()
     
-    def loadConfigFromFile(self, path):
+    
+    def loadUserConfigFromFile(self, path):
         fileReader = JsonFileStore(path)
         data = fileReader.getData()
 
@@ -74,11 +96,14 @@ class CloudBase:
             self.initialized = False
             print("We do not have enough information to access the Crownstone Cloud.")
             return
-    
+        
+        
         self.logIn()
         self.initialized = True
         
+        
     def logIn(self):
+        print({"email": self.email, "password": self.sha1Password})
         r = requests.post('https://my.crownstone.rocks/api/users/login', data={"email": self.email, "password": self.sha1Password})
         
         if r.status_code == 200:
@@ -110,21 +135,4 @@ class CloudBase:
     
         return spheres
     
-    
-    
-            
-    
-    
-
-
-            
-    
-    
-
-    
-
-
-
-
-
-       
+        

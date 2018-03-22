@@ -1,5 +1,7 @@
 import signal  # used to catch control C
 
+from BluenetLib.CrownstoneCloud import CrownstoneCloud
+
 from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.core.bluenet_modules.UsbDevHandler import UsbDevHandler
 from BluenetLib.lib.core.uart.UartBridge import UartBridge
@@ -11,7 +13,7 @@ from BluenetLib.lib.protocol.BlePackets import ControlPacket
 from BluenetLib.lib.protocol.BluenetTypes import IntentType, MeshMultiSwitchType, ControlType
 from BluenetLib.lib.protocol.MeshPackets import StoneMultiSwitchPacket, MeshMultiSwitchPacket
 from BluenetLib.lib.topics.SystemTopics import SystemTopics
-from BluenetLib.lib.topics.Topics import Topics
+
 
 
 class BluenetCore:
@@ -29,7 +31,7 @@ class BluenetCore:
         if catchSIGINT:
             signal.signal(signal.SIGINT, self.__stopAll)
 
-    def initializeUsbBridge(self, port, baudrate=38400):
+    def initializeUSB(self, port, baudrate=38400):
         # init the uart bridge
         self.uartBridge = UartBridge(port, baudrate)
         self.uartBridge.start()
@@ -38,6 +40,9 @@ class BluenetCore:
     def __stopAll(self, source, frame):
         self.stop()
 
+
+    def getCloud(self):
+        return CrownstoneCloud(BluenetEventBus)
 
     def stop(self):
         print("Quitting BluenetLib...")
@@ -88,16 +93,16 @@ class BluenetCore:
         correctedValue = min(1,max(0,value))
 
         # create a stone switch state packet to go into the multi switch
-        stoneSwitchPacket         = StoneMultiSwitchPacket(crownstoneId, correctedValue, 0, IntentType.MANUAL)
+        stoneSwitchPacket     = StoneMultiSwitchPacket(crownstoneId, correctedValue, 0, IntentType.MANUAL)
 
-        # wrap it in a mesh multiswitch packet
-        meshMultiSwitchPacket     = MeshMultiSwitchPacket(MeshMultiSwitchType.SIMPLE_LIST, [stoneSwitchPacket]).getPacket()
+        # wrap it in a mesh multi switch packet
+        meshMultiSwitchPacket = MeshMultiSwitchPacket(MeshMultiSwitchType.SIMPLE_LIST, [stoneSwitchPacket]).getPacket()
 
         # wrap that in a control packet
-        controlPacket             = ControlPacket(ControlType.MESH_MULTI_SWITCH).loadByteArray(meshMultiSwitchPacket).getPacket()
+        controlPacket         = ControlPacket(ControlType.MESH_MULTI_SWITCH).loadByteArray(meshMultiSwitchPacket).getPacket()
 
         # finally wrap it in an Uart packet
-        uartPacket                 = UartWrapper(UartTxType.CONTROL, controlPacket).getPacket()
+        uartPacket            = UartWrapper(UartTxType.CONTROL, controlPacket).getPacket()
 
         # send over uart
         BluenetEventBus.emit(SystemTopics.uartWriteData, uartPacket)

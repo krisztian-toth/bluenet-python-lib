@@ -1,11 +1,11 @@
 import time
 
-from BluenetLib import CrownstoneCloud, Bluenet, BluenetEventBus, Topics
+from BluenetLib import Bluenet, BluenetEventBus, Topics
 
 bluenet = Bluenet(catchSIGINT=True)
-cloud = CrownstoneCloud()
+cloud   = bluenet.getCloud()
 
-cloud.loadConfigFromFile('user.json')
+cloud.loadUserConfigFromFile('user.json')
 
 sphereHandler = cloud.getSphereHandler('58de6bda62a2241400f10c67')
 
