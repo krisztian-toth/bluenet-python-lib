@@ -39,10 +39,15 @@ class BluenetCore:
 
     def __stopAll(self, source, frame):
         self.stop()
+        
+        
+    def getPeopleInLocation(self, locationId):
+        return self.presenceManager.getPeopleInLocation(locationId)
 
 
     def getCloud(self):
         return CrownstoneCloud(BluenetEventBus)
+
 
     def stop(self):
         print("Quitting BluenetLib...")

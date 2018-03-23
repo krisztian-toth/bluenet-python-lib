@@ -11,7 +11,9 @@ class CloudHandler(CloudBase):
     def getSphereHandler(self, sphereId):
         sphereHandler = CloudSphereHandler(sphereId, self.eventBus)
 
-        return self._loadDataIntoSphereHandler(sphereHandler)
+        self._loadDataIntoSphereHandler(sphereHandler)
+        sphereHandler.init()
+        return sphereHandler
     
     
     def getSphereHandlerByName(self, sphereName):

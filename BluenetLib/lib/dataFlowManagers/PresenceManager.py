@@ -13,7 +13,7 @@ class PresenceManager:
         
         
     def handlePresenceInLocationFromCloud(self, locationData):
-        locationId = locationData["id"]
+        locationId = locationData["uid"]
         
         # if we initialize, we do not send change events.
         initializing = False
@@ -33,7 +33,7 @@ class PresenceManager:
                 
                 # we do not want to send change events triggered by initialization
                 if not initializing:
-                    self.newPersonInLocation(person, {"id": locationId, "name": locationData["name"]})
+                    self.newPersonInLocation(person, {"id": locationId, "name": locationData["name"], "cloudId": locationData["id"]})
                 else:
                     print("Skipping presence due to init")
 
@@ -50,6 +50,15 @@ class PresenceManager:
         # finally delete all the people that are no longer in this room
         for personId in peopleToDelete:
             del self.presence[locationData["id"]][personId]
+            
+    def getPeopleInLocation(self,locationId):
+        people = []
+        
+        if locationId in self.presence:
+            for personId, person in self.presence[locationId].items():
+                people.append(person)
+        
+        return people
             
         
     def newPersonInLocation(self, person, location):

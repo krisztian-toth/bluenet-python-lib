@@ -10,6 +10,7 @@ from threading import Timer
 
 class CloudSphereHandler(CloudBase):
     sphereId = None
+    sphereData = None
     
     pendingTimer = None
     pollingEnabled = False
@@ -19,6 +20,26 @@ class CloudSphereHandler(CloudBase):
         self.sphereId = sphereId
         BluenetEventBus.subscribe(SystemTopics.cleanUp, lambda x: self.stopPollingPresence())
     
+    def init(self):
+        self.sphereData = self.getSphereData()
+    
+    def getSphereData(self):
+        r = requests.get('https://my.crownstone.rocks/api/Spheres/' + self.sphereId + "?access_token=" + self.accessToken)
+
+        sphereData = None
+        if r.status_code == 200:
+            reply = r.json()
+
+            sphereData = {
+                "name": reply["name"],
+                "cloudId": reply["id"],
+                "iBeaconUUID": reply["uuid"]
+            }
+        else:
+            print(r.text)
+            print("Could not get Sphere data")
+    
+        return sphereData
     
     def getStones(self):
         r = requests.get('https://my.crownstone.rocks/api/Stones?access_token='+self.accessToken)
@@ -57,7 +78,7 @@ class CloudSphereHandler(CloudBase):
             reply = r.json()
         
             for location in reply:
-                locations.append({"id": location["id"], "name": location["name"]})
+                locations.append({"id": location["uid"], "cloudId": location['id'], "name": location["name"]})
         else:
             print(r.text)
             print("Could not get locations")

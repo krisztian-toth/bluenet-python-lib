@@ -1,7 +1,7 @@
 import hashlib
 import requests
+from BluenetLib.lib.util.EventBus import EventBus
 
-from BluenetLib import EventBus
 from BluenetLib.lib.util.JsonFileStore import JsonFileStore
 
 
