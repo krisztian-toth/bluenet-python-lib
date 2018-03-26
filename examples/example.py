@@ -8,7 +8,7 @@ from BluenetLib import Bluenet, BluenetEventBus, Topics
 
 # Function that's called when the power usage is updated.
 def showPowerUsage(data):
-	print("PowerUsage for Crownstone ID", data["crownstoneId"], "is", data["powerUsage"], "W")
+	print("PowerUsage for Crownstone ID", data["id"], "is", data["powerUsage"], "W")
 
 # Create new instance of Bluenet
 bluenet = Bluenet()

@@ -24,8 +24,8 @@ class StoneStateManager:
             self.emitNewData(data)
     
     def emitNewData(self, data):
-        BluenetEventBus.emit(Topics.powerUsageUpdate,  {"crownstoneId": data[0], "powerUsage":  data[1].powerUsageReal})
-        BluenetEventBus.emit(Topics.switchStateUpdate, {"crownstoneId": data[0], "switchState": data[1].switchState})
+        BluenetEventBus.emit(Topics.powerUsageUpdate,  {"id": data[0], "powerUsage":  data[1].powerUsageReal})
+        BluenetEventBus.emit(Topics.switchStateUpdate, {"id": data[0], "switchState": data[1].switchState})
 
     def getIds(self):
         ids = []

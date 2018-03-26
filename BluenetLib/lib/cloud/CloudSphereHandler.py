@@ -134,7 +134,7 @@ class CloudSphereHandler(CloudBase):
                 presentPeople = []
                 for person in location["presentPeople"]:
                     presentPeople.append({"id": person["id"], "email":person["email"], "name": person["firstName"] + " " + person["lastName"]})
-                locationData = {"id": location["id"], "name": location["name"], 'presentPeople': presentPeople}
+                locationData = {"cloudId": location["id"], "id": location["uid"], "name": location["name"], 'presentPeople': presentPeople}
                 locations.append(locationData)
                 BluenetEventBus.emit(SystemCloudTopics.presenceInLocationDownloadedFromCloud, locationData)
         else:

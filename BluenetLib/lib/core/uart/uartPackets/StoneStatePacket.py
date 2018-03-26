@@ -63,7 +63,7 @@ class StoneStatePacket:
     def getDict(self):
         data = {}
 
-        data["crownstoneId"]       = self.crownstoneId
+        data["id"]                 = self.crownstoneId
         data["switchState"]        = self.switchState
         data["flagBitMask"]        = self.flagBitMask
         data["temperature"]        = self.temperature

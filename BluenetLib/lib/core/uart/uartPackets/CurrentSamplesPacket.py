@@ -29,7 +29,7 @@ class CurrentSamplesPacket:
     def getDict(self):
         data = {}
 
-        data["crownstoneId"] = 0 # TODO: get the Crownstone ID here.
+        data["id"] = 0 # TODO: get the Crownstone ID here.
         data["type"] = self.typeDescription
         data["timestamp"] = self.timestampCounter
         data["data"] = self.samples

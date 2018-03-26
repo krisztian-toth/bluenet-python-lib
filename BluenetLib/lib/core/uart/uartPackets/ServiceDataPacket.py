@@ -51,7 +51,7 @@ class ServiceDataPacket:
         
         data["opCode"]           = self.opCode
         data["dataType"]         = self.dataType
-        data["crownstoneId"]     = self.crownstoneId
+        data["id"]               = self.crownstoneId
         data["switchState"]      = self.switchState
         data["flagBitmask"]      = self.flagBitmask
         data["temperature"]      = self.temperature

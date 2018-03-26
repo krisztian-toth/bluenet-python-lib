@@ -13,7 +13,7 @@ class PresenceManager:
         
         
     def handlePresenceInLocationFromCloud(self, locationData):
-        locationId = locationData["uid"]
+        locationId = locationData["id"]
         
         # if we initialize, we do not send change events.
         initializing = False
@@ -33,7 +33,8 @@ class PresenceManager:
                 
                 # we do not want to send change events triggered by initialization
                 if not initializing:
-                    self.newPersonInLocation(person, {"id": locationId, "name": locationData["name"], "cloudId": locationData["id"]})
+                    
+                    self.newPersonInLocation(person, {"id": locationId, "name": locationData["name"], "cloudId": locationData["cloudId"]})
                 else:
                     print("Skipping presence due to init")
 

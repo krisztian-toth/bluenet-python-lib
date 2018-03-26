@@ -65,7 +65,7 @@ class ServiceData:
         returnDict["stateOfExternalCrownstone"] = self.stateOfExternalCrownstone
         returnDict["hasError"]                  = self.hasError
         returnDict["setupMode"]                 = self.isInSetupMode()
-        returnDict["crownstoneId"]              = self.crownstoneId
+        returnDict["id"]                        = self.crownstoneId
         returnDict["switchState"]               = self.switchState
         returnDict["flagsBitmask"]              = self.flagsBitmask
         returnDict["temperature"]               = self.temperature

@@ -56,7 +56,7 @@ class NearestSelector:
             "address": nearest["address"],
             "rssi" : nearest["rssi"],
             "setupMode": nearest["serviceData"]["setupMode"],
-            "crownstoneId" : nearest["serviceData"]["crownstoneId"]
+            "id" : nearest["serviceData"]["id"]
         }
         
         

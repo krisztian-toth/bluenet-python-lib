@@ -2,9 +2,9 @@ from enum import Enum
 
 class DevTopics(Enum):
     newServiceData = "newServiceData"  # data is dictionary: {
+                                       #                        "id": int
                                        #                        "opCode": int
                                        #                        "dataTyle": int
-                                       #                        "crownstoneId": int
                                        #                        "switchState": int
                                        #                        "flagBitmask": int
                                        #                        "temperature": int
@@ -14,12 +14,12 @@ class DevTopics(Enum):
                                        #                        "partialTimestamp": int
                                        #                        "validation": int
                                        #                     }
-    newCurrentData = "newCurrentData"  # data is dictionary: { crownstoneId: int, type: 'current', data: [(time, data point)] }
-    newVoltageData = "newVoltageData"  # data is dictionary: { crownstoneId: int, type: 'voltage', data: [(time, data point)] }
-    newFilteredCurrentData = "newFilteredCurrentData"  # data is dictionary: { crownstoneId: int, type: 'current', data: [(time, data point)] }
-    newFilteredVoltageData = "newFilteredVoltageData"  # data is dictionary: { crownstoneId: int, type: 'voltage', data: [(time, data point)] }
+    newCurrentData = "newCurrentData"  # data is dictionary: { id: int, type: 'current', data: [(time, data point)] }
+    newVoltageData = "newVoltageData"  # data is dictionary: { id: int, type: 'voltage', data: [(time, data point)] }
+    newFilteredCurrentData = "newFilteredCurrentData"  # data is dictionary: { id: int, type: 'current', data: [(time, data point)] }
+    newFilteredVoltageData = "newFilteredVoltageData"  # data is dictionary: { id: int, type: 'voltage', data: [(time, data point)] }
     newCalculatedPowerData = "newCalculatedPowerData"  # data is dictionary: {
-                                                       #                         "crownstoneId": int,
+                                                       #                         "id": int,
                                                        #                         "currentRmsMA": int,
                                                        #                         "currentRmsMedianMA": int,
                                                        #                         "filteredCurrentRmsMA": int,

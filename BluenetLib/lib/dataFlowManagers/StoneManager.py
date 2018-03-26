@@ -33,7 +33,7 @@ class StoneManager:
         else:
             self.stones[stoneId] = {"available": True}
             
-        BluenetEventBus.subscribe(Topics.crownstoneAvailable, self.stones[stoneId])
+        BluenetEventBus.emit(Topics.crownstoneAvailable, self.stones[stoneId])
         
             
     def handleStoneFromCloud(self, stoneData):
