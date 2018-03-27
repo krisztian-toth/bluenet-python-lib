@@ -7,7 +7,7 @@ Since the Crownstone communicates through BLE, we can use BLE to tell it to do t
 
 This library works with Python 3.5 and higher. It does not work with Python 3.4...
 
-## Requirements
+# Requirements
 
 We need libbluetooth-dev for developing with BLE.
 
@@ -15,7 +15,7 @@ We need libbluetooth-dev for developing with BLE.
 sudo apt-get install libbluetooth-dev libglib2.0-dev
 ```
 
-## Installing Bluenet BLE
+# Installing Bluenet BLE
 
 You can use the setupBLE.py to install Bluenet + BluenetBLE. If you are on other platforms than Linux, you can use setup.py to install just Bluenet.
 
@@ -24,22 +24,7 @@ sudo python3 setupBLE.py install
 ```
 
 
-## Troubleshooting
-
-#### installation
-old request module (ImportError: cannot import name 'DependencyWarning') --> check [https://github.com/nickoala/telepot/issues/80]
-
-cant find bluetooth.h --> install libbluetooth-dev
-
-cant find bswap_128 --> happens on raspberry pi 3, check [https://github.com/labapart/gattlib/issues/6]
-
-ZipImportError: bad local file header --> update python-setuptools
-
-#### running
-Something about threading when setup is complete --> you don't have Python 3.5
-
-
-## Example
+# Documentation
 
 To use Bluenet BLE, you first import it from Bluenetlib.
 
@@ -49,15 +34,15 @@ from BluenetLib.BLE import BluenetBle
 
 BluenetBle is composed of a number of top level methods and modules for specific commands. We will first describe these top level methods.
 
-#### `shutDown()`
+##### `shutDown()`
 > Shut down the BLE module. This is should be done on closing your script
 
-#### `setSettings(adminKey: string, memberKey: string, guestKey: string, referenceId="PythonLib", encryptionEnabled=True)`
+###### `setSettings(adminKey: string, memberKey: string, guestKey: string, referenceId="PythonLib", encryptionEnabled=True)`
 > The Crownstone uses encryption by default. There are 3 keys used. You can find more information on that in the [protocol](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md).
 These keys are 16 characters long like "adminKeyForCrown" or 32 characters as a hex string like "9332b7abf19b86ff48156d88c687def6". The referenceId is optional. If you know what you're doing, you can disable the encryption but it should never be required.
 
 
-#### `loadSettingsFromFile(path: string)`
+##### `loadSettingsFromFile(path: string)`
 > As an alternative to using setSettings, you can load it from a json file. The path is relative to the script being executed. An example of this json file is:
 >```
 >{
@@ -67,10 +52,10 @@ These keys are 16 characters long like "adminKeyForCrown" or 32 characters as a 
 >}
 >```
 
-#### `connect(address: string)`
+##### `connect(address: string)`
 > This will connect to the Crownstone with the provided MAC address. You get get this address by scanning or getting the nearest Crownstone. More on this below.
 
-#### `setupCrownstone(address: string, crownstoneId: int, meshAccessAddress: string, ibeaconUUID: string, ibeaconMajor: uint16, ibeaconMinor: uint16)`
+###### `setupCrownstone(address: string, crownstoneId: int, meshAccessAddress: string, ibeaconUUID: string, ibeaconMajor: uint16, ibeaconMinor: uint16)`
 > New Crownstones are in setup mode. In this mode they are open to receiving encryption keys. This method facilitates this process. No manual connection is required.
 > - address is the MAC address.
 > - crownstoneId is a uint8 id for this Crownstone
@@ -79,25 +64,25 @@ These keys are 16 characters long like "adminKeyForCrown" or 32 characters as a 
 > - ibeaconMajor is a number between 0 and 65535
 > - ibeaconMinor is a number between 0 and 65535
 
-#### `disconnect()`
+##### `disconnect()`
 > This will disconnect from the connected Crownstone.
 
-#### `startScanning(timeout=3)`
+##### `startScanning(timeout=3)`
 > This will start scanning for Crownstones in a background thread. The timeout denotes how long we will scan for. Once scanning is active, Topic.advertisement events will be triggered with the advertisements of the Crownstones that share our encryption keys or are in setup mode.
 
-#### `stopScanning()`
+##### `stopScanning()`
 > This will stop an active scan.
 
-#### `getNearestCrownstone(rssiAtLeast=-100, timeout=3, returnFirstAcceptable=False)`
+##### `getNearestCrownstone(rssiAtLeast=-100, timeout=3, returnFirstAcceptable=False)`
 > This will search for the nearest Crownstone. It will return ANY Crownstone, not just the ones sharing our encryption keys.
 > - rssiAtLeast, you can use this to indicate a maximum distance
 > - timeout, the amount of time we scan
 > - returnFirstAcceptable, if this is True, we return on the first Crownstone in the rssiAtLeast range. If it is False, we will scan for the timeout duration and return the closest one.
 
-#### `getNearestValidatedCrownstone(rssiAtLeast=-100, timeout=3, returnFirstAcceptable=False)`
+##### `getNearestValidatedCrownstone(rssiAtLeast=-100, timeout=3, returnFirstAcceptable=False)`
 > Same as getNearestCrownstone but will only search for Crownstones with the same encryption keys.
 
-#### `getNearestSetupCrownstone(rssiAtLeast=-100, timeout=3, returnFirstAcceptable=False)`
+##### `getNearestSetupCrownstone(rssiAtLeast=-100, timeout=3, returnFirstAcceptable=False)`
 > Same as getNearestCrownstone but will only search for Crownstones in setup mode.
 
 
@@ -119,21 +104,21 @@ bluenetBle.disconnect()
 
 Methods:
 
-#### `setSwitchState(switchState: float)`
+##### `setSwitchState(switchState: float)`
 > You can switch the Crownstone. 0 for off, 1 for on, between 0 and 1 to dim. If you want to dim, make sure dimming is enabled. You can enable this using the allowDimming method.
-#### `switchRelay(switchState)`
+##### `switchRelay(switchState)`
 > DEVELOPMENT ONLY: you can switch the relay. 0 for off, 1 for on. Use the setSwitchState instead.
-#### `switchPWM(switchState)`
+##### `switchPWM(switchState)`
 > DEVELOPMENT ONLY: you can switch the IGBTs. 0 for off, 1 for on, in between for dimming. Use the setSwitchState instead.
-#### `commandFactoryReset()`
+##### `commandFactoryReset()`
 > Assuming you have the encryption keys, you can use this method to put the Crownstone back into setup mode.
-#### `allowDimming(allow: bool)`
+##### `allowDimming(allow: bool)`
 > Enable or disable dimming on this Crownstone. Required if you want to dim with setSwitchState.
-#### `disconnect()`
+##### `disconnect()`
 > Tell the Crownstone to disconnect from you. This can help if your Bluetooth stack does not reliably disconnect.
-#### `lockSwitch(lock: bool)`
+##### `lockSwitch(lock: bool)`
 > Lock the switch. If locked, it's switchState cannot be changed.
-#### `reset()`
+##### `reset()`
 > Restart the Crownstone.
 
 
@@ -155,18 +140,18 @@ bluenetBle.disconnect()
 ```
 
 
-#### `getSwitchState()`
+##### `getSwitchState()`
 > Get the switch state in the raw form [https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#switch_state_packet]
-#### `getSwitchStateFloat()`
+##### `getSwitchStateFloat()`
 > Get the switchState in the range [0 .. 1]
-#### `getTime()`
+##### `getTime()`
 > Get the time on the Crownstone as a timestamp since epoch in seconds. This has been corrected for location.
 
 ## Util
 
 Util contains a number (one right now) methods that will help you use the lib.
 
-#### generateMeshAccessAddress()
+##### generateMeshAccessAddress()
 > Generate the mesh access address used in the setup. It adheres to the requirements as per the Bluetooth spec:
 > BLE specification's rules are defined in Core spec 4.2 Vol. 6 Part B Chapter 2.1.2 and are as follows:
 > The initiator shall ensure that the Access Address meets the following requirements:
@@ -191,10 +176,10 @@ You can obtain the eventbus directly from the lib:
 from BluenetLib import BluenetEventBus, Topics
 ```
 
-#### `subscribe(TopicName: enum, functionPointer)`
+##### `subscribe(TopicName: enum, functionPointer)`
 > Returns a subscription ID that can be used to unsubscribe again with the unsubscribe method
 
-#### `unsubscribe(subscriptionId: number)`
+##### `unsubscribe(subscriptionId: number)`
 > This will stop the invocation of the function you provided in the subscribe method, unsubscribing you from the event.
 
 These can be used like this:
@@ -216,7 +201,7 @@ BluenetEventBus.unsubscribe(subscriptionId)
 
 These events are available for the BLE part of this lib:
 
-#### `Topics.advertisement`
+##### `Topics.advertisement`
 > Data format is:
 >```python
 > data is dictionary {
@@ -256,3 +241,20 @@ These events are available for the BLE part of this lib:
 >     timeIsSet:                    bool   # this crownstone knows what time it is
 > }
 >```
+
+
+
+# Troubleshooting
+
+### installation
+old request module (ImportError: cannot import name 'DependencyWarning') --> check [https://github.com/nickoala/telepot/issues/80]
+
+cant find bluetooth.h --> install libbluetooth-dev
+
+cant find bswap_128 --> happens on raspberry pi 3, check [https://github.com/labapart/gattlib/issues/6]
+
+ZipImportError: bad local file header --> update python-setuptools
+
+### running
+Something about threading when setup is complete --> you don't have Python 3.5
+
