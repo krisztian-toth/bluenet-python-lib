@@ -7,5 +7,4 @@ class Bluenet(BluenetCore):
     
     def __init__(self, catchSIGINT=True):
         super().__init__(catchSIGINT)
-        
 

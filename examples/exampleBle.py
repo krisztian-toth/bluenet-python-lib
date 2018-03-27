@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 import time
-from BluenetLib.lib.core.BluetoothCore import BluetoothCore
 
+from BluenetLib.BLE import BluenetBle
 
 print("\n\n\nStarting Example")
 
 # initialize the Bluetooth Core
-core = BluetoothCore()
+core = BluenetBle()
 core.setSettings("adminKeyForCrown", "memberKeyForHome", "guestKeyForOther")
 
 #get the nearest crownstone in setup mode. We expect it to be atleast within the -70db range

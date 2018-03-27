@@ -70,13 +70,6 @@ class ControlHandler:
         self._writeControlPacket(ControlPacketsGenerator.getResetPacket())
     
 
-    def lockSwitch(self, lock):
-        """
-        :param lock: bool
-        """
-        self._writeControlPacket(ControlPacketsGenerator.getLockSwitchPacket(lock))
-
-
 
 
 

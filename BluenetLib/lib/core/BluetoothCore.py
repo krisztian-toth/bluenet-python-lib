@@ -1,7 +1,6 @@
 from BluenetLib.lib.util.JsonFileStore import JsonFileStore
 
-from BluenetLib import BluenetBleException
-from BluenetLib.Exceptions import BleError, BluenetError
+from BluenetLib.Exceptions import BleError, BluenetError, BluenetBleException
 from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.core.bluenet_modules.BleHandler import BleHandler
 from BluenetLib.lib.core.bluenet_modules.ControlHandler import ControlHandler
@@ -69,12 +68,9 @@ class BluetoothCore:
     def disconnect(self):
         self.ble.disconnect()
     
-    def startScanning(self):
+    def startScanning(self, timeout=3):
         self.ble.startScanning()
 
-    def startScanningForCrownstones(self):
-        self.ble.startScanning()
-    
     def stopScanning(self):
         self.ble.stopScanning()
 
