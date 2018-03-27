@@ -24,6 +24,14 @@ sudo python3 setupBLE.py install
 ```
 
 
+# Running Example
+
+All scripts containing BLE should be run as sudo because scanning using BlueZ requires root rights.
+
+```
+sudo python3 ./examples/exampleBle.py
+```
+
 # Documentation
 
 To use Bluenet BLE, you first import it from Bluenetlib.
@@ -249,12 +257,28 @@ These events are available for the BLE part of this lib:
 ### installation
 old request module (ImportError: cannot import name 'DependencyWarning') --> check [https://github.com/nickoala/telepot/issues/80]
 
-cant find bluetooth.h --> install libbluetooth-dev
+cant find bluetooth.h
+```
+sudo apt install libbluetooth-dev
+```
 
-cant find bswap_128 --> happens on raspberry pi 3, check [https://github.com/labapart/gattlib/issues/6]
+/bluez-5.47/attrib/gatt.c:190: undefined reference to `bswap_128'\n/tmp/ccT6fQZS.o: In function `get_uuid128':\n/home/pi/gits/bluepy/bluepy/./bluez-5.47/attrib/gatt.c:204: undefined reference to `bswap_128'\ncollect2: error: ld returned 1 exit status\nMakefile:28: recipe for target 'bluepy-helper' failed\nmake: *** [bluepy-helper] Error 1\nmake: Leaving directory '/home/pi/gits/bluepy/bluepy'\n"
+You will need to manually install bluez
+```
+sudo apt purge bluez
+wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.47.tar.xz
+tar -xf bluez-5.47.tar.xz
+cd bluez-5.47
+
+sudo apt-get install libical-dev
+./configure --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --localstatedir=/var --enable-library --disable-udev
+make
+sudo make install
+```
 
 ZipImportError: bad local file header --> update python-setuptools
 
 ### running
 Something about threading when setup is complete --> you don't have Python 3.5
+
 
