@@ -37,7 +37,7 @@ BluenetBle is composed of a number of top level methods and modules for specific
 ##### `shutDown()`
 > Shut down the BLE module. This is should be done on closing your script
 
-###### `setSettings(adminKey: string, memberKey: string, guestKey: string, referenceId="PythonLib", encryptionEnabled=True)`
+##### `setSettings(adminKey: string, memberKey: string, guestKey: string, referenceId="PythonLib", encryptionEnabled=True)`
 > The Crownstone uses encryption by default. There are 3 keys used. You can find more information on that in the [protocol](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md).
 These keys are 16 characters long like "adminKeyForCrown" or 32 characters as a hex string like "9332b7abf19b86ff48156d88c687def6". The referenceId is optional. If you know what you're doing, you can disable the encryption but it should never be required.
 
@@ -55,7 +55,7 @@ These keys are 16 characters long like "adminKeyForCrown" or 32 characters as a 
 ##### `connect(address: string)`
 > This will connect to the Crownstone with the provided MAC address. You get get this address by scanning or getting the nearest Crownstone. More on this below.
 
-###### `setupCrownstone(address: string, crownstoneId: int, meshAccessAddress: string, ibeaconUUID: string, ibeaconMajor: uint16, ibeaconMinor: uint16)`
+##### `setupCrownstone(address: string, crownstoneId: int, meshAccessAddress: string, ibeaconUUID: string, ibeaconMajor: uint16, ibeaconMinor: uint16)`
 > New Crownstones are in setup mode. In this mode they are open to receiving encryption keys. This method facilitates this process. No manual connection is required.
 > - address is the MAC address.
 > - crownstoneId is a uint8 id for this Crownstone
