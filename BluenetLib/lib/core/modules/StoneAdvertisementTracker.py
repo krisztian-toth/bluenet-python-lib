@@ -1,5 +1,6 @@
 import time
 from threading import Timer
+import threading
 
 AMOUNT_OF_REQUIRED_MATCHES = 3
 
@@ -23,9 +24,12 @@ class StoneAdvertisementTracker:
     
     timeoutTimers = {}
     rssiTimers = {}
+
+    _lock = None
     
     def __init__(self, cleanupCallback):
         self.cleanupCallback = cleanupCallback
+        self._lock = threading.Lock()
     
     def update(self, advertisement):
         self.name = advertisement.name
@@ -40,7 +44,7 @@ class StoneAdvertisementTracker:
     
         updateTime = time.time()
         self.lastUpdate = updateTime
-    
+
         self.rssiHistory[self.lastUpdate] = self.rssi
     
         if advertisement.isInDFUMode():
@@ -61,17 +65,19 @@ class StoneAdvertisementTracker:
 
 
     def cancelRunningTimers(self):
-        for time, timer in self.timeoutTimers.items():
-            timer.cancel()
+        with self._lock:
+            for time, timer in self.timeoutTimers.items():
+                timer.cancel()
 
-        for time, timer in self.rssiTimers.items():
-            timer.cancel()
+            for time, timer in self.rssiTimers.items():
+                timer.cancel()
 
     def checkTimeout(self, referenceTime):
-        # if they are equal, no update has happened since the scheduling of this check.
         del self.timeoutTimers[referenceTime]
+        # if they are equal, no update has happened since the scheduling of this check so we can delete this entry.
         if self.lastUpdate == referenceTime:
             self.cleanupCallback()
+
 
 
     def clearRSSI(self, referenceTime):
@@ -124,10 +130,13 @@ class StoneAdvertisementTracker:
     def calculateRssiAverage(self):
         count = 0
         total = 0
-        for key, rssi in self.rssiHistory.items():
-            total = total + rssi
-            count += 1
-        
+
+        # this field can be manipulated during this loop. To avoid this, we lock the threads for the duration of the loop
+        with self._lock:
+            for key, rssi in self.rssiHistory.items():
+                total = total + rssi
+                count += 1
+
         if count > 0:
             self.avgRssi = total / float(count)
         else:
