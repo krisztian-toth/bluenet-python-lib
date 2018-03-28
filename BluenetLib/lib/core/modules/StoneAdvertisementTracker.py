@@ -18,19 +18,40 @@ class StoneAdvertisementTracker:
     dfu = False
     
     # config
-    timeout = 20  # seconds
-    rssiTimeout = 3  # seconds
+    timeoutDuration = 20  # seconds
+    rssiTimeoutDuration = 3  # seconds
     consecutiveMatches = 0
     
-    timeoutTimers = {}
-    rssiTimers = {}
+    timeoutTime = 0
+    rssiTimeoutList = []
 
     _lock = None
     
     def __init__(self, cleanupCallback):
         self.cleanupCallback = cleanupCallback
         self._lock = threading.Lock()
-    
+
+
+    def tick(self):
+        now = time.time()
+        # check time in self.timeoutTime with current time
+        if self.timeoutTime <= now:
+            self.cleanupCallback()
+            return
+
+        # loop over rssi list
+        remainingList = []
+        for measurement in self.rssiTimeoutList:
+            if measurement["timeoutTime"] <= now:
+                del self.rssiHistory[measurement["key"]]
+            else:
+                remainingList.append(measurement)
+
+        self.rssiTimeoutList = remainingList
+        self.avgRssi = self.calculateRssiAverage()
+
+
+
     def update(self, advertisement):
         self.name = advertisement.name
         self.address = advertisement.address
@@ -53,37 +74,14 @@ class StoneAdvertisementTracker:
             self.consecutiveMatches = 0
         else:
             self.verify(advertisement.serviceData)
-        
-    
-        self.calculateRssiAverage()
-        
-        self.timeoutTimers[updateTime] = Timer(self.timeout,     lambda: self.checkTimeout(updateTime), ())
-        self.rssiTimers[updateTime]    = Timer(self.rssiTimeout, lambda: self.clearRSSI(   updateTime), ())
 
-        self.timeoutTimers[updateTime].start()
-        self.rssiTimers[updateTime].start()
-
-
-    def cancelRunningTimers(self):
+        # this field can be manipulated during the loop in calculate. To avoid this, we lock the threads for the duration of the loop
         with self._lock:
-            for time, timer in self.timeoutTimers.items():
-                timer.cancel()
+            self.avgRssi = self.calculateRssiAverage()
+        
+        self.timeoutTime = self.lastUpdate + self.timeoutDuration
+        self.rssiTimeoutList.append({"key": self.lastUpdate, "timeoutTime": self.lastUpdate + self.rssiTimeoutDuration})
 
-            for time, timer in self.rssiTimers.items():
-                timer.cancel()
-
-    def checkTimeout(self, referenceTime):
-        del self.timeoutTimers[referenceTime]
-        # if they are equal, no update has happened since the scheduling of this check so we can delete this entry.
-        if self.lastUpdate == referenceTime:
-            self.cleanupCallback()
-
-
-
-    def clearRSSI(self, referenceTime):
-        del self.rssiHistory[referenceTime]
-        del self.rssiTimers[referenceTime]
-        self.calculateRssiAverage()
 
 
     # check if we consistently get the ID of this crownstone.
@@ -119,6 +117,7 @@ class StoneAdvertisementTracker:
         self.crownstoneId = serviceData.crownstoneId
 
 
+
     def invalidateDevice(self, serviceData):
         if not serviceData.stateOfExternalCrownstone:
             self.crownstoneId = serviceData.crownstoneId
@@ -127,20 +126,19 @@ class StoneAdvertisementTracker:
         self.verified = False
 
 
+
     def calculateRssiAverage(self):
         count = 0
         total = 0
 
-        # this field can be manipulated during this loop. To avoid this, we lock the threads for the duration of the loop
-        with self._lock:
-            for key, rssi in self.rssiHistory.items():
-                total = total + rssi
-                count += 1
+        for key, rssi in self.rssiHistory.items():
+            total = total + rssi
+            count += 1
 
         if count > 0:
-            self.avgRssi = total / float(count)
+            return total / float(count)
         else:
-            self.avgRssi = 0
+            return 0
         
     def shutDown(self):
         self.cancelRunningTimers()
