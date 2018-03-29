@@ -157,11 +157,10 @@ class Conversion:
 
 	@staticmethod
 	def string_to_uint8_array(string):
-#		arr8 = []
-#		for i in range(0, len(string)):
-#			arr8.append(ord(string[i]))
-#		return arr8
-		return bytearray(string)
+		arr8 = []
+		for i in range(0, len(string)):
+			arr8.append(ord(string[i]))
+		return bytes(arr8)
 
 
 	########################
@@ -196,6 +195,26 @@ class Conversion:
 	#######################
 	# Hex string to array #
 	#######################
+	
+	@staticmethod
+	def ibeaconUUIDString_to_uint8_array(inputStr):
+		hexStr = inputStr.replace(":","").replace("-","")
+		return Conversion.hex_string_to_uint8_array(hexStr)
+	
+	@staticmethod
+	def ibeaconUUIDString_to_reversed_uint8_array(inputStr):
+		arr = Conversion.ibeaconUUIDString_to_uint8_array(inputStr)
+		arr.reverse()
+		return arr
+	
+	@staticmethod
+	def ascii_or_hex_string_to_16_byte_array(inputStr):
+		if len(inputStr) == 16:
+			return Conversion.string_to_uint8_array(inputStr)
+		else :
+			return Conversion.hex_string_to_uint8_array(inputStr)
+	
+	
 	@staticmethod
 	def hex_string_to_uint8_array(hexStr):
 #		""" Convert a string which represents a hex byte buffer to an uint8 array """
@@ -273,3 +292,31 @@ class Conversion:
 		for p in reversed(hexStrArr):
 			arr8.append(Conversion.hex_string_to_uint8_array(p)[0])
 		return bytearray(arr8)
+
+
+	@staticmethod
+	def uint8_to_bit_array(val):
+		result = [False, False, False, False, False, False, False, False]
+		
+		one = 1
+		
+		result[0] = (val & (one << 0)) != 0
+		result[1] = (val & (one << 1)) != 0
+		result[2] = (val & (one << 2)) != 0
+		result[3] = (val & (one << 3)) != 0
+		result[4] = (val & (one << 4)) != 0
+		result[5] = (val & (one << 5)) != 0
+		result[6] = (val & (one << 6)) != 0
+		result[7] = (val & (one << 7)) != 0
+		
+		return result
+	
+	@staticmethod
+	def uint32_to_bit_array(val):
+		result = [False] * 32
+		one = 1
+		
+		for i in range(0,32):
+			result[i] = (val & (one << i)) != 0
+		
+		return result

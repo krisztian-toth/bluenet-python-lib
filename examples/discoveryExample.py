@@ -10,7 +10,7 @@ from BluenetLib import Bluenet
 bluenet = Bluenet()
 
 # Start up the USB bridge
-bluenet.initializeUsbBridge("/dev/tty.usbmodemFD131", catchSIGINT=True)
+bluenet.initializeUSB("/dev/tty.usbmodemFD131")
 
 # List the ids that have been seen
 while bluenet.running:

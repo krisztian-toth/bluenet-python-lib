@@ -50,7 +50,7 @@ class PowerCalculationPacket:
 	def getDict(self):
 		data = {}
 
-		data["crownstoneId"] = 0  # TODO: get the Crownstone ID here.
+		data["id"] = 0  # TODO: get the Crownstone ID here.
 		data["currentRmsMA"] = self.currentRmsMA
 		data["currentRmsMedianMA"] = self.currentRmsMedianMA
 		data["filteredCurrentRmsMA"] = self.filteredCurrentRmsMA

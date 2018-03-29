@@ -7,7 +7,7 @@ class EventBus:
     def __init__(self):
         pass
 
-    def subscribe(self, topic, callback):
+    def subscribe(self, topic: object, callback: object) -> object:
         if topic not in self.topics:
             self.topics[topic] = {}
 

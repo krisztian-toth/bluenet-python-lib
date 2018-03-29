@@ -41,7 +41,7 @@ class StoneStatePacket:
         self.flagBitMask        = meshStateItemState[2]
         self.temperature        = meshStateItemState[3]
         self.powerFactor        = float(meshStateItemState[4]) / 127
-        self.powerUsageReal     = float(Conversion.uint8_array_to_uint16(meshStateItemState[5:7])) / 8
+        self.powerUsageReal     = float(Conversion.uint8_array_to_int16(meshStateItemState[5:7])) / 8
         self.powerUsageApparent = self.powerUsageReal / self.powerFactor
         self.energyUsed         = Conversion.uint8_array_to_int32(meshStateItemState[7:11])
         self.partialTimestamp   = Conversion.uint8_array_to_uint16(meshStateItemState[11:13])
@@ -63,7 +63,7 @@ class StoneStatePacket:
     def getDict(self):
         data = {}
 
-        data["crownstoneId"]       = self.crownstoneId
+        data["id"]                 = self.crownstoneId
         data["switchState"]        = self.switchState
         data["flagBitMask"]        = self.flagBitMask
         data["temperature"]        = self.temperature

@@ -102,7 +102,7 @@ from BluenetLib import Bluenet
 
 # Function that's called when the power usage is updated.
 def showPowerUsage(data):
-	print("PowerUsage for Crownstone ID", data["crownstoneId"], "is", data["powerUsage"], "W")
+	print("PowerUsage for Crownstone ID", data["id"], "is", data["powerUsage"], "W")
 
 # Create new instance of Bluenet
 bluenet = Bluenet()
@@ -200,8 +200,8 @@ The following Topics are currently available:
 | Event Enum Name | Description |
 | :--------------- | :--------- |
 | `newCrownstoneFound` | When the lib hears from a Crownstone that it has not heard from since the lib was started, this event is emitted. The data that is emitted is a single int which represents the Crownstone ID of the new Crownstone. |
-| `powerUsageUpdate` | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: `{ "crownstoneId": int, "powerUsage" :  float }`. |
-| `switchStateUpdate` | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: `{ "crownstoneId": int, "switchState" :  int [0 .. 128] }`. The switchState value is [explained here](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#switch_state_packet). |
+| `powerUsageUpdate` | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: `{ "id": int, "powerUsage" :  float }`. |
+| `switchStateUpdate` | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: `{ "id": int, "switchState" :  int [0 .. 128] }`. The switchState value is [explained here](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#switch_state_packet). |
 
 ## EventBus API
 
@@ -259,7 +259,7 @@ myEventBus.unsubscribe(subscriptionId)
 > 
 ```
 {
-    "crownstoneId"       : int, ID of Crownstone. Range is [1 .. 255]
+    "id"                 : int, ID of Crownstone. Range is [1 .. 255]
     "switchState"        : int, [explained here](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#switch_state_packet). Range is [0 .. 128]
     "flagBitMask"        : [explained here](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#flags_bitmask). Will be expanded upon in the future.
     "temperature"        : int, temperature of the chip of the Crownstone in Celsius

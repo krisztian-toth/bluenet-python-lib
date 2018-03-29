@@ -10,6 +10,10 @@ class BLEPacket:
     def __init__(self, packetType):
         self.type = packetType.value
 
+    def loadKey(self, keyString):
+        self.payload = Conversion.ascii_or_hex_string_to_16_byte_array(keyString)
+        return self._process()
+    
     def loadString(self, string):
         self.payload = Conversion.string_to_uint8_array(string)
         return self._process()
@@ -102,8 +106,6 @@ class ReadConfigPacket(BLEPacket):
 class WriteConfigPacket(ReadConfigPacket):
     def getOpCode(self):
         return OpCode.WRITE
-
-
 
 
 
