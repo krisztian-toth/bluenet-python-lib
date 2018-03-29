@@ -45,7 +45,7 @@ class Validator:
     def checkAdvertisement(self, advertisement):
         if advertisement.address not in self.trackedCrownstones:
             self.trackedCrownstones[advertisement.address] = StoneAdvertisementTracker(lambda: self.removeStone(advertisement.address))
-            
+        
         self.trackedCrownstones[advertisement.address].update(advertisement)
         
         if self.trackedCrownstones[advertisement.address].verified:
@@ -55,7 +55,3 @@ class Validator:
     def shutDown(self):
         if self.tickTimer is not None:
             self.tickTimer.cancel()
-
-        for address, tracker in self.trackedCrownstones.items():
-            tracker.shutDown()
-        

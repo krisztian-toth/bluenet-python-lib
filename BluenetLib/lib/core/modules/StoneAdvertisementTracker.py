@@ -5,7 +5,7 @@ import threading
 AMOUNT_OF_REQUIRED_MATCHES = 3
 
 class StoneAdvertisementTracker:
-    rssiHistory = {}
+    rssiHistory = None
     rssi = None
     name = ""
     address = None
@@ -18,16 +18,17 @@ class StoneAdvertisementTracker:
     dfu = False
     
     # config
-    timeoutDuration = 20  # seconds
+    timeoutDuration     = 4  # seconds
     rssiTimeoutDuration = 3  # seconds
-    consecutiveMatches = 0
+    consecutiveMatches  = 0
     
     timeoutTime = 0
-    rssiTimeoutList = []
-
+    rssiTimeoutList = None
     _lock = None
     
     def __init__(self, cleanupCallback):
+        self.rssiHistory = {}
+        self.rssiTimeoutList = []
         self.cleanupCallback = cleanupCallback
         self._lock = threading.Lock()
 
@@ -47,6 +48,7 @@ class StoneAdvertisementTracker:
             else:
                 remainingList.append(measurement)
 
+        self.rssiTimeoutList = None
         self.rssiTimeoutList = remainingList
         self.avgRssi = self.calculateRssiAverage()
 
@@ -61,27 +63,26 @@ class StoneAdvertisementTracker:
                 
                 
     def handlePayload(self, advertisement):
-        self.rssi = advertisement.rssi
-    
-        updateTime = time.time()
-        self.lastUpdate = updateTime
-
-        self.rssiHistory[self.lastUpdate] = self.rssi
-    
-        if advertisement.isInDFUMode():
-            self.verified = True
-            self.dfu = True
-            self.consecutiveMatches = 0
-        else:
-            self.verify(advertisement.serviceData)
-
         # this field can be manipulated during the loop in calculate. To avoid this, we lock the threads for the duration of the loop
         with self._lock:
-            self.avgRssi = self.calculateRssiAverage()
+            self.rssi = advertisement.rssi
         
-        self.timeoutTime = self.lastUpdate + self.timeoutDuration
-        self.rssiTimeoutList.append({"key": self.lastUpdate, "timeoutTime": self.lastUpdate + self.rssiTimeoutDuration})
-
+            now = time.time()
+            
+            self.lastUpdate = now
+    
+            self.rssiHistory[now] = self.rssi
+        
+            if advertisement.isInDFUMode():
+                self.verified = True
+                self.dfu = True
+                self.consecutiveMatches = 0
+            else:
+                self.verify(advertisement.serviceData)
+            
+            self.avgRssi = self.calculateRssiAverage()
+            self.timeoutTime = now + self.timeoutDuration
+            self.rssiTimeoutList.append({"key": now, "timeoutTime": now + self.rssiTimeoutDuration})
 
 
     # check if we consistently get the ID of this crownstone.
@@ -139,9 +140,6 @@ class StoneAdvertisementTracker:
             return total / float(count)
         else:
             return 0
-        
-    def shutDown(self):
-        self.cancelRunningTimers()
         
         
         

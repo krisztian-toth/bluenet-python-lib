@@ -3,17 +3,21 @@ import time
 
 from BluenetLib.BLE import BluenetBle
 
-print("\n\n\nStarting Example")
+print("===========================================\n\nStarting Example\n\n===========================================")
 
 # initialize the Bluetooth Core
 core = BluenetBle()
 core.setSettings("adminKeyForCrown", "memberKeyForHome", "guestKeyForOther")
 
-#get the nearest crownstone in setup mode. We expect it to be atleast within the -70db range
+print("Searching for the nearest setup Crownstone")
+# get the nearest crownstone in setup mode. We expect it to be atleast within the -70db range
 nearestStone = core.getNearestSetupCrownstone(rssiAtLeast=-70, returnFirstAcceptable=True)
+
+print("Search Results:", nearestStone)
 
 if nearestStone is not None:
     # setup the nearest Crownstone if we can find one
+    print("Starting setup on ", nearestStone["address"])
     core.setupCrownstone(
         nearestStone["address"],
         crownstoneId=1,
@@ -30,10 +34,13 @@ if nearestStone is not None:
     # reset the Crownstone back into setup mode
     print("Starting the Factory Reset Process")
     core.connect(nearestStone["address"])
+    print("Command factory reset")
     core.control.commandFactoryReset()
+    print("command disconnect")
     core.control.disconnect()
 
-#clean up all pending processes
+# clean up all pending processes
+print("Core shutdown")
 core.shutDown()
 
-print("\n\n\nFinished Example")
+print("===========================================\n\nFinished Example\n\n===========================================")
