@@ -12,7 +12,7 @@ This library works with Python 3.5 and higher. It does not work with Python 3.4.
 We need libbluetooth-dev for developing with BLE.
 
 ```
-sudo apt-get install build-essential libbluetooth-dev libglib2.0-dev python3-setuptoolslibbluetooth-dev libglib2.0-dev
+sudo apt-get install build-essential libbluetooth-dev libglib2.0-dev python3-setuptools
 ```
 
 # Installing Bluenet BLE
