@@ -29,6 +29,7 @@ class BleHandler:
     subscriptionIds = []
     
     def __init__(self, settings):
+        self.connectedPeripherals = {}
         self.scanner = Scanner().withDelegate(ScanDelegate())
         self.validator = Validator()
         self.settings = settings

@@ -7,7 +7,7 @@ from BluenetLib.lib.topics.Topics import Topics
 import threading
 
 class Validator:
-    trackedCrownstones = {}
+    trackedCrownstones = None
     tickTimer = None
     _lock = None
 
@@ -15,6 +15,7 @@ class Validator:
         BluenetEventBus.subscribe(SystemBleTopics.rawAdvertisement, self.checkAdvertisement)
         self._lock = threading.Lock()
         self.scheduleTick()
+        self.trackedCrownstones = {}
 
 
     def scheduleTick(self):

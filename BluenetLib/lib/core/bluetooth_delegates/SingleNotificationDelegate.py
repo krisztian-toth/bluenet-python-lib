@@ -10,7 +10,7 @@ LAST_PACKET_INDEX = 0xFF
 
 class PeripheralDelegate(DefaultDelegate):
     callback = None
-    dataCollected = []
+    dataCollected = None
     settings = None
     
     def __init__(self, callback, settings):

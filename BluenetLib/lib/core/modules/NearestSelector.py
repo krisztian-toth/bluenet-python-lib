@@ -6,8 +6,8 @@ class NearestSelector:
     setupModeOnly = False
     rssiAtLeast = -100
     returnFirstAcceptable = False
-    
-    deviceList = []
+
+    deviceList = None
     
     nearest = None
     
@@ -15,6 +15,7 @@ class NearestSelector:
         self.setupModeOnly = setupModeOnly
         self.rssiAtLeast = rssiAtLeast
         self.returnFirstAcceptable = returnFirstAcceptable
+        self.deviceList = []
         
     def handleAdvertisement(self, advertisement):
         if "serviceData" not in advertisement:
