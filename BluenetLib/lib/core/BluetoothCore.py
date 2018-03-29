@@ -21,12 +21,12 @@ class BluetoothCore:
     mesh    = None
     ble     = None
     
-    def __init__(self):
+    def __init__(self, hciIndex=0):
         self.settings = BluenetSettings()
         self.control  = ControlHandler(self)
         self.setup    = SetupHandler(self)
         self.state    = StateHandler(self)
-        self.ble      = BleHandler(self.settings)
+        self.ble      = BleHandler(self.settings, hciIndex)
         
     def shutDown(self):
         self.ble.shutDown()
