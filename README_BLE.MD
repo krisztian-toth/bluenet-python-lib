@@ -12,7 +12,7 @@ This library works with Python 3.5 and higher. It does not work with Python 3.4.
 We need libbluetooth-dev for developing with BLE.
 
 ```
-sudo apt-get install libbluetooth-dev libglib2.0-dev
+sudo apt-get install build-essential libbluetooth-dev libglib2.0-dev python3-setuptools
 ```
 
 # Installing Bluenet BLE
@@ -38,9 +38,25 @@ To use Bluenet BLE, you first import it from Bluenetlib.
 
 ```python
 from BluenetLib.BLE import BluenetBle
+
+myBluenetBle = BluenetBle(hciIndex=0)
+
 ```
 
 BluenetBle is composed of a number of top level methods and modules for specific commands. We will first describe these top level methods.
+
+
+##### `__init__(hciIndex=0)`
+> When initializing the BluenetBle class, you can provide an hciIndex. On linux, 0 means /dev/hci0, 1 /dev/hci1 etc. Usually 0 is the right one. You can check which one you need with:
+> ```
+> hciconfig
+> ```
+> The constructor is not explicitly called with __init__, but like this:
+>```python
+>myBluenetBle = BluenetBle(hciIndex=0)
+>```
+
+
 
 ##### `shutDown()`
 > Shut down the BLE module. This is should be done on closing your script

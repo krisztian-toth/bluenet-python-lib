@@ -27,12 +27,14 @@ class BleHandler:
     scanAborted = False
     
     subscriptionIds = []
+    hciIndex = 0
     
-    def __init__(self, settings):
+    def __init__(self, settings, hciIndex=0):
         self.connectedPeripherals = {}
-        self.scanner = Scanner().withDelegate(ScanDelegate())
         self.validator = Validator()
         self.settings = settings
+        self.hciIndex = hciIndex
+        self.scanner = Scanner(self.hciIndex).withDelegate(ScanDelegate())
         self.subscriptionIds.append(BluenetEventBus.subscribe(SystemBleTopics.abortScanning, lambda x: self.abortScanning()))
         
     
@@ -45,8 +47,8 @@ class BleHandler:
     
     def connect(self, address):
         if address not in self.connectedPeripherals:
-            self.connectedPeripherals[address] = Peripheral()
-            print("Connecting")
+            self.connectedPeripherals[address] = Peripheral(iface=self.hciIndex)
+            print("Connecting...")
             self.connectedPeripheral = address
             self.connectedPeripherals[address].connect(address, ADDR_TYPE_RANDOM)
             self.connectedPeripherals[address].getServices()
