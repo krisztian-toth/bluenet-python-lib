@@ -70,9 +70,10 @@ class BleHandler:
             self.scanningActive = True
             self.scanAborted = False
             scanTime = 0
+            processInterval = 0.5
             while self.scanningActive and scanTime < scanDuration and not self.scanAborted:
-                scanTime += 0.5
-                self.scanner.process(scanTime)
+                scanTime += processInterval
+                self.scanner.process(processInterval)
             
             self.stopScanning()
 

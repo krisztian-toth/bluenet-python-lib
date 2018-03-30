@@ -79,7 +79,7 @@ class BluetoothCore:
         gatherer = Gatherer()
     
         subscriptionIdValidated = BluenetEventBus.subscribe(Topics.advertisement,             lambda advertisementData: gatherer.handleAdvertisement(advertisementData, True)  )
-        subscriptionIdAll       = BluenetEventBus.subscribe(SystemBleTopics.rawAdvertisement, lambda advertisementData: gatherer.handleAdvertisement(advertisementData, False) )
+        subscriptionIdAll       = BluenetEventBus.subscribe(SystemBleTopics.rawAdvertisement, lambda advertisement: gatherer.handleAdvertisement(advertisement.getDictionary(), False) )
     
         self.ble.startScanning(scanDuration=scanDuration)
     

@@ -41,6 +41,7 @@ from BluenetLib.BLE import BluenetBle
 
 myBluenetBle = BluenetBle(hciIndex=0)
 
+
 ```
 
 BluenetBle is composed of a number of top level methods and modules for specific commands. We will first describe these top level methods.

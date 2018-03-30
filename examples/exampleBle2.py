@@ -15,4 +15,9 @@ crownstonesInRange = core.getCrownstonesByScanning()
 
 print(crownstonesInRange)
 
+# clean up all pending processes
+print("Core shutdown")
+core.shutDown()
+
 print("===========================================\n\nFinished Example\n\n===========================================")
+
