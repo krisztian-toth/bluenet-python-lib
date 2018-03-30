@@ -58,6 +58,8 @@ BluenetBle is composed of a number of top level methods and modules for specific
 >```
 
 
+##### `isCrownstoneInSetupMode(address: string, scanDuration=3)`
+> This will scan (blocking) for scanDuration. After which it will return True or False, depending if the Crownstone with this address (like "f7:19:a4:ef:ea:f6") is in setup mode or not.
 
 ##### `shutDown()`
 > Shut down the BLE module. This is should be done on closing your script

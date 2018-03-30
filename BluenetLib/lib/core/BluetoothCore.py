@@ -1,4 +1,5 @@
 from BluenetLib.lib.core.modules.Gatherer import Gatherer
+from BluenetLib.lib.core.modules.SetupChecker import SetupChecker
 from BluenetLib.lib.util.JsonFileStore import JsonFileStore
 
 from BluenetLib.Exceptions import BleError, BluenetError, BluenetBleException, BluenetException
@@ -78,7 +79,7 @@ class BluetoothCore:
     def getCrownstonesByScanning(self, scanDuration=3):
         gatherer = Gatherer()
     
-        subscriptionIdValidated = BluenetEventBus.subscribe(Topics.advertisement,             lambda advertisementData: gatherer.handleAdvertisement(advertisementData, True)  )
+        subscriptionIdValidated = BluenetEventBus.subscribe(Topics.advertisement,             lambda advertisementData: gatherer.handleAdvertisement(advertisementData, True)          )
         subscriptionIdAll       = BluenetEventBus.subscribe(SystemBleTopics.rawAdvertisement, lambda advertisement: gatherer.handleAdvertisement(advertisement.getDictionary(), False) )
     
         self.ble.startScanning(scanDuration=scanDuration)
@@ -87,6 +88,16 @@ class BluetoothCore:
         BluenetEventBus.unsubscribe(subscriptionIdAll)
         
         return gatherer.getCollection()
+    
+    def isCrownstoneInSetupMode(self, address, scanDuration=3):
+        setupChecker = SetupChecker(address)
+        subscriptionId = BluenetEventBus.subscribe(Topics.advertisement, setupChecker.handleAdvertisement)
+
+        self.ble.startScanning(scanDuration=scanDuration)
+        
+        BluenetEventBus.unsubscribe(subscriptionId)
+
+        return setupChecker.getResult()
         
     
     def getNearestCrownstone(self, rssiAtLeast=-100, scanDuration=3, returnFirstAcceptable=False, addressesToExclude=[]):
