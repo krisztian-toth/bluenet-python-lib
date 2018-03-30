@@ -6,19 +6,24 @@ class NearestSelector:
     setupModeOnly = False
     rssiAtLeast = -100
     returnFirstAcceptable = False
+    addressesToExcludeSet = False
 
     deviceList = None
     
     nearest = None
     
-    def __init__(self, setupModeOnly=False, rssiAtLeast=-100, returnFirstAcceptable=False):
+    def __init__(self, setupModeOnly=False, rssiAtLeast=-100, returnFirstAcceptable=False, addressesToExcludeSet=set()):
         self.setupModeOnly = setupModeOnly
         self.rssiAtLeast = rssiAtLeast
         self.returnFirstAcceptable = returnFirstAcceptable
         self.deviceList = []
         
+        
     def handleAdvertisement(self, advertisement):
         if "serviceData" not in advertisement:
+            return
+        
+        if advertisement["address"].lower() in self.addressesToExcludeSet:
             return
         
         if self.setupModeOnly and not advertisement["serviceData"]["setupMode"]:
@@ -37,9 +42,6 @@ class NearestSelector:
         if self.returnFirstAcceptable:
             BluenetEventBus.emit(SystemBleTopics.abortScanning, True)
             
-        
-        
-        
             
     def getNearest(self):
         

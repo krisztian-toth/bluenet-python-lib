@@ -1,6 +1,7 @@
+from BluenetLib.lib.core.modules.Gatherer import Gatherer
 from BluenetLib.lib.util.JsonFileStore import JsonFileStore
 
-from BluenetLib.Exceptions import BleError, BluenetError, BluenetBleException
+from BluenetLib.Exceptions import BleError, BluenetError, BluenetBleException, BluenetException
 from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.core.bluenet_modules.BleHandler import BleHandler
 from BluenetLib.lib.core.bluenet_modules.ControlHandler import ControlHandler
@@ -68,27 +69,50 @@ class BluetoothCore:
     def disconnect(self):
         self.ble.disconnect()
     
-    def startScanning(self, timeout=3):
-        self.ble.startScanning()
+    def startScanning(self, scanDuration=3):
+        self.ble.startScanning(scanDuration)
 
     def stopScanning(self):
         self.ble.stopScanning()
 
+    def getCrownstonesByScanning(self, scanDuration=3):
+        gatherer = Gatherer()
     
-    def getNearestCrownstone(self, rssiAtLeast=-100, timeout=3, returnFirstAcceptable=False):
-        return self._getNearest(False, rssiAtLeast, timeout, returnFirstAcceptable, False)
+        subscriptionIdValidated = BluenetEventBus.subscribe(Topics.advertisement,             lambda advertisementData: gatherer.handleAdvertisement(advertisementData, True)  )
+        subscriptionIdAll       = BluenetEventBus.subscribe(SystemBleTopics.rawAdvertisement, lambda advertisementData: gatherer.handleAdvertisement(advertisementData, False) )
+    
+        self.ble.startScanning(scanDuration=scanDuration)
+    
+        BluenetEventBus.unsubscribe(subscriptionIdValidated)
+        BluenetEventBus.unsubscribe(subscriptionIdAll)
+        
+        return gatherer.getCollection()
+        
+    
+    def getNearestCrownstone(self, rssiAtLeast=-100, scanDuration=3, returnFirstAcceptable=False, addressesToExclude=[]):
+        return self._getNearest(False, rssiAtLeast, scanDuration, returnFirstAcceptable, False, addressesToExclude)
     
     
-    def getNearestValidatedCrownstone(self, rssiAtLeast=-100, timeout=3, returnFirstAcceptable=False):
-        return self._getNearest(False, rssiAtLeast, timeout, returnFirstAcceptable, True)
+    def getNearestValidatedCrownstone(self, rssiAtLeast=-100, scanDuration=3, returnFirstAcceptable=False, addressesToExclude=[]):
+        return self._getNearest(False, rssiAtLeast, scanDuration, returnFirstAcceptable, True, addressesToExclude)
     
     
-    def getNearestSetupCrownstone(self, rssiAtLeast=-100, timeout=3, returnFirstAcceptable=False):
-        return self._getNearest(True, rssiAtLeast, timeout, returnFirstAcceptable, True)
+    def getNearestSetupCrownstone(self, rssiAtLeast=-100, scanDuration=3, returnFirstAcceptable=False, addressesToExclude=[]):
+        return self._getNearest(True, rssiAtLeast, scanDuration, returnFirstAcceptable, True, addressesToExclude)
     
 
-    def _getNearest(self, setup, rssiAtLeast, timeout, returnFirstAcceptable, validated):
-        selector = NearestSelector(setup, rssiAtLeast, returnFirstAcceptable)
+    def _getNearest(self, setup, rssiAtLeast, scanDuration, returnFirstAcceptable, validated, addressesToExclude):
+        addressesToExcludeSet = set()
+        for data in addressesToExclude:
+            if isinstance(data, dict):
+                if "address" in data:
+                    addressesToExcludeSet.add(data["address"].lower())
+                else:
+                    raise BluenetException(BluenetError.INVALID_ADDRESS, "Addresses to Exclude is either an array of addresses (like 'f7:19:a4:ef:ea:f6') or an array of dicts with the field 'address'")
+            else:
+                addressesToExcludeSet.add(data.lower())
+        
+        selector = NearestSelector(setup, rssiAtLeast, returnFirstAcceptable, addressesToExcludeSet)
     
         topic = Topics.advertisement
         if not validated:
@@ -96,7 +120,7 @@ class BluetoothCore:
     
         subscriptionId = BluenetEventBus.subscribe(topic, selector.handleAdvertisement)
         
-        self.ble.startScanning(timeout=timeout)
+        self.ble.startScanning(scanDuration=scanDuration)
     
         BluenetEventBus.unsubscribe(subscriptionId)
         

@@ -75,22 +75,35 @@ These keys are 16 characters long like "adminKeyForCrown" or 32 characters as a 
 ##### `disconnect()`
 > This will disconnect from the connected Crownstone.
 
-##### `startScanning(timeout=3)`
-> This will start scanning for Crownstones in a background thread. The timeout denotes how long we will scan for. Once scanning is active, Topic.advertisement events will be triggered with the advertisements of the Crownstones that share our encryption keys or are in setup mode.
+##### `getCrownstonesByScanning(scanDuration=3)`
+> This will scan for scanDuration in seconds and return an array of the Crownstone it has found. This is an array of dictionaries that look like this:
+>```
+>{
+>    "address": string,      # mac address like "f7:19:a4:ef:ea:f6"
+>    "setupMode": boolean,   # is this Crownstone in setup mode?
+>    "validated": boolean,   # does this Crownstone share our encryption key set?
+>    "rssi": Float           # average of the rssi of this Crownstone. If None, there have been no valid measurements.
+>}
+>```
+>This array can be directly put in the 'addressesToExclude' field of the 'getNearest..' methods.
+
+##### `startScanning(scanDuration=3)`
+> This will start scanning for Crownstones in a background thread. The scanDuration denotes how long we will scan for. Once scanning is active, Topic.advertisement events will be triggered with the advertisements of the Crownstones that share our encryption keys or are in setup mode.
 
 ##### `stopScanning()`
 > This will stop an active scan.
 
-##### `getNearestCrownstone(rssiAtLeast=-100, timeout=3, returnFirstAcceptable=False)`
+##### `getNearestCrownstone(rssiAtLeast=-100, scanDuration=3, returnFirstAcceptable=False, addressesToExclude=[])`
 > This will search for the nearest Crownstone. It will return ANY Crownstone, not just the ones sharing our encryption keys.
 > - rssiAtLeast, you can use this to indicate a maximum distance
-> - timeout, the amount of time we scan
+> - scanDuration, the amount of time we scan (in seconds)
 > - returnFirstAcceptable, if this is True, we return on the first Crownstone in the rssiAtLeast range. If it is False, we will scan for the timeout duration and return the closest one.
+> - addressesToExclude, this is an array of either address strings (like "f7:19:a4:ef:ea:f6") or an array of dictionaries that each contain an address field (like what you get from "getCrownstonesByScanning").
 
-##### `getNearestValidatedCrownstone(rssiAtLeast=-100, timeout=3, returnFirstAcceptable=False)`
+##### `getNearestValidatedCrownstone(rssiAtLeast=-100, scanDuration=3, returnFirstAcceptable=False, addressesToExclude=[])`
 > Same as getNearestCrownstone but will only search for Crownstones with the same encryption keys.
 
-##### `getNearestSetupCrownstone(rssiAtLeast=-100, timeout=3, returnFirstAcceptable=False)`
+##### `getNearestSetupCrownstone(rssiAtLeast=-100, scanDuration=3, returnFirstAcceptable=False, addressesToExclude=[])`
 > Same as getNearestCrownstone but will only search for Crownstones in setup mode.
 
 

@@ -62,20 +62,20 @@ class BleHandler:
             print("Cleaned up")
     
     
-    def startScanning(self, timeout=3):
+    def startScanning(self, scanDuration=3):
         if not self.scanningActive:
             self.scanner.start()
             self.scanningActive = True
             self.scanAborted = False
             scanTime = 0
-            while self.scanningActive and scanTime < timeout and not self.scanAborted:
+            while self.scanningActive and scanTime < scanDuration and not self.scanAborted:
                 scanTime += 0.5
                 self.scanner.process(scanTime)
             
             self.stopScanning()
 
-    def startScanningBackground(self, timeout=3):
-        Timer(0.0001, lambda: self.startScanning(timeout))
+    def startScanningBackground(self, scanDuration=3):
+        Timer(0.0001, lambda: self.startScanning(scanDuration))
 
     
     def stopScanning(self):

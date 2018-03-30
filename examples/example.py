@@ -20,7 +20,7 @@ bluenet.initializeUSB("/dev/tty.SLAB_USBtoUART")
 BluenetEventBus.subscribe(Topics.powerUsageUpdate, showPowerUsage)
 
 # This is the id of the Crownstone we will be switching
-targetCrownstoneId = 10
+targetCrownstoneId = 11
 
 # Switch this Crownstone on and off.
 switchState = True

@@ -21,6 +21,7 @@ class BluenetError(Enum):
     ADMIN_KEY_REQUIRED  = "ADMIN_KEY_REQUIRED"
     MEMBER_KEY_REQUIRED = "MEMBER_KEY_REQUIRED"
     GUEST_KEY_REQUIRED  = "GUEST_KEY_REQUIRED"
+    INVALID_ADDRESS     = "INVALID_ADDRESS"
 
 class BluenetBleException(Exception):
     code    = None
