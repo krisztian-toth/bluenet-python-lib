@@ -19,6 +19,9 @@ class AdcConfigPacket:
             print("ERROR: INVALID PAYLOAD LENGTH", len(payload), payload)
             return
         
+        
+        self.channels = []
+        
         index = 0
         self.amountOfChannels = payload[index]
         index += 1
@@ -35,9 +38,10 @@ class AdcConfigPacket:
         self.samplingPeriod = Conversion.uint8_array_to_uint32(payload[index:index+4])
 
 
+
     def getDict(self):
         data = {}
-
+        
         data["amountOfChannels"] = self.amountOfChannels
         data["channels"] = {}
         for i in range(0, self.amountOfChannels):
@@ -49,5 +53,5 @@ class AdcConfigPacket:
             data["channels"][type] = self.channels[i].getDict()
             
         data["samplingPeriod"] = self.samplingPeriod
-
+        
         return data

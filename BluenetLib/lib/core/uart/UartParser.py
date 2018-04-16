@@ -16,11 +16,13 @@ from BluenetLib.lib.topics.SystemTopics import SystemTopics
 
 
 class UartParser:
+    
     def __init__(self):
         BluenetEventBus.subscribe(SystemTopics.uartNewPackage, self.parse)
 
     def parse(self, dataPacket):
         opCode = dataPacket.opCode
+        parsedData = None
         
         if opCode == UartRxType.MESH_STATE_0 or opCode == UartRxType.MESH_STATE_1:
             # unpack the mesh packet
@@ -76,4 +78,6 @@ class UartParser:
         else:
             print("Unknown OpCode", opCode)
 
-
+        
+        parsedData = None
+        

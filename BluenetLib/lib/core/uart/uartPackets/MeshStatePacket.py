@@ -17,7 +17,7 @@ class MeshStatePacket:
 		if len(payload) != MESH_STATE_PACKET_SIZE:
 			print("ERROR: INVALID PAYLOAD LENGTH", len(payload), payload)
 			return
-
+		self.stoneStates = []
 		self.head = payload[0]
 		self.tail = payload[1]
 		self.size = payload[2]
