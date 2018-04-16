@@ -54,6 +54,7 @@ class SetupHandler:
             time.sleep(sleepTime)
             print("BluenetBLE: Wrapping up...")
             self.validateSetup()
+            time.sleep(2*sleepTime)
             print("BluenetBLE: Setup complete!")
         except BTLEException as err:
             raise err

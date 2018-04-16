@@ -9,8 +9,8 @@ print("===========================================\n\nStarting Example\n\n======
 core = BluenetBle()
 core.setSettings("adminKeyForCrown", "memberKeyForHome", "guestKeyForOther")
 
-print("Searching for the nearest setup Crownstone")
-# get the nearest crownstone in setup mode. We expect it to be atleast within the -70db range
+print("Searching for Crownstones in range")
+
 crownstonesInRange = core.getCrownstonesByScanning()
 
 print(crownstonesInRange)
