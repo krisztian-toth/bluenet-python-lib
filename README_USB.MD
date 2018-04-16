@@ -94,8 +94,7 @@ The example is shown below to get an idea of how everything works:
 """An example that switches a Crownstone, and prints the power usage of all Crownstones."""
 
 import time
-
-from BluenetLib import Bluenet
+from BluenetLib import Bluenet, BluenetEventBus, Topics
 
 # Function that's called when the power usage is updated.
 def showPowerUsage(data):
@@ -105,20 +104,18 @@ def showPowerUsage(data):
 bluenet = Bluenet()
 
 # Start up the USB bridge
-bluenet.initializeUsbBridge("/dev/ttyUSB0")
+bluenet.initializeUSB("/dev/tty.SLAB_USBtoUART")
 
 # Set up event listeners
-eventBus = bluenet.getEventBus()
-topics   = bluenet.getTopics()
-eventBus.subscribe(topics.powerUsageUpdate, showPowerUsage)
+BluenetEventBus.subscribe(Topics.powerUsageUpdate, showPowerUsage)
 
 # This is the id of the Crownstone we will be switching
-targetCrownstoneId = 1
+targetCrownstoneId = 10
 
 # Switch this Crownstone on and off.
 switchState = True
 for i in range(0,100):
-	if not bluenet.isRunning:
+	if not bluenet.running:
 		break
 
 	if switchState:
@@ -129,6 +126,7 @@ for i in range(0,100):
 
 	switchState = not switchState
 	time.sleep(2)
+
 ```
 
 
