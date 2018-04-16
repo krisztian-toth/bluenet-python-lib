@@ -13,7 +13,8 @@ print("Searching for Crownstones in range")
 
 crownstonesInRange = core.getCrownstonesByScanning()
 
-print(crownstonesInRange)
+for stoneInRange in crownstonesInRange:
+    print(stoneInRange)
 
 # clean up all pending processes
 print("Core shutdown")

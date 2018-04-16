@@ -40,8 +40,6 @@ To use Bluenet BLE, you first import it from Bluenetlib.
 from BluenetLib.BLE import BluenetBle
 
 myBluenetBle = BluenetBle(hciIndex=0)
-
-
 ```
 
 BluenetBle is composed of a number of top level methods and modules for specific commands. We will first describe these top level methods.
@@ -58,6 +56,8 @@ BluenetBle is composed of a number of top level methods and modules for specific
 >```
 
 
+##### `isCrownstoneInSetupMode(address: string, scanDuration=3)`
+> This will scan (blocking) for scanDuration. After which it will return True or False, depending if the Crownstone with this address (like "f7:19:a4:ef:ea:f6") is in setup mode or not.
 
 ##### `shutDown()`
 > Shut down the BLE module. This is should be done on closing your script
