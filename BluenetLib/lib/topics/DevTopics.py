@@ -31,3 +31,4 @@ class DevTopics(Enum):
                                                        #                         "avgPowerMilliWattReal": int
                                                        #                     }
     newAdcConfigPacket = 'newAdcConfigPacket'
+    adcRestarted = 'adcRestarted'

@@ -66,7 +66,10 @@ class UartParser:
             # type is PowerCalculationsPacket
             parsedData = AdcConfigPacket(dataPacket.payload)
             BluenetEventBus.emit(DevTopics.newAdcConfigPacket, parsedData.getDict())
-            
+
+        elif opCode == UartRxType.ADC_RESTART:
+            BluenetEventBus.emit(DevTopics.adcRestarted, None)
+
         elif opCode == UartRxType.ASCII_LOG:
             stringResult = ""
             for byte in dataPacket.payload:
