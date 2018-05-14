@@ -50,7 +50,7 @@ class BleHandler:
             self.connectedPeripherals[address] = Peripheral(iface=self.hciIndex)
             print("Connecting...")
             self.connectedPeripheral = address
-            self.connectedPeripherals[address].connect(address, ADDR_TYPE_RANDOM)
+            self.connectedPeripherals[address].connect(address, addrType=ADDR_TYPE_RANDOM, iface=self.hciIndex)
             self.connectedPeripherals[address].getServices()
             print("Connected")
             
