@@ -31,6 +31,7 @@ class UartRxType(IntEnum):
 	MESH_STATE_LAST =                  101   # Last state handle
 
 	ADC_CONFIG =                       10100
+	ADC_RESTART =                      10101
 
 	POWER_LOG_CURRENT =                10200
 	POWER_LOG_VOLTAGE =                10201
