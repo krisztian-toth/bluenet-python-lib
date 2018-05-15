@@ -16,12 +16,12 @@ class CrownstoneErrors:
     
         bitArray = Conversion.uint32_to_bit_array(bitMask)
     
-        self.overCurrent = bitArray[31 - 0]
-        self.overCurrentDimmer = bitArray[31 - 1]
-        self.temperatureChip = bitArray[31 - 2]
-        self.temperatureDimmer = bitArray[31 - 3]
-        self.dimmerOnFailure = bitArray[31 - 4]
-        self.dimmerOffFailure = bitArray[31 - 5]
+        self.overCurrent        = bitArray[31 - 0]
+        self.overCurrentDimmer  = bitArray[31 - 1]
+        self.temperatureChip    = bitArray[31 - 2]
+        self.temperatureDimmer  = bitArray[31 - 3]
+        self.dimmerOnFailure    = bitArray[31 - 4]
+        self.dimmerOffFailure   = bitArray[31 - 5]
     
     def hasErrors(self):
         return self.bitMask == 0

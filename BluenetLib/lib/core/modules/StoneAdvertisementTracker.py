@@ -91,19 +91,22 @@ class StoneAdvertisementTracker:
             self.verified = True
             self.consecutiveMatches = 0
         else:
-            if self.uniqueIdentifier != serviceData.uniqueIdentifier:
-                if serviceData.validation != 0 and serviceData.opCode == 3:
-                    if serviceData.dataType != 1:
-                        if serviceData.validation == 0xFACE:
-                            self.addValidMeasurement(serviceData)
-                        elif serviceData.validation != 0xFACE:
-                            self.invalidateDevice(serviceData)
-                else:
-                    if not serviceData.stateOfExternalCrownstone:
-                        if serviceData.crownstoneId == self.crownstoneId:
-                            self.addValidMeasurement(serviceData)
-                        else:
-                            self.invalidateDevice(serviceData)
+            if serviceData.dataReadyForUse == False:
+                self.invalidateDevice(serviceData)
+            else:
+                if self.uniqueIdentifier != serviceData.uniqueIdentifier:
+                    if serviceData.validation != 0 and serviceData.opCode == 3:
+                        if serviceData.dataType != 1:
+                            if serviceData.validation == 0xFACE:
+                                self.addValidMeasurement(serviceData)
+                            elif serviceData.validation != 0xFACE:
+                                self.invalidateDevice(serviceData)
+                    else:
+                        if not serviceData.stateOfExternalCrownstone:
+                            if serviceData.crownstoneId == self.crownstoneId:
+                                self.addValidMeasurement(serviceData)
+                            else:
+                                self.invalidateDevice(serviceData)
         
         self.uniqueIdentifier = serviceData.uniqueIdentifier
         

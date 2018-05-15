@@ -123,3 +123,37 @@ class ControlPacketsGenerator:
 			lockByte = 1
 
 		return ControlPacket(ControlType.LOCK_SWITCH).loadUInt8(lockByte).getPacket()
+	
+	@staticmethod
+	def getSwitchCraftPacket(enabled):
+		"""
+        :param enabled: bool
+        :return:
+        """
+		
+		enabledValue = 0
+		if enabled:
+			enabledValue = 1
+		
+		return ControlPacket(ControlType.ENABLE_SWITCHCRAFT).loadUInt8(enabledValue).getPacket()
+
+
+	
+	@staticmethod
+	def getSetupPacket(type, crownstoneId, adminKey, memberKey, guestKey, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor):
+		data = []
+		data.append(type)
+		data.append(crownstoneId)
+		
+		data += Conversion.ascii_or_hex_string_to_16_byte_array(adminKey)
+		data += Conversion.ascii_or_hex_string_to_16_byte_array(memberKey)
+		data += Conversion.ascii_or_hex_string_to_16_byte_array(guestKey)
+		
+		data += Conversion.hex_string_to_uint8_array(meshAccessAddress)
+		
+		data += Conversion.ibeaconUUIDString_to_reversed_uint8_array(ibeaconUUID)
+		data += Conversion.uint16_to_uint8_array(ibeaconMajor)
+		data += Conversion.uint16_to_uint8_array(ibeaconMinor)
+		
+		return ControlPacket(ControlType.SETUP).loadByteArray(data).getPacket()
+

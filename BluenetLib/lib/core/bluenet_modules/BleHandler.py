@@ -6,6 +6,7 @@ from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.core.bluetooth_delegates.SingleNotificationDelegate import PeripheralDelegate
 from BluenetLib.lib.core.bluetooth_delegates.ScanDelegate import ScanDelegate
 from BluenetLib.lib.core.modules.Validator import Validator
+from BluenetLib.lib.protocol.BluenetTypes import ProcessType
 from BluenetLib.lib.topics.SystemBleTopics import SystemBleTopics
 from BluenetLib.lib.util.EncryptionHandler import EncryptionHandler
 
@@ -97,7 +98,7 @@ class BleHandler:
         print("DISABLE NOTIFICATIONS IS NOT IMPLEMENTED YET")
 
     def writeToCharacteristic(self, serviceUUID, characteristicUUID, content):
-        targetCharacteristic = self._getCharacteristic(serviceUUID, characteristicUUID)
+        targetCharacteristic = self.getCharacteristic(serviceUUID, characteristicUUID)
         encryptedContent = EncryptionHandler.encrypt(content, self.settings)
         targetCharacteristic.write(encryptedContent, withResponse=True)
 
@@ -109,12 +110,12 @@ class BleHandler:
 
 
     def readCharacteristicWithoutEncryption(self, serviceUUID, characteristicUUID):
-        targetCharacteristic = self._getCharacteristic(serviceUUID, characteristicUUID)
+        targetCharacteristic = self.getCharacteristic(serviceUUID, characteristicUUID)
         data = targetCharacteristic.read()
         return data
 
     
-    def _getCharacteristic(self, serviceUUID, characteristicUUID):
+    def getCharacteristic(self, serviceUUID, characteristicUUID):
         if self.connectedPeripheral:
             peripheral = self.connectedPeripherals[self.connectedPeripheral]
         
@@ -134,7 +135,7 @@ class BleHandler:
         
         
     def setupSingleNotification(self, serviceUUID, characteristicUUID, writeCommand):
-        characteristic = self._getCharacteristic(serviceUUID, characteristicUUID)
+        characteristic = self.getCharacteristic(serviceUUID, characteristicUUID)
         peripheral = self.connectedPeripherals[self.connectedPeripheral]
         
         peripheral.withDelegate(PeripheralDelegate(lambda x: self._killNotificationLoop(x), self.settings))
@@ -145,7 +146,7 @@ class BleHandler:
         
         characteristicCCCD = characteristicCCCDList[0]
         
-        # enable notifications
+        # enable notifications.. This is ugly but necessary
         characteristicCCCD.write(b"\x01\x00", True)
         
         # execute something that will trigger the notifications
@@ -166,8 +167,51 @@ class BleHandler:
         self.notificationResult = None
         
         return result
+    
+    def setupNotificationStream(self, serviceUUID, characteristicUUID, writeCommand, resultHandler, timeout):
+        characteristic = self.getCharacteristic(serviceUUID, characteristicUUID)
+        peripheral = self.connectedPeripherals[self.connectedPeripheral]
         
+        peripheral.withDelegate(PeripheralDelegate(lambda x: self._loadNotificationResult(x), self.settings))
+    
+        characteristicCCCDList = characteristic.getDescriptors(forUUID=CCCD_UUID)
+        if len(characteristicCCCDList) == 0:
+            raise BluenetBleException(BleError.CAN_NOT_FIND_CCCD, "Can not find CCCD handle to use notifications for characteristic: " + characteristicUUID)
+    
+        characteristicCCCD = characteristicCCCDList[0]
+    
+        # enable notifications.. This is ugly but necessary
+        characteristicCCCD.write(b"\x01\x00", True)
+    
+        # execute something that will trigger the notifications
+        writeCommand()
+    
+        self.notificationLoopActive = True
+        self.notificationResult = None
+        
+        loopCount = 0
+        successful = False
+        while self.notificationLoopActive and loopCount < timeout*2:
+            peripheral.waitForNotifications(0.5)
+            loopCount += 1
+            if self.notificationResult is not None:
+                command = resultHandler(self.notificationResult)
+                self.notificationResult = None
+                if command == ProcessType.ABORT_ERROR:
+                    self.notificationLoopActive = False
+                    raise BluenetBleException(BleError.ABORT_NOTIFICATION_STREAM_W_ERROR, "Aborting the notification stream because the resultHandler raised an error.")
+                elif command == ProcessType.FINISHED:
+                    self.notificationLoopActive = False
+                    successful = True
+    
+        if not successful:
+            raise BluenetBleException(BleError.NOTIFICATION_STREAM_TIMEOUT, "Notification stream not finished within timeout.")
+    
         
     def _killNotificationLoop(self, result):
         self.notificationLoopActive = False
         self.notificationResult = result
+        
+    def _loadNotificationResult(self, result):
+        self.notificationResult = result
+    

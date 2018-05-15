@@ -1,6 +1,6 @@
 from BluenetLib.lib.util.Conversion import Conversion
 
-def parseOpcode4_type0(serviceData, data):
+def parseOpCode4_type0(serviceData, data):
     if len(data) == 17:
         # opCode   = data[0]
         # dataType = data[1]

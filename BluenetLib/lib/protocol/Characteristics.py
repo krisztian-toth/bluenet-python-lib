@@ -21,7 +21,9 @@ class SetupCharacteristics:
     ConfigControl    = "24f10004-7d10-4805-bfc1-7663a01c3bff"
     ConfigRead       = "24f10005-7d10-4805-bfc1-7663a01c3bff"
     GoToDFU          = "24f10006-7d10-4805-bfc1-7663a01c3bff"
+    SetupControl     = "24f10007-7d10-4805-bfc1-7663a01c3bff"
     SessionNonce     = "24f10008-7d10-4805-bfc1-7663a01c3bff"
+
 
 
 class GeneralCharacteristics:

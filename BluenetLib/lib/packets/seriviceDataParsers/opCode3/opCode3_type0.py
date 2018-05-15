@@ -4,7 +4,7 @@ from BluenetLib.lib.util.Conversion import Conversion
 from BluenetLib.lib.util.Timestamp import reconstructTimestamp
 
 
-def parseOpcode3_type0(serviceData, data):
+def parseOpCode3_type0(serviceData, data):
     if len(data) == 17:
         # opCode = data[0]
         # dataType = data[1]
@@ -18,15 +18,16 @@ def parseOpcode3_type0(serviceData, data):
         # bitmask states
         bitmaskArray = Conversion.uint8_to_bit_array(serviceData.flagsBitmask)
         
-        serviceData.dimmingAvailable = bitmaskArray[0]
-        serviceData.dimmingAllowed   = bitmaskArray[1]
-        serviceData.hasError         = bitmaskArray[2]
-        serviceData.switchLocked     = bitmaskArray[3]
-        serviceData.timeIsSet        = bitmaskArray[4]
+        serviceData.dimmingAvailable   = bitmaskArray[0]
+        serviceData.dimmingAllowed     = bitmaskArray[1]
+        serviceData.hasError           = bitmaskArray[2]
+        serviceData.switchLocked       = bitmaskArray[3]
+        serviceData.timeIsSet          = bitmaskArray[4]
+        serviceData.switchCraftEnabled = bitmaskArray[5]
         
-        serviceData.temperature      = Conversion.uint8_to_int8(data[5])
-        powerFactor                  = Conversion.uint8_to_int8(data[6])
-        realPower                    = Conversion.uint16_to_int16(Conversion.uint8_array_to_uint16([data[7], data[8]]))
+        serviceData.temperature        = Conversion.uint8_to_int8(data[5])
+        powerFactor                    = Conversion.uint8_to_int8(data[6])
+        realPower                      = Conversion.uint16_to_int16(Conversion.uint8_array_to_uint16([data[7], data[8]]))
         
         serviceData.powerFactor = float(powerFactor) / 127.0
         

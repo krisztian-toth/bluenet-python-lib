@@ -1,9 +1,12 @@
 import time
 
+from BluenetLib.lib.packets.ResultPacket import ResultPacket
+from BluenetLib.lib.protocol.ControlPackets import ControlPacketsGenerator
+
 from BluenetLib import BluenetBleException
 from BluenetLib.Exceptions import BleError
 from BluenetLib.lib.protocol.BlePackets import WriteConfigPacket, ControlPacket
-from BluenetLib.lib.protocol.BluenetTypes import ConfigurationType, ControlType
+from BluenetLib.lib.protocol.BluenetTypes import ConfigurationType, ControlType, ProcessType, ResultValue
 from BluenetLib.lib.protocol.Characteristics import SetupCharacteristics
 from BluenetLib.lib.protocol.Services import CSServices
 from BluenetLib.lib.util.Conversion import Conversion
@@ -16,8 +19,71 @@ class SetupHandler:
 
     def __init__(self, bluetoothCore):
         self.core = bluetoothCore
-        
+
     def setup(self, crownstoneId, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor):
+        characteristic = None
+        try:
+            characteristic = self.core.ble.getCharacteristic(CSServices.SetupService, SetupCharacteristics.SetupControl)
+            print("BluenetBLE: Fast Setup is supported. Performing..")
+            self.fastSetup(crownstoneId, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor)
+        except BluenetBleException as err:
+            print("BluenetBLE: Fast Setup is NOT supported. Performing classic setup..")
+            self.classicSetup(crownstoneId, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor)
+            
+        
+            
+        
+
+    def fastSetup(self, crownstoneId, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor):
+        if not self.core.settings.initializedKeys:
+            raise BluenetBleException(BleError.NO_ENCRYPTION_KEYS_SET, "Keys are not initialized so I can't put anything on the Crownstone. Make sure you call .setSettings(True, adminKey, memberKey, guesKey")
+
+        self.handleSetupPhaseEncryption()
+        self.core.ble.setupNotificationStream(
+            CSServices.SetupService,
+            SetupCharacteristics.SetupControl,
+            lambda: self._writeFastSetup(crownstoneId, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor),
+            lambda notificationResult: self._handleResult(notificationResult),
+            5
+        )
+        self.core.ble.disconnect()
+    
+    def _writeFastSetup(self, crownstoneId, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor):
+        packet = ControlPacketsGenerator.getSetupPacket(
+            0,
+            crownstoneId,
+            self.core.settings.adminKey,
+            self.core.settings.memberKey,
+            self.core.settings.guestKey,
+            meshAccessAddress,
+            ibeaconUUID,
+            ibeaconMajor,
+            ibeaconMinor
+        )
+
+        print("BluenetBLE: Writing setup data to Crownstone...")
+        self.core.ble.writeToCharacteristic(CSServices.SetupService, SetupCharacteristics.SetupControl, packet)
+        
+    
+    def _handleResult(self, result):
+        response = ResultPacket(result)
+        if response.valid:
+            payload = response.getUInt16Payload()
+            if payload == ResultValue.WAIT_FOR_SUCCESS:
+                print("BluenetBLE: Waiting for setup data to be stored on Crownstone...")
+                return ProcessType.CONTINUE
+            elif payload == ResultValue.SUCCESS:
+                print("BluenetBLE: Data stored...")
+                return ProcessType.FINISHED
+            else:
+                print("BluenetBLE: Unexpected notification data. Aborting...")
+                return ProcessType.ABORT_ERROR
+        else:
+            print("BluenetBLE: Invalid notification data. Aborting...")
+            return ProcessType.ABORT_ERROR
+        
+
+    def classicSetup(self, crownstoneId, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor):
         if not self.core.settings.initializedKeys:
             raise BluenetBleException(BleError.NO_ENCRYPTION_KEYS_SET, "Keys are not initialized so I can't put anything on the Crownstone. Make sure you call .setSettings(True, adminKey, memberKey, guesKey")
         

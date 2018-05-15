@@ -9,7 +9,6 @@ class Advertisement:
     address = None
     serviceUUID = None
     serviceData = None
-    deviceType = None
     operationMode = None
     rssi = None
     
