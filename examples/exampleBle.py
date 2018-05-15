@@ -36,8 +36,9 @@ if nearestStone is not None:
     core.connect(nearestStone["address"])
     print("Command factory reset")
     core.control.commandFactoryReset()
-    print("command disconnect")
-    core.control.disconnect()
+    time.sleep(1)
+    # print("command disconnect")
+    # core.control.disconnect()
 
 # clean up all pending processes
 print("Core shutdown")

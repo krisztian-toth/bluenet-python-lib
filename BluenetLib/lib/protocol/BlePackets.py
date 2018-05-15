@@ -60,11 +60,12 @@ class ControlPacket(BLEPacket):
 
     def getPacket(self):
         packet = []
+        
         packet.append(self.type)
         packet.append(0)
         packet += self.lengthAsUint8Array
         packet += self.payload
-
+        
         return packet
 
 

@@ -2,7 +2,7 @@ from BluenetLib.lib.packets.seriviceDataParsers.opCode3.opCode3_type1 import par
 from BluenetLib.lib.util.Conversion import Conversion
 
 
-def parseOpcode3_type3(serviceData, data):
+def parseOpCode3_type3(serviceData, data):
     if len(data) == 17:
         parseOpCode3_type1(serviceData, data)
 

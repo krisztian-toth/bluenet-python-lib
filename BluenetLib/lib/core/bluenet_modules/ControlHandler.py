@@ -2,7 +2,7 @@ from BluenetLib.lib.protocol.Characteristics import CrownstoneCharacteristics
 from BluenetLib.lib.protocol.ControlPackets import ControlPacketsGenerator
 from BluenetLib.lib.protocol.Services import CSServices
 from BluenetLib.lib.util.EncryptionHandler import EncryptionHandler
-
+from bluepy.btle import BTLEException
 
 class ControlHandler:
     core = None
@@ -55,8 +55,15 @@ class ControlHandler:
         """
           This forces the Crownstone to disconnect from you
         """
-        self._writeControlPacket(ControlPacketsGenerator.getDisconnectPacket())
-        self.core.ble.disconnect()
+        try:
+            self._writeControlPacket(ControlPacketsGenerator.getDisconnectPacket())
+            self.core.ble.disconnect()
+        except BTLEException as err:
+            if err.code is BTLEException.DISCONNECTED:
+                pass
+            else:
+                raise err
+            
         
 
     def lockSwitch(self, lock):

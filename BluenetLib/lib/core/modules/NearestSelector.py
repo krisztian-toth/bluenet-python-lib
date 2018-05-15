@@ -6,7 +6,7 @@ class NearestSelector:
     setupModeOnly = False
     rssiAtLeast = -100
     returnFirstAcceptable = False
-    addressesToExcludeSet = False
+    addressesToExcludeSet = set()
 
     deviceList = None
     
@@ -16,6 +16,7 @@ class NearestSelector:
         self.setupModeOnly = setupModeOnly
         self.rssiAtLeast = rssiAtLeast
         self.returnFirstAcceptable = returnFirstAcceptable
+        self.addressesToExcludeSet = addressesToExcludeSet
         self.deviceList = []
         
         

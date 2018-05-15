@@ -46,7 +46,8 @@ class SetupHandler:
             lambda notificationResult: self._handleResult(notificationResult),
             5
         )
-        self.core.ble.disconnect()
+        print("BluenetBLE: Closing Setup.")
+        self.core.settings.exitSetup()
     
     def _writeFastSetup(self, crownstoneId, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor):
         packet = ControlPacketsGenerator.getSetupPacket(
@@ -188,7 +189,6 @@ class SetupHandler:
 
     def validateSetup(self):
         self.core.ble.writeToCharacteristic(CSServices.SetupService, SetupCharacteristics.Control, ControlPacket(ControlType.VALIDATE_SETUP).getPacket())
-    
     
     
     def _writeConfigPacket(self, packet):

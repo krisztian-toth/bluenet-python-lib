@@ -1,7 +1,6 @@
 from BluenetLib.lib.packets.CrownstoneErrors import CrownstoneErrors
 from BluenetLib.lib.packets.seriviceDataParsers.parsers import parseOpCode3, parseOpCode4, parseOpCode5, parseOpCode6
 from BluenetLib.lib.protocol.BluenetTypes import DeviceType
-from BluenetLib.lib.util.Conversion import Conversion
 from BluenetLib.lib.util.EncryptionHandler import EncryptionHandler
 
 
@@ -38,7 +37,7 @@ class ServiceData:
     validData = False
     dataReadyForUse = False # decryption is successful if this is true
     
-    deviceType = DeviceType.undefined
+    deviceType = DeviceType.UNDEFINED
     rssiOfExternalCrownstone = 0
 
     encryptedData = []
