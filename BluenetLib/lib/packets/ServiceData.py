@@ -119,7 +119,7 @@ class ServiceData:
         if self.validData and len(self.encryptedData) == 16 and len(keyHexString) >= 16:
             result = EncryptionHandler.decryptECB(self.encryptedData, keyHexString)
             
-            for i in range(0, len(self.data)):
+            for i in range(0, len(self.encryptedData)):
                 self.data[i+self.encryptedDataStartIndex] = result[i]
             
             self.parse()
