@@ -31,9 +31,6 @@ class SetupHandler:
             self.classicSetup(crownstoneId, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor)
             
         
-            
-        
-
     def fastSetup(self, crownstoneId, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor):
         if not self.core.settings.initializedKeys:
             raise BluenetBleException(BleError.NO_ENCRYPTION_KEYS_SET, "Keys are not initialized so I can't put anything on the Crownstone. Make sure you call .setSettings(True, adminKey, memberKey, guesKey")

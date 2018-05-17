@@ -48,6 +48,7 @@ class ServiceData:
         self.parse()
 
     def parse(self):
+        self.validData = True
         if len(self.data) == 18:
             self.opCode = self.data[0]
             self.encryptedData = self.data[2:]

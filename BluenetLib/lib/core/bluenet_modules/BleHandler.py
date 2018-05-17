@@ -35,7 +35,7 @@ class BleHandler:
         self.validator = Validator()
         self.settings = settings
         self.hciIndex = hciIndex
-        self.scanner = Scanner(self.hciIndex).withDelegate(ScanDelegate())
+        self.scanner = Scanner(self.hciIndex).withDelegate(ScanDelegate(settings))
         self.subscriptionIds.append(BluenetEventBus.subscribe(SystemBleTopics.abortScanning, lambda x: self.abortScanning()))
         
     
