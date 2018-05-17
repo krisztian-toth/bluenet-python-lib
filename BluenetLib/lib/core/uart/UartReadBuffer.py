@@ -2,6 +2,7 @@ from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.core.uart.UartWrapper import BIT_FLIP_MASK, ESCAPE_TOKEN, START_TOKEN
 from BluenetLib.lib.core.uart.uartPackets.UartPacket import PREFIX_SIZE, OPCODE_SIZE, WRAPPER_SIZE, CRC_SIZE, UartPacket
 from BluenetLib.lib.topics.SystemTopics import SystemTopics
+from BluenetLib.lib.topics.DevTopics import DevTopics
 
 from BluenetLib.lib.util.Conversion import Conversion
 from BluenetLib.lib.util.UartUtil   import UartUtil
@@ -27,6 +28,8 @@ class UartReadBuffer:
         if byte is START_TOKEN:
             if self.active:
                 print("WARN: MULTIPLE START TOKENS")
+                BluenetEventBus.emit(DevTopics.uartNoise, "multiple start token")
+#                print("buf:", self.buffer)
                 self.reset()
                 return
             else:
@@ -35,11 +38,13 @@ class UartReadBuffer:
 
 
         if not self.active:
+#            print(byte)
             return
 
         if byte is ESCAPE_TOKEN:
             if self.escapingNextToken:
                 print("WARN: DOUBLE ESCAPE")
+                BluenetEventBus.emit(DevTopics.uartNoise, "double escape token")
                 self.reset()
                 return
 
@@ -64,6 +69,7 @@ class UartReadBuffer:
                 return
             elif bufferSize > self.length + WRAPPER_SIZE:
                 print("WARN: OVERFLOW")
+                BluenetEventBus.emit(DevTopics.uartNoise, "overflow")
                 self.reset()
 
 
@@ -74,6 +80,7 @@ class UartReadBuffer:
 
         if calculatedCrc != sourceCrc:
             print("WARN: Failed CRC")
+            BluenetEventBus.emit(DevTopics.uartNoise, "crc mismatch")
             self.reset()
             return
 
