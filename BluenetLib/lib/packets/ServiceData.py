@@ -48,6 +48,7 @@ class ServiceData:
         self.parse()
 
     def parse(self):
+        self.validData = True
         if len(self.data) == 18:
             self.opCode = self.data[0]
             self.encryptedData = self.data[2:]
@@ -118,7 +119,7 @@ class ServiceData:
         if self.validData and len(self.encryptedData) == 16 and len(keyHexString) >= 16:
             result = EncryptionHandler.decryptECB(self.encryptedData, keyHexString)
             
-            for i in range(0, len(self.data)):
+            for i in range(0, len(self.encryptedData)):
                 self.data[i+self.encryptedDataStartIndex] = result[i]
             
             self.parse()

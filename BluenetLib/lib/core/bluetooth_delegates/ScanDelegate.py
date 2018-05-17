@@ -9,8 +9,10 @@ NAME_ADTYPE         = 8
 FLAGS_ADTYPE        = 1
 
 class ScanDelegate(DefaultDelegate):
+    settings = None
     
-    def __init__(self):
+    def __init__(self, settings):
+        self.settings = settings
         DefaultDelegate.__init__(self)
 
     def handleDiscovery(self, dev, isNewDev, isNewData):
@@ -21,5 +23,8 @@ class ScanDelegate(DefaultDelegate):
           
     def parsePayload(self, address, rssi, nameText, valueText):
         advertisement = Advertisement(address, rssi, nameText, valueText)
+        if self.settings.encryptionEnabled:
+            advertisement.decrypt(self.settings.guestKey)
+            
         if advertisement.isCrownstoneFamily():
             BluenetEventBus.emit(SystemBleTopics.rawAdvertisement, advertisement)
