@@ -95,12 +95,19 @@ class StoneAdvertisementTracker:
                 self.invalidateDevice(serviceData)
             else:
                 if self.uniqueIdentifier != serviceData.uniqueIdentifier:
-                    if serviceData.validation != 0 and serviceData.opCode == 3:
+                    if serviceData.validation != 0 and serviceData.opCode == 5:
+                        if serviceData.validation == 0xFA and serviceData.dataType != 1: # datatype 1 is the error packet
+                            self.addValidMeasurement(serviceData)
+                        elif serviceData.validation != 0xFA and serviceData.dataType != 1: # datatype 1 is the error packet
+                            self.invalidateDevice(serviceData)
+                    elif serviceData.validation != 0 and serviceData.opCode == 3:
                         if serviceData.dataType != 1:
-                            if serviceData.validation == 0xFACE:
+                            if serviceData.validation == 0xFA:
                                 self.addValidMeasurement(serviceData)
-                            elif serviceData.validation != 0xFACE:
+                            elif serviceData.validation != 0xFA:
                                 self.invalidateDevice(serviceData)
+                        else:
+                            pass # do nothing, skip these messages (usually error states)
                     else:
                         if not serviceData.stateOfExternalCrownstone:
                             if serviceData.crownstoneId == self.crownstoneId:

@@ -1,3 +1,4 @@
+from BluenetLib.Exceptions import BluenetError
 from BluenetLib.lib.packets.ServiceData import ServiceData
 from BluenetLib.lib.protocol.Services import DFU_ADVERTISEMENT_SERVICE_UUID
 from BluenetLib.lib.util.Conversion import Conversion
@@ -34,10 +35,12 @@ class Advertisement:
 
     
     def isInDFUMode(self):
-        return self.operationMode == "DFU"
+        return False
     
     def isInSetupMode(self):
-        return self.operationMode == "SETUP"
+        if self.serviceData:
+            return self.serviceData.setupMode
+        return False
     
     def isCrownstoneFamily(self):
         return self.serviceUUID == 0xC001 or self.serviceUUID == 0xC002 or self.serviceUUID == 0xC003 or self.serviceUUID == DFU_ADVERTISEMENT_SERVICE_UUID
