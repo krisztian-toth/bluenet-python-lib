@@ -250,21 +250,45 @@ myEventBus.unsubscribe(subscriptionId)
 #### `getLatestCrownstoneData(crownstoneId: int)`
 > This will return a dictionary filled with all the information the library has on this Crownstone. This data will be extended in future versions. If the crownstoneId is unknown, ```None``` will be returned.
 >
-> Data Format:
->
-```
-{
-    "id"                 : int, ID of Crownstone. Range is [1 .. 255]
-    "switchState"        : int, [explained here](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#switch_state_packet). Range is [0 .. 128]
-    "flagBitMask"        : [explained here](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#flags_bitmask). Will be expanded upon in the future.
-    "temperature"        : int, temperature of the chip of the Crownstone in Celsius
-    "powerFactor"        : float, difference between real power usage (W) and apparent power usage (VA)
-    "powerUsageReal"     : float, Real power usage in Watts (W)
-    "powerUsageApparent" : float, Apparent power usage in VA
-    "energyUsed"         : <unused> Will be functional in future versions of the firmware.
-    "timestamp"          : float, seconds since Epoch with localization correction ( so if you are in GMT + 1, this will be 3600 higher than a normal UTC timestamp ). Time on Crownstone when this message was sent.
-}
-```
+> Data format is:
+>```python
+> data is dictionary {
+>   name: string
+>   rssi: int
+>   address: string   # mac address
+>   serviceUUID: string
+>   serviceData: {
+>     opCode:                       int
+>     dataType:                     int
+>     stateOfExternalCrownstone:    int    # adv contains state of external crownstone
+>     hasError:                     bool   # this crownstone has an error
+>     setupMode:                    bool   # is in setup mode
+>     id:                           int    # crownstone id (0-255)
+>     switchState:                  int
+>     flagsBitmak:                  int
+>     temperature:                  int    # chip temp
+>     powerFactor:                  int    # factor between real and appearent
+>     powerUsageReal:               int    # usage in watts (W)
+>     powerUsageApparent:           int    # usage in VA
+>     accumulatedEnergy:            int
+>     timestamp:                    int    # time on Crownstone seconds since epoch with locale correction
+>     dimmingAvailable:             bool   # dimming is available for use (it is not in the first 60 seconds after boot)
+>     dimmingAllowed:               bool   # this Crownstone can dim
+>     switchLocked:                 bool   # this Crownstone is switch-locked
+>     errorMode:                    bool   # advertisement type errorMode : the errors JSON is valid. This alternates with normal advertisements
+>     errors: {
+>         overCurrent:              bool
+>         overCurrentDimmer:        bool
+>         temperatureChip:          bool
+>         temperatureDimmer:        bool
+>         dimmerOnFailure:          bool
+>         dimmerOffFailure:         bool
+>         bitMask:                  int
+>     }
+>     uniqueElement:                int    # something that identifies this advertisement uniquely. Can be used to skip duplicate payloads
+>     timeIsSet:                    bool   # this crownstone knows what time it is
+> }
+>```
 
 #### `stop()`
 > Stop any running processes.

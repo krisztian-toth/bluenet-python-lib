@@ -2,12 +2,13 @@ import sys
 
 import time
 
+from BluenetLib.lib.packets.ServiceData import ServiceData
+
 from BluenetLib.lib.core.uart.UartTypes import UartRxType
 from BluenetLib.lib.core.uart.uartPackets.AdcConfigPacket import AdcConfigPacket
 from BluenetLib.lib.core.uart.uartPackets.CurrentSamplesPacket import CurrentSamplesPacket
 from BluenetLib.lib.core.uart.uartPackets.MeshStatePacket import MeshStatePacket
 from BluenetLib.lib.core.uart.uartPackets.PowerCalculationPacket import PowerCalculationPacket
-from BluenetLib.lib.core.uart.uartPackets.ServiceDataPacket import ServiceDataPacket
 from BluenetLib.lib.core.uart.uartPackets.VoltageSamplesPacket import VoltageSamplesPacket
 
 from BluenetLib._EventBusInstance import BluenetEventBus
@@ -33,9 +34,9 @@ class UartParser:
                 stoneState.broadcastState()
                 
         elif opCode == UartRxType.SERVICE_DATA:
-            serviceData = ServiceDataPacket(dataPacket.payload)
-            if serviceData.isValid():
-                BluenetEventBus.emit(DevTopics.newServiceData, serviceData.getDict())
+            serviceData = ServiceData(dataPacket.payload)
+            if serviceData.validData:
+                BluenetEventBus.emit(DevTopics.newServiceData, serviceData.getDictionary())
   
         elif opCode == UartRxType.POWER_LOG_CURRENT:
             # type is CurrentSamples
