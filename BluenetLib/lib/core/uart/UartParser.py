@@ -75,10 +75,8 @@ class UartParser:
             stringResult = ""
             for byte in dataPacket.payload:
                 stringResult += chr(byte)
-            sys.stdout.write("LOG: ")
-            sys.stdout.write(str(round(time.time(),3)))
-            sys.stdout.write(" - ")
-            sys.stdout.write(stringResult)
+            logStr = "LOG: %15.3f - %s" % (time.time(), stringResult)
+            sys.stdout.write(logStr)
         else:
             print("Unknown OpCode", opCode)
 
