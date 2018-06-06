@@ -45,7 +45,7 @@ An example is provided in the root of this repository.
 ## Prerequisites
 
 - First use the [phone app](https://crownstone.rocks/app) to setup your Crownstones and the Crownstone USB.
-- Make sure you update the Crownstones' firmware to at least 2.0.0.
+- Make sure you update the Crownstones' firmware to at least 2.1.0.
 - Find out what port to use (e.g. `COM1`, `/dev/ttyUSB0`, or `/dev/tty.SLAB_USBtoUART`) and fill this in at `discoveryExample.py` and `example.py`.
 - install the BluenetLib library using the setup.py:
 
@@ -89,7 +89,7 @@ $ python3 example.py
 The example is shown below to get an idea of how everything works:
 
 ```python
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """An example that switches a Crownstone, and prints the power usage of all Crownstones."""
 

@@ -31,7 +31,7 @@ class BluenetCore:
         if catchSIGINT:
             signal.signal(signal.SIGINT, self.__stopAll)
 
-    def initializeUSB(self, port, baudrate=38400):
+    def initializeUSB(self, port, baudrate=230400):
         # init the uart bridge
         self.uartBridge = UartBridge(port, baudrate)
         self.uartBridge.start()
