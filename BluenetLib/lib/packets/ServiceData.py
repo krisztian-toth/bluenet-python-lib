@@ -110,7 +110,7 @@ class ServiceData:
         returnDict["uniqueElement"]             =  self.uniqueIdentifier
         returnDict["timeIsSet"]                 =  self.timeIsSet
 
-        returnDict["deviceType"]                = self.deviceType
+        returnDict["deviceType"]                = self.deviceType.name
         returnDict["rssiOfExternalCrownstone"]  = self.rssiOfExternalCrownstone
     
         return returnDict
@@ -126,4 +126,4 @@ class ServiceData:
             self.dataReadyForUse = True
         else:
             self.dataReadyForUse = False
-            print("Invalid data length")
+            

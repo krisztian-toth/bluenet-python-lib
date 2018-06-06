@@ -2,7 +2,7 @@ import time
 from threading import Timer
 import threading
 
-AMOUNT_OF_REQUIRED_MATCHES = 3
+AMOUNT_OF_REQUIRED_MATCHES = 2
 
 class StoneAdvertisementTracker:
     rssiHistory = None

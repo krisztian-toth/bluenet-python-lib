@@ -23,7 +23,7 @@ class BluetoothCore:
     mesh    = None
     ble     = None
     
-    def __init__(self, hciIndex=0):
+    def __init__(self, hciIndex = 0):
         self.settings = BluenetSettings()
         self.control  = ControlHandler(self)
         self.setup    = SetupHandler(self)
@@ -33,7 +33,7 @@ class BluetoothCore:
     def shutDown(self):
         self.ble.shutDown()
     
-    def setSettings(self, adminKey, memberKey, guestKey, referenceId="PythonLib", encryptionEnabled=True):
+    def setSettings(self, adminKey, memberKey, guestKey, referenceId = "PythonLib", encryptionEnabled=True):
         self.settings.loadKeys(encryptionEnabled, adminKey, memberKey, guestKey, referenceId)
         
         

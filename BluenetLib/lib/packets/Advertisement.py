@@ -23,7 +23,6 @@ class Advertisement:
         if serviceDataText is not None:
             dataArray = Conversion.hex_string_to_uint8_array(dataString)
             self.serviceUUID = Conversion.uint8_array_to_uint16([dataArray[0], dataArray[1]])
-
             # pop the service UUID
             dataArray.pop(0)
             dataArray.pop(0)

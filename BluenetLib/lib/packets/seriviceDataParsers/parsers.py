@@ -39,6 +39,7 @@ def parseOpCode4(serviceData, data):
 
 def parseOpCode5(serviceData, data):
     if len(data) == 18:
+        
         if DeviceType.has_value(data[1]):
             serviceData.deviceType = DeviceType(data[1])
         else:
