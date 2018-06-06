@@ -19,5 +19,5 @@ print("Listening for Crownstones on the mesh, this might take a while.")
 while bluenet.running:
 	time.sleep(2)
 	ids = bluenet.getCrownstoneIds()
-	print("Crownstone IDs:", ids)
+	print("Crownstone IDs seen so far:", ids)
 
