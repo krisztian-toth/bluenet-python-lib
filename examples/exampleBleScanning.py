@@ -1,8 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-"""An example that switches a Crownstone, and prints the power usage of all Crownstones."""
+"""An example that scans for your Crownstones"""
 
-#!/usr/bin/env python
 import time
 
 from BluenetLib.BLE import BluenetBle
@@ -17,10 +16,14 @@ def showData(data):
 # Set up event listeners
 BluenetEventBus.subscribe(Topics.advertisement, showData)
 
-# initialize the Bluetooth Core
-core = BluenetBle()
+# Initialize the Bluetooth Core.
+# Fill in the correct hciIndex, see the readme.
+# Fill in the correct keys, see the readme.
+core = BluenetBle(hciIndex=0)
 core.setSettings("adminKeyForCrown", "memberKeyForHome", "guestKeyForOther")
 
-core.startScanning(10)
+
+print("Scanning for Crownstones..")
+core.startScanning(60)
 
 core.shutDown()

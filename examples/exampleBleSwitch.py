@@ -1,16 +1,22 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+"""An example that turns on a Crownstone with given MAC address."""
+
 import time
 
 from BluenetLib.BLE import BluenetBle
 
 print("===========================================\n\nStarting Example\n\n===========================================")
 
-# initialize the Bluetooth Core
-core = BluenetBle()
+# Initialize the Bluetooth Core.
+# Fill in the correct hciIndex, see the readme.
+# Fill in the correct keys, see the readme.
+core = BluenetBle(hciIndex=0)
 core.setSettings("adminKeyForCrown", "memberKeyForHome", "guestKeyForOther")
 
-print("Searching for Crownstones in range")
+# Fill in the correct MAC address.
 address = "d0:64:fd:10:54:f9"
+print("Connecting to", address)
 
 core.connect(address)
 core.control.setSwitchState(1)

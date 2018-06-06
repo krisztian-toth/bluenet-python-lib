@@ -1,12 +1,16 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+"""An example that performs the setup of a Crownstone, and then factory resets it again."""
+
 import time
 
 from BluenetLib.BLE import BluenetBle
 
 print("===========================================\n\nStarting Example\n\n===========================================")
 
-# initialize the Bluetooth Core
-core = BluenetBle()
+# Initialize the Bluetooth Core.
+# Fill in the correct hciIndex, see the readme.
+core = BluenetBle(hciIndex=0)
 core.setSettings("adminKeyForCrown", "memberKeyForHome", "guestKeyForOther")
 
 print("Searching for the nearest setup Crownstone")

@@ -1,0 +1,6 @@
+{
+  "email":"myEmailAddress",
+  "password": "myPassword",
+  "sha1Password": "myPasswordHashed",
+  "accessToken": "myAccessToken"
+}
