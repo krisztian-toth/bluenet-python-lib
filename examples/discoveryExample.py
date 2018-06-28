@@ -21,3 +21,5 @@ while bluenet.running:
 	ids = bluenet.getCrownstoneIds()
 	print("Crownstone IDs seen so far:", ids)
 
+
+bluenet.stop()

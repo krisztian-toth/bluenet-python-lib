@@ -12,6 +12,7 @@ from BluenetLib.lib.core.uart.uartPackets.PowerCalculationPacket import PowerCal
 from BluenetLib.lib.core.uart.uartPackets.VoltageSamplesPacket import VoltageSamplesPacket
 
 from BluenetLib._EventBusInstance import BluenetEventBus
+from BluenetLib.lib.topics.Topics import Topics
 from BluenetLib.lib.topics.DevTopics import DevTopics
 from BluenetLib.lib.topics.SystemTopics import SystemTopics
 
@@ -77,6 +78,13 @@ class UartParser:
                 stringResult += chr(byte)
             logStr = "LOG: %15.3f - %s" % (time.time(), stringResult)
             sys.stdout.write(logStr)
+        elif opCode == UartRxType.UART_MESSAGE:
+            stringResult = ""
+            for byte in dataPacket.payload:
+                stringResult += chr(byte)
+            # logStr = "LOG: %15.3f - %s" % (time.time(), stringResult)
+            # print(logStr)
+            BluenetEventBus.emit(Topics.uartMessage, {"string":stringResult, "data": dataPacket.payload})
         else:
             print("Unknown OpCode", opCode)
 

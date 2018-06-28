@@ -84,6 +84,15 @@ class BluenetCore:
     def isRunning(self):
         return self.running
 
+    def uartEcho(self, payloadString):
+        # wrap that in a control packet
+        controlPacket = ControlPacket(ControlType.UART_MESSAGE).loadString(payloadString).getPacket()
+    
+        # finally wrap it in an Uart packet
+        uartPacket = UartWrapper(UartTxType.CONTROL, controlPacket).getPacket()
+
+        # send over uart
+        BluenetEventBus.emit(SystemTopics.uartWriteData, uartPacket)
 
     # MARK: Private
 

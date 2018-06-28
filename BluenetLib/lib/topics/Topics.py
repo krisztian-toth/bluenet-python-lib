@@ -55,4 +55,5 @@ class Topics(Enum):
 
     personEnteredLocation = "personEnteredLocation" # data is dictionary: {"locationId": str, "name": str, "person": {"id": str, "email": str, "name": str}}
     personLeftLocation = "personLeftLocation" # data is dictionary: {"locationId": str, "name": str, "person": {"id": str, "email": str, "name": str}}
+    uartMessage = "uartMessage" # data is dictionary: {"string": str, "data": [uint8, uint8, ...] }
 

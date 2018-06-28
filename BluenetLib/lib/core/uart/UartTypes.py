@@ -26,6 +26,7 @@ class UartTxType(IntEnum):
 class UartRxType(IntEnum):
 	ACK =                              0
 	SERVICE_DATA =                     2
+	UART_MESSAGE =                     3
 	MESH_STATE_0 =                     100   # For 1st handle, next handle has opCode of 1 larger.
 	MESH_STATE_1 =                     101   # Second state handle
 	MESH_STATE_LAST =                  101   # Last state handle

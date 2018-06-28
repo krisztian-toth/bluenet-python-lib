@@ -35,6 +35,7 @@ class ControlType(IntEnum):
     LOCK_SWITCH            = 30
     SETUP                  = 31
     ENABLE_SWITCHCRAFT     = 32
+    UART_MESSAGE           = 33
 
 
 class ConfigurationType(IntEnum):
