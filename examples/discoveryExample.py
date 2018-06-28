@@ -12,7 +12,7 @@ bluenet = Bluenet()
 # Start up the USB bridge.
 # Fill in the correct device, see the readme.
 # For firmware versions below 2.1, add the parameter baudrate=38400
-bluenet.initializeUSB("/dev/ttyUSB0")
+bluenet.initializeUSB("/dev/tty.SLAB_USBtoUART")
 
 # List the ids that have been seen
 print("Listening for Crownstones on the mesh, this might take a while.")

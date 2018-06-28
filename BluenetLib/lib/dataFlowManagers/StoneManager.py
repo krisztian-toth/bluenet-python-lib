@@ -16,10 +16,9 @@ class StoneManager:
         
     def getIds(self):
         ids = []
-        
-        for stoneId, data in enumerate(self.stones):
+        for stoneId, data in self.stones.items():
             ids.append(stoneId)
-        
+
         return ids
     
     
@@ -46,7 +45,3 @@ class StoneManager:
         self.stones[stoneId] = stoneData
         self.stones[stoneId]["available"] = available
         
-        
-    
-    
-    
