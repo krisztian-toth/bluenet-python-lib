@@ -16,7 +16,7 @@ bluenet = Bluenet()
 # Start up the USB bridge.
 # Fill in the correct device, see the readme.
 # For firmware versions below 2.1, add the parameter baudrate=38400
-bluenet.initializeUSB("/dev/tty.SLAB_USBtoUART")
+bluenet.initializeUSB("/dev/ttyUSB0")
 
 # Set up event listeners
 BluenetEventBus.subscribe(Topics.powerUsageUpdate, showPowerUsage)
