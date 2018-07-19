@@ -30,7 +30,7 @@ class StoneManager:
         if stoneId in self.stones:
             self.stones[stoneId]["available"] = True
         else:
-            self.stones[stoneId] = {"available": True}
+            self.stones[stoneId] = {"available": True, "id": stoneId}
             
         BluenetEventBus.emit(Topics.crownstoneAvailable, self.stones[stoneId])
         
