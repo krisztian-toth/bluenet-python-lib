@@ -7,7 +7,7 @@ print(find_packages(exclude=["examples", "experiment", "tests", "techDocs"]))
 
 setup(
     name='BluenetLib',
-    version='0.5.0',
+    version='0.5.2',
     packages=find_packages(exclude=["examples", "experiment", "tests", "techDocs"]),
     install_requires=[
         'pyserial==3.4.0',
