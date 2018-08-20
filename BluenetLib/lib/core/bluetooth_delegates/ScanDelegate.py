@@ -9,7 +9,6 @@ NAME_ADTYPE         = 8
 FLAGS_ADTYPE        = 1
 
 class ScanDelegate(DefaultDelegate):
-    settings = None
     
     def __init__(self, settings):
         self.settings = settings

@@ -5,8 +5,6 @@ from BluenetLib.lib.util.EncryptionHandler import EncryptionHandler
 from bluepy.btle import BTLEException
 
 class ControlHandler:
-    core = None
-
     def __init__(self, bluetoothCore):
         self.core = bluetoothCore
 

@@ -1,11 +1,10 @@
 import uuid
 
 class EventBus:
-    topics = {}
-    subscriberIds = {}
 
     def __init__(self):
-        pass
+        self.topics = {}
+        self.subscriberIds = {}
 
     def subscribe(self, topic: object, callback: object) -> object:
         if topic not in self.topics:

@@ -8,12 +8,6 @@ PREFIX_SIZE  = OPCODE_SIZE + LENGTH_SIZE
 WRAPPER_SIZE = PREFIX_SIZE + CRC_SIZE
 
 class UartPacket:
-	opCode  = 0
-	length  = 0
-	payload = []
-	crc     = 0
-
-
 	def __init__(self, data):
 		self.opCode	 = Conversion.uint8_array_to_uint16(data[0:OPCODE_SIZE])
 		self.length  = Conversion.uint8_array_to_uint16(data[OPCODE_SIZE:PREFIX_SIZE])

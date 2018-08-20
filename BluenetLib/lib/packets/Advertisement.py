@@ -6,17 +6,16 @@ from BluenetLib.lib.util.Conversion import Conversion
 import json
 
 class Advertisement:
-    name = ""
-    address = None
-    serviceUUID = None
-    serviceData = None
-    operationMode = None
-    rssi = None
+    
     
     def __init__(self, address, rssi, nameText, serviceDataText):
         self.address = address
         self.rssi = rssi
         self.name = nameText
+
+        self.serviceUUID = None
+        self.serviceData = None
+        self.operationMode = None
 
         dataString = serviceDataText
         

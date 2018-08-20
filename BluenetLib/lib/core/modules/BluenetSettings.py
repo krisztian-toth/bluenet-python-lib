@@ -12,24 +12,19 @@ class UserLevel(IntEnum):
 
 
 class BluenetSettings:
-    encryptionEnabled = True
-    
-    adminKey  = None
-    memberKey = None
-    guestKey  = None
-    setupKey  = None
-    
-    referenceId  = None
-    sessionNonce = None
-    
-    initializedKeys  = False
-    temporaryDisable = False
-    
-    userLevel = UserLevel.unknown
-    
     
     def __init__(self):
-        pass
+        self.encryptionEnabled = True
+        self.adminKey = None
+        self.memberKey = None
+        self.guestKey = None
+        self.setupKey = None
+        
+        self.referenceId = None
+        self.sessionNonce = None
+        self.initializedKeys = False
+        self.temporaryDisable = False
+        self.userLevel = UserLevel.unknown
 
 
     def loadKeys(self, encryptionEnabled, adminKey, memberKey, guestKey, referenceId):

@@ -15,8 +15,6 @@ from bluepy.btle import BTLEException
 
 
 class SetupHandler:
-    core = None
-
     def __init__(self, bluetoothCore):
         self.core = bluetoothCore
 

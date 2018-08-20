@@ -7,8 +7,6 @@ START_TOKEN = 0x7e
 
 
 class UartWrapper:
-	payload = []
-	opCode = 0
 
 	def __init__(self, opCode, payload):
 		self.opCode = opCode

@@ -6,11 +6,6 @@ from BluenetLib.lib.util.Conversion import Conversion
 class AdcChannelPacket:
     packetSize = 6
 
-    channelIndex = 0
-    pin = 0
-    range = 0
-    refPin = 0
-
     def __init__(self, payload, channelIndex):
         if len(payload) < self.packetSize:
             print("ERROR: INVALID PAYLOAD LENGTH", len(payload), payload)

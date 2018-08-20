@@ -5,28 +5,29 @@ import threading
 AMOUNT_OF_REQUIRED_MATCHES = 2
 
 class StoneAdvertisementTracker:
-    rssiHistory = None
-    rssi = None
-    name = ""
-    address = None
-    crownstoneId = 0
-    lastUpdate = 0
-    avgRssi = 0
-    cleanupCallback = None
-    uniqueIdentifier = 0
-    verified = False
-    dfu = False
-    
-    # config
-    timeoutDuration     = 4  # seconds
-    rssiTimeoutDuration = 3  # seconds
-    consecutiveMatches  = 0
-    
-    timeoutTime = 0
-    rssiTimeoutList = None
-    _lock = None
     
     def __init__(self, cleanupCallback):
+        self.rssiHistory = None
+        self.rssi = None
+        self.name = ""
+        self.address = None
+        self.crownstoneId = 0
+        self.lastUpdate = 0
+        self.avgRssi = 0
+        self.cleanupCallback = None
+        self.uniqueIdentifier = 0
+        self.verified = False
+        self.dfu = False
+        
+        # config
+        self.timeoutDuration = 4  # seconds
+        self.rssiTimeoutDuration = 3  # seconds
+        self.consecutiveMatches = 0
+        
+        self.timeoutTime = 0
+        self.rssiTimeoutList = None
+        self._lock = None
+        
         self.rssiHistory = {}
         self.rssiTimeoutList = []
         self.cleanupCallback = cleanupCallback

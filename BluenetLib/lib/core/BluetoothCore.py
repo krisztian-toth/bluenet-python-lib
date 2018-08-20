@@ -16,12 +16,6 @@ from BluenetLib.lib.topics.Topics import Topics
 
 
 class BluetoothCore:
-    control = None
-    setup   = None
-    config  = None
-    state   = None
-    mesh    = None
-    ble     = None
     
     def __init__(self, hciIndex = 0):
         self.settings = BluenetSettings()

@@ -4,9 +4,8 @@ from BluenetLib.lib.topics.Topics import Topics
 
 
 class StoneStateManager:
-    stones = {}
-
     def __init__(self):
+        self.stones = {}
         BluenetEventBus.subscribe(SystemTopics.stateUpdate, self.handleStateUpdate)
 
     def handleStateUpdate(self,data):

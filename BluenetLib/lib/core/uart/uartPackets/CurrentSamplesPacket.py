@@ -13,8 +13,6 @@ class CurrentSamplesPacket:
 
     typeDescription = 'current'
 
-    timestampCounter = 0
-    samples = []
 
     def __init__(self, payload):
         if len(payload) < self.packetSize:

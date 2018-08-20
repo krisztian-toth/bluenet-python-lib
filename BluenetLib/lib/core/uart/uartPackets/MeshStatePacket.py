@@ -6,14 +6,10 @@ MESH_STATE_PACKET_SIZE = 92
 MAX_STATE_ITEMS = 6
 
 class MeshStatePacket:
-	head = 0
-	tail = 0
-	size = 0
-	timestamp = 0
-	stoneStates = []
-
 
 	def __init__(self, payload):
+		self.stoneStates = []
+		
 		if len(payload) != MESH_STATE_PACKET_SIZE:
 			print("ERROR: INVALID PAYLOAD LENGTH", len(payload), payload)
 			return

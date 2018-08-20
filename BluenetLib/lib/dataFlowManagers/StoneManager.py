@@ -5,10 +5,9 @@ from BluenetLib.lib.topics.Topics import Topics
 
 
 class StoneManager:
-    stones = {}
-    stateManager = None
     
     def __init__(self):
+        self.stones = {}
         self.stateManager = StoneStateManager()
         BluenetEventBus.subscribe(Topics.newCrownstoneFound, self.handleNewStoneFromScan)
         BluenetEventBus.subscribe(SystemCloudTopics.stoneDownloadedFromCloud, self.handleStoneFromCloud)

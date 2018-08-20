@@ -3,14 +3,6 @@ from BluenetLib.lib.topics.SystemBleTopics import SystemBleTopics
 
 
 class NearestSelector:
-    setupModeOnly = False
-    rssiAtLeast = -100
-    returnFirstAcceptable = False
-    addressesToExcludeSet = set()
-
-    deviceList = None
-    
-    nearest = None
     
     def __init__(self, setupModeOnly=False, rssiAtLeast=-100, returnFirstAcceptable=False, addressesToExcludeSet=set()):
         self.setupModeOnly = setupModeOnly
@@ -18,6 +10,7 @@ class NearestSelector:
         self.returnFirstAcceptable = returnFirstAcceptable
         self.addressesToExcludeSet = addressesToExcludeSet
         self.deviceList = []
+        self.nearest = None
         
         
     def handleAdvertisement(self, advertisement):

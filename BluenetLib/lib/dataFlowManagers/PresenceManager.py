@@ -5,9 +5,9 @@ from BluenetLib.lib.topics.Topics import Topics
 
 
 class PresenceManager:
-    presence = {}
     
     def __init__(self):
+        self.presence = {}
         self.stateManager = StoneStateManager()
         BluenetEventBus.subscribe(SystemCloudTopics.presenceInLocationDownloadedFromCloud, self.handlePresenceInLocationFromCloud)
         

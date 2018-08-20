@@ -317,6 +317,7 @@ class Conversion:
 		one = 1
 		
 		for i in range(0,32):
-			result[i] = (val & (one << i)) != 0
+			result[i] = (val & (one << 31 - i)) != 0
 		
 		return result
+	

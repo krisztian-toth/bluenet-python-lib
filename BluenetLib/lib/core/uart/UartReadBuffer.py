@@ -9,15 +9,14 @@ from BluenetLib.lib.util.UartUtil   import UartUtil
 
 
 class UartReadBuffer:
-    buffer = None
-    escapingNextToken = False
-    active = False
-    opCode = 0
-
-    length = 0
 
     def __init__(self):
         self.buffer = []
+        self.escapingNextToken = False
+        self.active = False
+        self.opCode = 0
+        
+        self.length = 0
 
     def addByteArray(self, rawByteArray):
         for byte in rawByteArray:

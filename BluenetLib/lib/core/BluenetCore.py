@@ -17,12 +17,10 @@ from BluenetLib.lib.topics.SystemTopics import SystemTopics
 
 
 class BluenetCore:
-    uartBridge = None
-    stoneManager = None
-    presenceManager = None
-    running = True
 
     def __init__(self, catchSIGINT=True):
+        self.uartBridge = None
+        self.running = True
         self.stoneManager = StoneManager()
         self.presenceManager = PresenceManager()
         self._usbDev = UsbDevHandler()

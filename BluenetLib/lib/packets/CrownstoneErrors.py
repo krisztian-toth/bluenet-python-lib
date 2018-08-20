@@ -2,19 +2,11 @@ from BluenetLib.lib.util.Conversion import Conversion
 
 
 class CrownstoneErrors:
-    overCurrent       = False
-    overCurrentDimmer = False
-    temperatureChip   = False
-    temperatureDimmer = False
-    dimmerOnFailure   = False
-    dimmerOffFailure  = False
-    
-    bitMask = 0
     
     def __init__(self, bitMask):
         self.bitMask = bitMask
     
-        bitArray = Conversion.uint32_to_bit_array(bitMask)
+        bitArray = Conversion.uint32_to_bit_array_reversed(bitMask)
     
         self.overCurrent        = bitArray[31 - 0]
         self.overCurrentDimmer  = bitArray[31 - 1]

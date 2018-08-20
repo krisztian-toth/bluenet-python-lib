@@ -15,23 +15,23 @@ from threading import Timer
 CCCD_UUID = 0x2902
 
 class BleHandler:
-    scanner = None
-    settings = None
-
-    connectedPeripherals = {}
-    connectedPeripheral = None
-    
-    notificationLoopActive = False
-    notificationResult = None
-    
-    scanningActive = False
-    scanAborted = False
-    
-    subscriptionIds = []
-    hciIndex = 0
     
     def __init__(self, settings, hciIndex=0):
         self.connectedPeripherals = {}
+
+        self.settings = None
+
+        self.connectedPeripherals = {}
+        self.connectedPeripheral = None
+
+        self.notificationLoopActive = False
+        self.notificationResult = None
+
+        self.scanningActive = False
+        self.scanAborted = False
+
+        self.subscriptionIds = []
+        
         self.validator = Validator()
         self.settings = settings
         self.hciIndex = hciIndex

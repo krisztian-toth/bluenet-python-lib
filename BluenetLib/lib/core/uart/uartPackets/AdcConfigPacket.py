@@ -9,16 +9,11 @@ class AdcConfigPacket:
     amountOfChannels = 2
     channelSize = 6 
     packetSize = amountOfChannels * channelSize + 1 + 4 # 4 for sampling period, 1 for count
- 
-    channels = []
-    samplingPeriod = 0
- 
 
     def __init__(self, payload):
         if len(payload) < 1:
             print("ERROR: INVALID PAYLOAD LENGTH", len(payload), payload)
             return
-        
         
         self.channels = []
         

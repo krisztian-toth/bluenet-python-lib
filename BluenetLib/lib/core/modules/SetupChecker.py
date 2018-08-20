@@ -3,11 +3,11 @@ from BluenetLib.lib.topics.SystemBleTopics import SystemBleTopics
 
 
 class SetupChecker:
-    address = None
-    result = False
+    
     
     def __init__(self, address):
         self.address = address
+        self.result = False
         
     def handleAdvertisement(self, advertisement):
         if "serviceData" not in advertisement:

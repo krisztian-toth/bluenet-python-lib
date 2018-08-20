@@ -5,45 +5,46 @@ from BluenetLib.lib.util.EncryptionHandler import EncryptionHandler
 
 
 class ServiceData:
-    opCode = 0
-    dataType = 0
-    crownstoneId = 0
-    switchState = 0
-    flagsBitmask = 0
-    temperature = 0
-    powerFactor = 1
-    powerUsageReal = 0
-    powerUsageApparent = 0
-    accumulatedEnergy = 0
-    setupMode = False
-    stateOfExternalCrownstone = False
-    data = None
-    dataString = ""
-    dimmingAvailable = False
-    dimmingAllowed = False
-    hasError = False
-    switchLocked = False
-    partialTimestamp = 0
-    timestamp = -1
-    validation = 0x0000 # Will be 0xFACE if it is set.
-    
-    errorTimestamp = 0
-    errorsBitmask = 0
-    errorMode = False
-    timeIsSet = False
-    switchCraftEnabled = False
-    uniqueIdentifier = 0
-    
-    validData = False
-    dataReadyForUse = False # decryption is successful if this is true
-    
-    deviceType = DeviceType.UNDEFINED
-    rssiOfExternalCrownstone = 0
-
-    encryptedData = []
-    encryptedDataStartIndex = 0
     
     def __init__(self, data):
+        self.opCode = 0
+        self.dataType = 0
+        self.crownstoneId = 0
+        self.switchState = 0
+        self.flagsBitmask = 0
+        self.temperature = 0
+        self.powerFactor = 1
+        self.powerUsageReal = 0
+        self.powerUsageApparent = 0
+        self.accumulatedEnergy = 0
+        self.setupMode = False
+        self.stateOfExternalCrownstone = False
+        self.data = None
+        self.dataString = ""
+        self.dimmingAvailable = False
+        self.dimmingAllowed = False
+        self.hasError = False
+        self.switchLocked = False
+        self.partialTimestamp = 0
+        self.timestamp = -1
+        self.validation = 0x0000  # Will be 0xFACE if it is set.
+   
+        self.errorTimestamp = 0
+        self.errorsBitmask = 0
+        self.errorMode = False
+        self.timeIsSet = False
+        self.switchCraftEnabled = False
+        self.uniqueIdentifier = 0
+   
+        self.validData = False
+        self.dataReadyForUse = False  # decryption is successful if this is true
+    
+        self.deviceType = DeviceType.UNDEFINED
+        self.rssiOfExternalCrownstone = 0
+ 
+        self.encryptedData = []
+        self.encryptedDataStartIndex = 0
+        
         self.data = data
         self.parse()
 

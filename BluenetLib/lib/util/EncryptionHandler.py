@@ -19,10 +19,10 @@ CHECKSUM                 = 0xcafebabe
 BLUENET_ENCRYPTION_TESTING = False
 
 class SessionData:
-    sessionNonce  = None
-    validationKey = None
-    
     def __init__(self, sessionData):
+        self.sessionNonce = None
+        self.validationKey = None
+        
         if len(sessionData) != SESSION_DATA_LENGTH:
             raise BluenetBleException(BleError.INVALID_SESSION_DATA, "Invalid Session Data")
         
@@ -38,11 +38,12 @@ class SessionData:
        
 
 class EncryptedPackage:
-    nonce     = None
-    userLevel = None
-    payload   = None
     
     def __init__(self, dataArray):
+        self.nonce = None
+        self.userLevel = None
+        self.payload = None
+        
         prefixLength = PACKET_NONCE_LENGTH + PACKET_USER_LEVEL_LENGTH
         # 20 is the minimal size of a packet (3+1+16)
         if len(dataArray) < 20:

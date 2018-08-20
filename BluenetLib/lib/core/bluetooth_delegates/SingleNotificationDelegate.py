@@ -9,9 +9,6 @@ from BluenetLib.lib.util.EncryptionHandler import EncryptionHandler
 LAST_PACKET_INDEX = 0xFF
 
 class PeripheralDelegate(DefaultDelegate):
-    callback = None
-    dataCollected = None
-    settings = None
     
     def __init__(self, callback, settings):
         DefaultDelegate.__init__(self)

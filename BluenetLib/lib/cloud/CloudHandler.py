@@ -6,7 +6,6 @@ class CloudHandler(CloudBase):
     
     def __init__(self, eventBus):
         super().__init__(eventBus)
-        pass
     
     def getSphereHandler(self, sphereId):
         sphereHandler = CloudSphereHandler(sphereId, self.eventBus)

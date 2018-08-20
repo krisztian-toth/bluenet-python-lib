@@ -2,8 +2,6 @@ from BluenetLib.lib.util.Conversion import Conversion
 
 
 class StoneKeepAlivePacket:
-    crownstoneId = 0
-    actionAndState = 0
 
     def __init__(self, crownstoneId, action, state):
         """

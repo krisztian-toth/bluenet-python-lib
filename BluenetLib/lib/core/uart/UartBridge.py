@@ -9,17 +9,16 @@ from BluenetLib.lib.topics.SystemTopics import SystemTopics
 
 
 class UartBridge (threading.Thread):
-    baudrate = 230400
-    port = 'COM1'
-    serialController = None
-    parser = None
-    eventId = 0
-
-    running = True
 
     def __init__(self, port, baudrate):
         self.baudrate = baudrate
         self.port = port
+
+        self.serialController = None
+        self.parser = None
+        self.eventId = 0
+        
+        self.running = True
 
         self.startSerial()
         threading.Thread.__init__(self)

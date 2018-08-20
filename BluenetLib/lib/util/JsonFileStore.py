@@ -5,11 +5,11 @@ import os
 __location__ = sys.path[0]
 
 class JsonFileStore:
-    memoryStore = {}
-    filename = None
+    
     
     
     def __init__(self, filename):
+        self.memoryStore = {}
         self.filename = filename
         self._loadData()
     

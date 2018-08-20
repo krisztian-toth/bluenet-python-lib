@@ -5,17 +5,17 @@ class PowerCalculationPacket:
 	sampleSize = 4
 	packetSize = amountOfSamples * sampleSize
 
-	currentRmsMA               = 0
-	currentRmsMedianMA         = 0
-	filteredCurrentRmsMA       = 0
-	filteredCurrentRmsMedianMA = 0
-	avgZeroVoltage             = 0
-	avgZeroCurrent             = 0
-	powerMilliWattApparent     = 0
-	powerMilliWattReal 	       = 0
-	avgPowerMilliWattReal      = 0
-
 	def __init__(self, payload):
+		self.currentRmsMA = 0
+		self.currentRmsMedianMA = 0
+		self.filteredCurrentRmsMA = 0
+		self.filteredCurrentRmsMedianMA = 0
+		self.avgZeroVoltage = 0
+		self.avgZeroCurrent = 0
+		self.powerMilliWattApparent = 0
+		self.powerMilliWattReal = 0
+		self.avgPowerMilliWattReal = 0
+		
 		if len(payload) < self.packetSize:
 			print("ERROR: INVALID PAYLOAD LENGTH", len(payload), payload)
 			return

@@ -9,15 +9,17 @@ from BluenetLib.lib.topics.SystemTopics      import SystemTopics
 from threading import Timer
 
 class CloudSphereHandler(CloudBase):
-    sphereId = None
-    sphereData = None
     
-    pendingTimer = None
-    pollingEnabled = False
     
     def __init__(self, sphereId, eventBus):
         super().__init__(eventBus)
+
         self.sphereId = sphereId
+        self.sphereData = None
+
+        self.pendingTimer = None
+        self.pollingEnabled = False
+        
         BluenetEventBus.subscribe(SystemTopics.cleanUp, lambda x: self.stopPollingPresence())
     
     def init(self):

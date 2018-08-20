@@ -6,16 +6,16 @@ from BluenetLib.lib.util.JsonFileStore import JsonFileStore
 
 
 class CloudBase:
-    email = None
-    password = None
-    sha1Password = None
-    accessToken = None
-    
-    userId = None
-    initialized = False
-    eventBus = None
-    
     def __init__(self, eventBus=None):
+        self.email = None
+        self.password = None
+        self.sha1Password = None
+        self.accessToken = None
+    
+        self.userId = None
+        self.initialized = False
+        self.eventBus = None
+        
         if eventBus is not None:
             self.eventBus = eventBus
         else:

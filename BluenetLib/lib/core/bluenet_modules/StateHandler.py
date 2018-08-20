@@ -6,8 +6,6 @@ from BluenetLib.lib.util.Conversion import Conversion
 
 
 class StateHandler:
-    core = None
-    
     def __init__(self, bluetoothCore):
         self.core = bluetoothCore
         

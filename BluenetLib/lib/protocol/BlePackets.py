@@ -3,11 +3,10 @@ from BluenetLib.lib.util.Conversion import Conversion
 
 
 class BLEPacket:
-    type = 0
-    lengthAsUint8Array = [0,0]
-    payload = []
 
     def __init__(self, packetType):
+        self.lengthAsUint8Array = [0, 0]
+        self.payload = []
         self.type = packetType.value
 
     def loadKey(self, keyString):

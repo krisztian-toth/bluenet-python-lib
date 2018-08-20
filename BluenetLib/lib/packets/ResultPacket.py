@@ -2,14 +2,14 @@ from BluenetLib.lib.util.Conversion import Conversion
 
 
 class ResultPacket:
-    type = 0
-    opCode = 0
-    length = 0
-    payload = []
-    
-    valid = False
     
     def __init__(self, data):
+        self.type = 0
+        self.opCode = 0
+        self.length = 0
+        self.payload = []
+        self.valid = False
+        
         if len(data) >= 4:
             self.valid = True
             self.type = data[0]

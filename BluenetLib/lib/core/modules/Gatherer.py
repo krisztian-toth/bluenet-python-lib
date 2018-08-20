@@ -3,7 +3,6 @@ from BluenetLib.lib.topics.SystemBleTopics import SystemBleTopics
 
 
 class Gatherer:
-    deviceList = None
     
     def __init__(self):
         self.deviceList = {}

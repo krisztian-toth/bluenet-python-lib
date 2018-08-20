@@ -8,22 +8,21 @@ from BluenetLib.lib.util.Timestamp  import reconstructTimestamp
 STONE_STATE_PACKET_SIZE = 14
 
 class StoneStatePacket:
-    type = 0
-
-    crownstoneId       = 0
-    switchState        = 0
-    flagBitMask        = 0
-    temperature        = 0
-    powerFactor        = 0
-    powerUsageReal     = 0
-    powerUsageApparent = 0
-    energyUsed         = 0
-    partialTimestamp   = 0
-    timestamp          = 0
-
-    deprecated = False
 
     def __init__(self, meshStateItem):
+        self.type = 0
+        self.crownstoneId = 0
+        self.switchState = 0
+        self.flagBitMask = 0
+        self.temperature = 0
+        self.powerFactor = 0
+        self.powerUsageReal = 0
+        self.powerUsageApparent = 0
+        self.energyUsed = 0
+        self.partialTimestamp = 0
+        self.timestamp = 0
+        self.deprecated = False
+        
         if len(meshStateItem) != STONE_STATE_PACKET_SIZE:
             print("ERROR: Invalid length of StoneStatePacket", len(meshStateItem), meshStateItem)
 
