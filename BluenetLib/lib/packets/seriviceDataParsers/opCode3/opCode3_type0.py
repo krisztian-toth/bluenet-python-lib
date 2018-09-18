@@ -58,7 +58,7 @@ def parseOpCode3_type0(serviceData, data):
             serviceData.timestamp = serviceData.partialTimestamp # this is now a counter
         
         
-        serviceData.validation = Conversion.uint8_array_to_uint16([data[15], data[16]])
+        serviceData.validation = data[16]
 
     
 

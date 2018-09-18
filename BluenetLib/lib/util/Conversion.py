@@ -321,3 +321,13 @@ class Conversion:
 		
 		return result
 	
+	@staticmethod
+	def uint32_to_bit_array_reversed(val):
+		result = [False] * 32
+		one = 1
+		
+		for i in range(0,32):
+			result[i] = (val & (one << 31 - i)) != 0
+		
+		return list(reversed(result))
+	
