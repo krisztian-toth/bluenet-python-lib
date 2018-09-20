@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
-"""An example that scans for any Crownstone, and prints the results."""
-
 import time
 
 from BluenetLib.BLE import BluenetBle
 
 print("===========================================\n\nStarting Example\n\n===========================================")
+print("This is an example that scans for any Crownstone, and prints the results.\n")
 
 # Initialize the Bluetooth Core.
 # Fill in the correct hciIndex, see the readme.

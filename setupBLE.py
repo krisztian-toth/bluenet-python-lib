@@ -3,11 +3,11 @@
 from setuptools import setup, find_packages
 
 
-print(find_packages(exclude=["examples", "experiment", "tests", "techDocs"]))
+print(find_packages(exclude=["examplesUsb", "experiment", "tests", "techDocs"]))
 
 setup(
     name='BluenetLib',
-    version='0.5.3',
+    version='0.5.4',
     packages=find_packages(exclude=["examples", "experiment", "tests", "techDocs"]),
     install_requires=[
         'pyserial==3.4.0',

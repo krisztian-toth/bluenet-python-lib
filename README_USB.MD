@@ -59,9 +59,9 @@ python setup.py install
 
 ## Find the IDs of your Crownstones
 
-Firstly run the example script that simply lists the IDs of the Crownstones:
+Firstly run the example script that simply lists the IDs of the Crownstones. They are located in /examples/examplesUsb:
 ```
-$ python discoveryExample.py
+$ python3 discoveryExample.py
 ```
 
 Some systems may require calling python3 specifically:

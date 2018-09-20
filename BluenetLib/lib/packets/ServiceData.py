@@ -71,12 +71,13 @@ class ServiceData:
                 parseOpCode4(self, self.data)
             else:
                 parseOpCode3(self, self.data)
-                
         else:
             self.validData = False
+            
+        
 
     def isInSetupMode(self):
-        if self.validData:
+        if not self.validData:
             return False
     
         return self.setupMode

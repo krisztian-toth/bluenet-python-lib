@@ -47,6 +47,9 @@ class CloudBase:
         
         self.validateUserData()
         
+    def isLoggedIn(self):
+        return self.accessToken is not None
+        
     
     def setAccessToken(self, token):
         self.accessToken = token

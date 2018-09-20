@@ -29,7 +29,7 @@ sudo python3 setupBLE.py install
 All scripts containing BLE should be run as sudo because scanning using BlueZ requires root rights.
 
 ```
-sudo python3 ./examples/exampleBle.py
+sudo python3 ./examples/examplesBle/example_continuous_scanning.py
 ```
 
 # Documentation
@@ -171,7 +171,7 @@ from BluenetLib.BLE import BluenetBle
 # initialize the Bluetooth Core
 bluenetBle = BluenetBle()
 
-# set the switch stat eusing the control module
+# set the switch state using the control module
 bluenetBle.connect(address)
 switchstate = bluenetBle.state.getSwitchState()
 bluenetBle.disconnect()

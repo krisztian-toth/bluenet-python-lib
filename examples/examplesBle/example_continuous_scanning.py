@@ -10,7 +10,7 @@ from BluenetLib import BluenetEventBus, Topics
 
 # Function that's called when the power usage is updated.
 def showData(data):
-	print("data", data)
+	print("data", data["address"], data["rssi"], data["serviceData"]["setupMode"])
 
 
 # Set up event listeners

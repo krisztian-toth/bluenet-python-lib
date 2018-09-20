@@ -92,7 +92,7 @@ class StoneAdvertisementTracker:
             self.verified = True
             self.consecutiveMatches = 0
         else:
-            if serviceData.dataReadyForUse == False:
+            if not serviceData.dataReadyForUse:
                 self.invalidateDevice(serviceData)
             else:
                 if self.uniqueIdentifier != serviceData.uniqueIdentifier:
