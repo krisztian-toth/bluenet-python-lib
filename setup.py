@@ -12,7 +12,7 @@ setup(
     install_requires=[
         'pyserial==3.4.0',
         'pyaes==1.6.1',
-        'requests==2.18.4'
+        'requests==2.20.1'
     ],
-    dependency_links=['http://github.com/requests/requests/tarball/a3d7cf3f27e74c28ef30f01e9f2e483570ab042e#egg=requests-2.18.4']
+    dependency_links=['http://github.com/requests/requests/tarball/6cfbe1aedd56f8c2f9ff8b968efe65b22669795b#egg=requests-2.20.1']
 )
