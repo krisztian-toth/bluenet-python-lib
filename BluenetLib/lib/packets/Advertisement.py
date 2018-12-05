@@ -36,7 +36,7 @@ class Advertisement:
         return False
     
     def isInSetupMode(self):
-        if self.serviceData:
+        if self.serviceData is not None:
             return self.serviceData.setupMode
         return False
     
