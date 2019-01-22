@@ -1,12 +1,8 @@
-from BluenetLib.Exceptions import BluenetError
 from BluenetLib.lib.packets.ServiceData import ServiceData
 from BluenetLib.lib.protocol.Services import DFU_ADVERTISEMENT_SERVICE_UUID
 from BluenetLib.lib.util.Conversion import Conversion
 
-import json
-
 class Advertisement:
-    
     
     def __init__(self, address, rssi, nameText, serviceDataText):
         self.address = address
@@ -68,4 +64,11 @@ class Advertisement:
             data["serviceData"] = self.serviceData.getDictionary()
     
         return data
+    
+    def getSummary(self):
+        data = {}
+        if self.serviceData is not None:
+            data = self.serviceData.getSummary()
+        return data
+
     

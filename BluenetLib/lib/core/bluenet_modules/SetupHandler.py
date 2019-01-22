@@ -3,8 +3,7 @@ import time
 from BluenetLib.lib.packets.ResultPacket import ResultPacket
 from BluenetLib.lib.protocol.ControlPackets import ControlPacketsGenerator
 
-from BluenetLib import BluenetBleException
-from BluenetLib.Exceptions import BleError
+from BluenetLib.Exceptions import BleError, BluenetBleException
 from BluenetLib.lib.protocol.BlePackets import WriteConfigPacket, ControlPacket
 from BluenetLib.lib.protocol.BluenetTypes import ConfigurationType, ControlType, ProcessType, ResultValue
 from BluenetLib.lib.protocol.Characteristics import SetupCharacteristics

@@ -1,6 +1,6 @@
 from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.topics.SystemTopics import SystemTopics
-from BluenetLib.lib.topics.Topics import Topics
+from BluenetLib.lib.topics.UsbTopics import UsbTopics
 
 
 class StoneStateManager:
@@ -10,21 +10,19 @@ class StoneStateManager:
 
     def handleStateUpdate(self,data):
         stoneId = data[0]
-        state = data[1]
+        stoneStatePacket = data[1]
 
         if stoneId in self.stones:
-            if self.stones[stoneId]["timestampLastSeen"] < state.timestamp:
-                self.stones[stoneId]["timestampLastSeen"] = state.timestamp
-                self.stones[stoneId]["data"] = data[1].getDict()
-                self.emitNewData(data)
+            if self.stones[stoneId]["timestamp"] < stoneStatePacket.timestamp:
+                self.stones[stoneId] = stoneStatePacket.getSummary()
+                self.emitNewData(stoneStatePacket)
         else:
-            BluenetEventBus.emit(Topics.newCrownstoneFound, data[0])
-            self.stones[stoneId] = {"timestampLastSeen":state.timestamp, "data": data[1].getDict()}
-            self.emitNewData(data)
+            BluenetEventBus.emit(SystemTopics.newCrownstoneFound, stoneId)
+            self.stones[stoneId] = stoneStatePacket.getSummary()
+            self.emitNewData(stoneStatePacket)
     
-    def emitNewData(self, data):
-        BluenetEventBus.emit(Topics.powerUsageUpdate,  {"id": data[0], "powerUsage":  data[1].powerUsageReal})
-        BluenetEventBus.emit(Topics.switchStateUpdate, {"id": data[0], "switchState": data[1].switchState})
+    def emitNewData(self, stoneStatePacket):
+        BluenetEventBus.emit(UsbTopics.newDataAvailable, stoneStatePacket.getSummary())
 
     def getIds(self):
         ids = []

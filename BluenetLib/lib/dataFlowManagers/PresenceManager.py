@@ -1,14 +1,12 @@
 from BluenetLib._EventBusInstance import BluenetEventBus
-from BluenetLib.lib.dataFlowManagers.StoneStateManager import StoneStateManager
 from BluenetLib.lib.topics.SystemCloudTopics import SystemCloudTopics
-from BluenetLib.lib.topics.Topics import Topics
+from BluenetLib.lib.topics.CloudTopics import CloudTopics
 
 
 class PresenceManager:
     
     def __init__(self):
         self.presence = {}
-        self.stateManager = StoneStateManager()
         BluenetEventBus.subscribe(SystemCloudTopics.presenceInLocationDownloadedFromCloud, self.handlePresenceInLocationFromCloud)
         
         
@@ -63,10 +61,10 @@ class PresenceManager:
             
         
     def newPersonInLocation(self, person, location):
-        BluenetEventBus.emit(Topics.personEnteredLocation, {"locationId": location["id"], "name": location["name"], "person": person})
+        BluenetEventBus.emit(CloudTopics.personEnteredLocation, {"locationId": location["id"], "name": location["name"], "person": person})
     
     def personLeftLocation(self, person, location):
-        BluenetEventBus.emit(Topics.personLeftLocation, {"locationId": location["id"], "name": location["name"], "person": person})
+        BluenetEventBus.emit(CloudTopics.personLeftLocation, {"locationId": location["id"], "name": location["name"], "person": person})
     
     
     

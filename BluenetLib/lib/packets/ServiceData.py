@@ -27,7 +27,7 @@ class ServiceData:
         self.switchLocked = False
         self.partialTimestamp = 0
         self.timestamp = -1
-        self.validation = 0x0000  # Will be 0xFACE if it is set.
+        self.validation = 0x00  # Will be 0xFAif it is set.
    
         self.errorTimestamp = 0
         self.errorsBitmask = 0
@@ -112,10 +112,36 @@ class ServiceData:
         returnDict["uniqueElement"]             =  self.uniqueIdentifier
         returnDict["timeIsSet"]                 =  self.timeIsSet
 
-        returnDict["deviceType"]                = self.deviceType.name
         returnDict["rssiOfExternalCrownstone"]  = self.rssiOfExternalCrownstone
     
         return returnDict
+    
+    
+    def getSummary(self):
+        errorsDictionary = CrownstoneErrors(self.errorsBitmask).getDictionary()
+    
+        returnDict = {}
+    
+        returnDict["id"] = self.crownstoneId
+        returnDict["setupMode"] = self.isInSetupMode()
+        returnDict["switchState"] = self.switchState
+        returnDict["temperature"] = self.temperature
+        returnDict["powerFactor"] = self.powerFactor
+        returnDict["powerUsageReal"] = self.powerUsageReal
+        returnDict["powerUsageApparent"] = self.powerUsageApparent
+        returnDict["accumulatedEnergy"] = self.accumulatedEnergy
+        returnDict["dimmingAvailable"] = self.dimmingAvailable
+        returnDict["dimmingAllowed"] = self.dimmingAllowed
+        returnDict["switchLocked"] = self.switchLocked
+        returnDict["switchCraftEnabled"] = self.switchCraftEnabled
+        returnDict["timeIsSet"] = self.timeIsSet
+        returnDict["timestamp"] = self.timestamp
+        returnDict["hasError"] = self.hasError
+        returnDict["errorMode"] = self.errorMode
+        returnDict["errors"] = errorsDictionary
+    
+        return returnDict
+    
     
     def decrypt(self, keyHexString):
         if self.validData and len(self.encryptedData) == 16 and len(keyHexString) >= 16:

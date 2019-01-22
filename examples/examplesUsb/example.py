@@ -2,13 +2,16 @@
 
 """An example that switches a Crownstone, and prints the power usage of all Crownstones."""
 
-import time
-from BluenetLib import Bluenet, BluenetEventBus, Topics
+import time, json
+from BluenetLib import Bluenet, BluenetEventBus, UsbTopics
 
 
 # Function that's called when the power usage is updated.
-def showPowerUsage(data):
-	print("PowerUsage for Crownstone ID", data["id"], "is", data["powerUsage"], "W")
+
+def showNewData(data):
+	print("New data received!")
+	print(json.dumps(data, indent=2))
+	print("-------------------")
 
 # Create new instance of Bluenet
 bluenet = Bluenet()
@@ -19,10 +22,10 @@ bluenet = Bluenet()
 bluenet.initializeUSB("/dev/ttyUSB0")
 
 # Set up event listeners
-BluenetEventBus.subscribe(Topics.powerUsageUpdate, showPowerUsage)
+BluenetEventBus.subscribe(UsbTopics.newDataAvailable, showNewData)
 
 # This is the id of the Crownstone we will be switching
-targetCrownstoneId = 2
+targetCrownstoneId = 10
 
 # Switch this Crownstone on and off.
 switchState = True
@@ -31,7 +34,7 @@ for i in range(0,100):
 		break
 
 	if switchState:
-		print("Switching Crownstone on  (iteration: ", i,")", targetCrownstoneId)
+		print("Switching Crownstone on  (iteration: ", i,")")
 	else:
 		print("Switching Crownstone off (iteration: ", i,")")
 	bluenet.switchCrownstone(targetCrownstoneId, on = switchState)

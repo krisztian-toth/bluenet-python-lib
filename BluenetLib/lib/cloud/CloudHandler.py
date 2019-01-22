@@ -4,11 +4,11 @@ from BluenetLib.lib.cloud.CloudSphereHandler import CloudSphereHandler
 
 class CloudHandler(CloudBase):
     
-    def __init__(self, eventBus):
-        super().__init__(eventBus)
+    def __init__(self):
+        super().__init__()
     
     def getSphereHandler(self, sphereId):
-        sphereHandler = CloudSphereHandler(sphereId, self.eventBus)
+        sphereHandler = CloudSphereHandler(sphereId)
 
         self._loadDataIntoSphereHandler(sphereHandler)
         sphereHandler.init()

@@ -2,12 +2,9 @@
 
 """An example that shows how to login to the cloud."""
 
-import time
+from BluenetLib import CrownstoneCloud
 
-from BluenetLib import Bluenet, BluenetEventBus, Topics
-
-bluenet = Bluenet(catchSIGINT=True)
-cloud   = bluenet.getCloud()
+cloud = CrownstoneCloud()
 
 # Insert your own Crownstone Account Settings here. You can also load from file if you'd like. Check the readme for more options.
 cloud.setUserInformation('myEmailAddress@gmail.com', 'myPassword')

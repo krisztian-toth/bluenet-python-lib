@@ -1,12 +1,12 @@
 import hashlib
 import requests
-from BluenetLib.lib.util.EventBus import EventBus
 
+from BluenetLib.lib.dataFlowManagers.PresenceManager import PresenceManager
 from BluenetLib.lib.util.JsonFileStore import JsonFileStore
 
-
 class CloudBase:
-    def __init__(self, eventBus=None):
+    def __init__(self):
+        self.presenceManager = PresenceManager()
         self.email = None
         self.password = None
         self.sha1Password = None
@@ -14,16 +14,7 @@ class CloudBase:
     
         self.userId = None
         self.initialized = False
-        self.eventBus = None
         
-        if eventBus is not None:
-            self.eventBus = eventBus
-        else:
-            self.eventBus = EventBus()
-
-    def getEventBus(self):
-        return self.eventBus
-    
     
     def setUserInformation(self, email=None, password=None, sha1Password=None, accessToken=None):
         self.email = None

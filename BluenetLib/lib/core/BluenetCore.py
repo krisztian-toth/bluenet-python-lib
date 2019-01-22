@@ -7,7 +7,6 @@ from BluenetLib.lib.core.bluenet_modules.UsbDevHandler import UsbDevHandler
 from BluenetLib.lib.core.uart.UartBridge import UartBridge
 from BluenetLib.lib.core.uart.UartTypes import UartTxType
 from BluenetLib.lib.core.uart.UartWrapper import UartWrapper
-from BluenetLib.lib.dataFlowManagers.PresenceManager import PresenceManager
 from BluenetLib.lib.dataFlowManagers.StoneManager import StoneManager
 from BluenetLib.lib.protocol.BlePackets import ControlPacket
 from BluenetLib.lib.protocol.BluenetTypes import IntentType, MeshMultiSwitchType, ControlType
@@ -22,7 +21,6 @@ class BluenetCore:
         self.uartBridge = None
         self.running = True
         self.stoneManager = StoneManager()
-        self.presenceManager = PresenceManager()
         self._usbDev = UsbDevHandler()
         
         # listen for CTRL+C and handle the exit cleanly.
@@ -39,13 +37,6 @@ class BluenetCore:
         self.stop()
         
         
-    def getPeopleInLocation(self, locationId):
-        return self.presenceManager.getPeopleInLocation(locationId)
-
-
-    def getCloud(self):
-        return CrownstoneCloud(BluenetEventBus)
-
 
     def stop(self):
         print("Quitting BluenetLib...")

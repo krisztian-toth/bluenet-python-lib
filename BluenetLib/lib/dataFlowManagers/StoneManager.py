@@ -1,7 +1,7 @@
 from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.dataFlowManagers.StoneStateManager import StoneStateManager
+from BluenetLib.lib.topics.SystemTopics import SystemTopics
 from BluenetLib.lib.topics.SystemCloudTopics import SystemCloudTopics
-from BluenetLib.lib.topics.Topics import Topics
 
 
 class StoneManager:
@@ -9,7 +9,7 @@ class StoneManager:
     def __init__(self):
         self.stones = {}
         self.stateManager = StoneStateManager()
-        BluenetEventBus.subscribe(Topics.newCrownstoneFound, self.handleNewStoneFromScan)
+        BluenetEventBus.subscribe(SystemTopics.newCrownstoneFound, self.handleNewStoneFromScan)
         BluenetEventBus.subscribe(SystemCloudTopics.stoneDownloadedFromCloud, self.handleStoneFromCloud)
         
         
@@ -31,7 +31,7 @@ class StoneManager:
         else:
             self.stones[stoneId] = {"available": True, "id": stoneId}
             
-        BluenetEventBus.emit(Topics.crownstoneAvailable, self.stones[stoneId])
+        # BluenetEventBus.emit(Topics.crownstoneAvailable, self.stones[stoneId])
         
             
     def handleStoneFromCloud(self, stoneData):

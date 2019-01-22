@@ -15,7 +15,7 @@ core = BluenetBle(hciIndex=0)
 core.setSettings("adminKeyForCrown", "memberKeyForHome", "guestKeyForOther")
 
 # Fill in the correct MAC address.
-address = "d0:64:fd:10:54:f9"
+address = "d0:30:f7:32:b3:07"
 print("Connecting to", address)
 
 core.connect(address)

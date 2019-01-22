@@ -1,6 +1,4 @@
-import sys
-
-from BluenetLib import BluenetBleException
+from BluenetLib.Exceptions import BluenetBleException
 from bluepy.btle import DefaultDelegate
 
 from BluenetLib.lib.util.EncryptionHandler import EncryptionHandler

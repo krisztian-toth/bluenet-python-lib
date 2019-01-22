@@ -1,7 +1,6 @@
 from bluepy.btle import Scanner, Peripheral, ADDR_TYPE_RANDOM, BTLEException
 
-from BluenetLib import BluenetBleException
-from BluenetLib.Exceptions import BleError
+from BluenetLib.Exceptions import BleError, BluenetBleException
 from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.core.bluetooth_delegates.SingleNotificationDelegate import PeripheralDelegate
 from BluenetLib.lib.core.bluetooth_delegates.ScanDelegate import ScanDelegate
@@ -11,6 +10,7 @@ from BluenetLib.lib.topics.SystemBleTopics import SystemBleTopics
 from BluenetLib.lib.util.EncryptionHandler import EncryptionHandler
 
 from threading import Timer
+
 
 CCCD_UUID = 0x2902
 

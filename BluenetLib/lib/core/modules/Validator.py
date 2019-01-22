@@ -49,6 +49,9 @@ class Validator:
         
         if self.trackedCrownstones[advertisement.address].verified:
             BluenetEventBus.emit(Topics.advertisement, advertisement.getDictionary())
+            
+            if advertisement.hasScanResponse:
+                BluenetEventBus.emit(Topics.newDataAvailable, advertisement.getSummary())
 
 
     def shutDown(self):

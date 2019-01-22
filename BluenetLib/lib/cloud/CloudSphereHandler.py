@@ -11,8 +11,8 @@ from threading import Timer
 class CloudSphereHandler(CloudBase):
     
     
-    def __init__(self, sphereId, eventBus):
-        super().__init__(eventBus)
+    def __init__(self, sphereId):
+        super().__init__()
 
         self.sphereId = sphereId
         self.sphereData = None
