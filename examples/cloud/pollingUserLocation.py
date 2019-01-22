@@ -19,7 +19,7 @@ def printEvent(topic, data):
 BluenetEventBus.subscribe(CloudTopics.personEnteredLocation, lambda x: printEvent(CloudTopics.personEnteredLocation, x))
 BluenetEventBus.subscribe(CloudTopics.personLeftLocation,    lambda x: printEvent(CloudTopics.personLeftLocation, x))
 
-print("Start Polling Presence. Check if there are people present in this sphere using the consumer smart phone app.")
+print("Start Polling Presence. Check if there are people present in this sphere using the consumer smart phone app. The enter end left events are thrown on changes.")
 sphereHandler.startPollingPresence()
 
 

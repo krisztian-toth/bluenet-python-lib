@@ -46,7 +46,7 @@ An example is provided in the root of this repository.
 
 - First use the [phone app](https://crownstone.rocks/app) to setup your Crownstones and the Crownstone USB.
 - Make sure you update the Crownstones' firmware to at least 2.1.0.
-- Find out what port to use (e.g. `COM1`, `/dev/ttyUSB0`, or `/dev/tty.SLAB_USBtoUART`) and fill this in at `discoveryExample.py` and `example.py`.
+- Find out what port to use (e.g. `COM1`, `/dev/ttyUSB0`, or `/dev/tty.SLAB_USBtoUART`) and fill this in at `discoveryExample.py` and `example.py` at the `initializeUSB` method.
 - install the BluenetLib library using the setup.py:
 
 ```python
@@ -93,21 +93,25 @@ The example is shown below to get an idea of how everything works:
 
 """An example that switches a Crownstone, and prints the power usage of all Crownstones."""
 
-import time
-from BluenetLib import Bluenet, BluenetEventBus, Topics
+import time, json
+from BluenetLib import Bluenet, BluenetEventBus, UsbTopics
 
-# Function that's called when the power usage is updated.
-def showPowerUsage(data):
-	print("PowerUsage for Crownstone ID", data["id"], "is", data["powerUsage"], "W")
+# Function that's called when the power usage is updated, a Crownstone is switched, or as an update every minute(ish).
+def showNewData(data):
+	print("New data received!")
+	print(json.dumps(data, indent=2))
+	print("-------------------")
 
 # Create new instance of Bluenet
 bluenet = Bluenet()
 
-# Start up the USB bridge
-bluenet.initializeUSB("/dev/tty.SLAB_USBtoUART")
+# Start up the USB bridge.
+# Fill in the correct device, see the readme.
+# For firmware versions below 2.1, add the parameter baudrate=38400
+bluenet.initializeUSB("/dev/ttyUSB0")
 
 # Set up event listeners
-BluenetEventBus.subscribe(Topics.powerUsageUpdate, showPowerUsage)
+BluenetEventBus.subscribe(UsbTopics.newDataAvailable, showNewData)
 
 # This is the id of the Crownstone we will be switching
 targetCrownstoneId = 10
@@ -126,6 +130,9 @@ for i in range(0,100):
 
 	switchState = not switchState
 	time.sleep(2)
+
+
+bluenet.stop()
 
 ```
 
@@ -179,31 +186,18 @@ myBluenetInstance.dimCrownstone(targetCrownstoneId, 0.5)
 
 The Bluenet python lib uses an event bus to deliver updates to you. You can request an instance of the event bus from Bluenet:
 
-```python
-
-# get an instance of the eventBus to subscribe to updates
-myEventBus = myBluenetInstance.getEventBus()
-
-# get an instance of the available Topics
-theTopics = myBluenetInstance.getTopics()
-```
-
-You can use the event bus to subscribe to topics.
-
-The following Topics are currently available:
-
-| Event Enum Name | Description |
-| :--------------- | :--------- |
-| `newCrownstoneFound` | When the lib hears from a Crownstone that it has not heard from since the lib was started, this event is emitted. The data that is emitted is a single int which represents the Crownstone ID of the new Crownstone. |
-| `powerUsageUpdate` | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: `{ "id": int, "powerUsage" :  float }`. |
-| `switchStateUpdate` | Every time a new data point is recorded, this event will notify the updated powerUsage value. The data that is emitted is a dictionary: `{ "id": int, "switchState" :  int [0 .. 128] }`. The switchState value is [explained here](https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#switch_state_packet). |
-
 ## EventBus API
 
-#### `subscribe(TopicName: enum, functionPointer)`
+You can obtain the eventBus directly from the lib:
+
+```
+from BluenetLib import BluenetEventBus, UsbTopics
+```
+
+##### `subscribe(TopicName: enum, functionPointer)`
 > Returns a subscription ID that can be used to unsubscribe again with the unsubscribe method
 
-#### `unsubscribe(subscriptionId: number)`
+##### `unsubscribe(subscriptionId: number)`
 > This will stop the invocation of the function you provided in the subscribe method, unsubscribing you from the event.
 
 These can be used like this:
@@ -211,17 +205,63 @@ These can be used like this:
 ```python
 
 # simple example function to print the data you receive
-def dataPrinter(data):
-    print(data)
+def showNewData(data):
+	print("received new data: ", data)
 
-# subscribe to the powerUsageUpdate event
-subscriptionId = myEventBus.subscribe(myTopics.powerUsageUpdate, dataPrinter)
+
+# Set up event listeners
+BluenetEventBus.subscribe(UsbTopics.newDataAvailable, showNewData) # keep in mind that this is using the UsbTopics, not the Topics
 
 # unsubscribe again
-myEventBus.unsubscribe(subscriptionId)
-
-
+BluenetEventBus.unsubscribe(subscriptionId)
 ```
+
+## Events
+
+These events are available for the USB part of the lib.
+
+##### `UsbTopics.newDataAvailable`
+> This is a topic with a summary of the data of a message received via the mesh. If you care about the power usage, you can get it from here. If the hasError: true, the accumulated energy is not filled, nor is the power factor and the powerUsageApparent.
+> Data format is a dictionary with the fields shown below:
+>```python
+> {
+>     id:                           int    # crownstone id (0-255)
+>     setupMode:                    bool   # is in setup mode
+>     switchState:                  int
+>     temperature:                  int    # chip temp in Celcius
+>     powerFactor:                  int    # factor between real and apparent
+>     powerUsageReal:               int    # power usage in watts (W)
+>     powerUsageApparent:           int    # power usage in VA
+>     accumulatedEnergy:            int
+>     timestamp:                    int    # time on Crownstone seconds since epoch with locale correction
+>     dimmingAvailable:             bool   # dimming is available for use (it is not in the first 60 seconds after boot)
+>     dimmingAllowed:               bool   # this Crownstone can dim
+>     switchLocked:                 bool   # this Crownstone is switch-locked
+>     hasError:                     bool   # this crownstone has an error, if the crownstone has an error, the errors: {} dict is only valid if errorMode: true. This boolean is always valid.
+>     errorMode:                    bool   # summary type errorMode : the errors JSON is valid. This alternates with normal advertisements
+>     errors: {
+>         overCurrent:              bool
+>         overCurrentDimmer:        bool
+>         temperatureChip:          bool
+>         temperatureDimmer:        bool
+>         dimmerOnFailure:          bool
+>         dimmerOffFailure:         bool
+>         bitMask:                  int
+>     }
+>     timeIsSet:                    bool   # this crownstone knows what time it is
+> }
+>```
+
+##### `UsbTopics.uartMessage`
+> This topic will print anything you send to the USB dongle using Bluenet.uartEcho. This can be used for a ping-pong implementation.
+> Data format is a dictionary with the fields shown below:
+>```python
+> {
+>     data:             [array of ints]
+>     string:           stringified representation of the data
+> }
+>```
+
 
 ## Bluenet API
 
@@ -238,57 +278,8 @@ myEventBus.unsubscribe(subscriptionId)
 #### `dimCrownstone(crownstoneId: int, value: float [0 .. 1])`
 > Dim the Crownstone. 0 is off, 1 is fully on. While dimming, the Crownstone is rated a maximum power usage of 100 W.
 
-#### `getEventBus()`
-> Get an instance of the EventBus used for data updates.
-
-#### `getTopics()`
-> Get an instance of the Topics : Enum available in the EventBus.
-
 #### `getCrownstoneIds()`
 > Get a list of the CrownstoneIDs (ints) that are known to the library.
-
-#### `getLatestCrownstoneData(crownstoneId: int)`
-> This will return a dictionary filled with all the information the library has on this Crownstone. This data will be extended in future versions. If the crownstoneId is unknown, ```None``` will be returned.
->
-> Data format is:
->```python
-> data is dictionary {
->   name: string
->   rssi: int
->   address: string   # mac address
->   serviceUUID: string
->   serviceData: {
->     opCode:                       int
->     dataType:                     int
->     stateOfExternalCrownstone:    int    # adv contains state of external crownstone
->     hasError:                     bool   # this crownstone has an error
->     setupMode:                    bool   # is in setup mode
->     id:                           int    # crownstone id (0-255)
->     switchState:                  int
->     flagsBitmak:                  int
->     temperature:                  int    # chip temp
->     powerFactor:                  int    # factor between real and appearent
->     powerUsageReal:               int    # usage in watts (W)
->     powerUsageApparent:           int    # usage in VA
->     accumulatedEnergy:            int
->     timestamp:                    int    # time on Crownstone seconds since epoch with locale correction
->     dimmingAvailable:             bool   # dimming is available for use (it is not in the first 60 seconds after boot)
->     dimmingAllowed:               bool   # this Crownstone can dim
->     switchLocked:                 bool   # this Crownstone is switch-locked
->     errorMode:                    bool   # advertisement type errorMode : the errors JSON is valid. This alternates with normal advertisements
->     errors: {
->         overCurrent:              bool
->         overCurrentDimmer:        bool
->         temperatureChip:          bool
->         temperatureDimmer:        bool
->         dimmerOnFailure:          bool
->         dimmerOffFailure:         bool
->         bitMask:                  int
->     }
->     uniqueElement:                int    # something that identifies this advertisement uniquely. Can be used to skip duplicate payloads
->     timeIsSet:                    bool   # this crownstone knows what time it is
-> }
->```
 
 #### `stop()`
 > Stop any running processes.

@@ -208,7 +208,7 @@ accessAddress = Util.generateMeshAccessAddress()
 
 ## EventBus
 
-You can obtain the eventbus directly from the lib:
+You can obtain the eventBus directly from the lib:
 
 ```
 from BluenetLib import BluenetEventBus, Topics
@@ -225,11 +225,12 @@ These can be used like this:
 ```python
 
 # simple example function to print the data you receive
-def advertisementPrinter(data):
-    print(data)
+def showNewData(data):
+	print("received new data: ", data)
 
-# subscribe to the powerUsageUpdate event
-subscriptionId = BluenetEventBus.subscribe(Topics.advertisement, advertisementPrinter)
+
+# Set up event listeners
+BluenetEventBus.subscribe(Topics.newDataAvailable, showNewData)
 
 # unsubscribe again
 BluenetEventBus.unsubscribe(subscriptionId)
@@ -239,10 +240,44 @@ BluenetEventBus.unsubscribe(subscriptionId)
 
 These events are available for the BLE part of this lib:
 
-##### `Topics.advertisement`
-> Data format is:
+##### `Topics.newDataAvailable`
+> This is a topic with a summary of the data of an advertisement. If you care about the power usage, you can get it from here.
+ For the full advertisement, you can use the Topics.advertisement as shown below.
+> Data format is a dictionary with the fields shown below:
 >```python
-> data is dictionary {
+> {
+>     id:                           int    # crownstone id (0-255)
+>     setupMode:                    bool   # is in setup mode
+>     switchState:                  int
+>     temperature:                  int    # chip temp in Celcius
+>     powerFactor:                  int    # factor between real and apparent
+>     powerUsageReal:               int    # power usage in watts (W)
+>     powerUsageApparent:           int    # power usage in VA
+>     accumulatedEnergy:            int
+>     timestamp:                    int    # time on Crownstone seconds since epoch with locale correction
+>     dimmingAvailable:             bool   # dimming is available for use (it is not in the first 60 seconds after boot)
+>     dimmingAllowed:               bool   # this Crownstone can dim
+>     switchLocked:                 bool   # this Crownstone is switch-locked
+>     hasError:                     bool   # this crownstone has an error, if the crownstone has an error, the errors: {} dict is only valid if errorMode: true. This boolean is always valid.
+>     errorMode:                    bool   # summary type errorMode : the errors JSON is valid. This alternates with normal advertisements
+>     errors: {
+>         overCurrent:              bool
+>         overCurrentDimmer:        bool
+>         temperatureChip:          bool
+>         temperatureDimmer:        bool
+>         dimmerOnFailure:          bool
+>         dimmerOffFailure:         bool
+>         bitMask:                  int
+>     }
+>     timeIsSet:                    bool   # this crownstone knows what time it is
+> }
+>```
+
+
+##### `Topics.advertisement`
+> Data format is a dictionary with the fields shown below:
+>```python
+> {
 >   name: string
 >   rssi: int
 >   address: string   # mac address
