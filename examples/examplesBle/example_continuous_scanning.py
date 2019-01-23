@@ -4,7 +4,7 @@
 
 import time
 
-from BluenetLib import BluenetBle
+from BluenetLib.BLE import BluenetBle
 from BluenetLib import BluenetEventBus, Topics
 
 import json

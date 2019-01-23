@@ -1,5 +1,4 @@
 from BluenetLib.Bluenet                 import Bluenet
-from BluenetLib.BLE                     import BluenetBle
 from BluenetLib.CrownstoneCloud         import CrownstoneCloud
 from BluenetLib.Exceptions              import BluenetBleException, BluenetException
 from BluenetLib.lib.util.EventBus       import EventBus
