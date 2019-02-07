@@ -141,17 +141,18 @@ class ServiceData:
         returnDict["errors"] = errorsDictionary
     
         return returnDict
-    
-    
+
+
     def decrypt(self, keyHexString):
         if self.validData and len(self.encryptedData) == 16 and len(keyHexString) >= 16:
-            result = EncryptionHandler.decryptECB(self.encryptedData, keyHexString)
-            
-            for i in range(0, len(self.encryptedData)):
-                self.data[i+self.encryptedDataStartIndex] = result[i]
-            
-            self.parse()
+            if not self.setupMode:
+                result = EncryptionHandler.decryptECB(self.encryptedData, keyHexString)
+
+                for i in range(0, len(self.encryptedData)):
+                    self.data[i + self.encryptedDataStartIndex] = result[i]
+
+                self.parse()
             self.dataReadyForUse = True
         else:
             self.dataReadyForUse = False
-            
+
