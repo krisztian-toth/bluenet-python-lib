@@ -15,6 +15,7 @@ from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.topics.UsbTopics import UsbTopics
 from BluenetLib.lib.topics.DevTopics import DevTopics
 from BluenetLib.lib.topics.SystemTopics import SystemTopics
+from BluenetLib.lib.util.Conversion import Conversion
 
 
 class UartParser:
@@ -25,7 +26,8 @@ class UartParser:
     def parse(self, dataPacket):
         opCode = dataPacket.opCode
         parsedData = None
-        
+#        print("UART - opCode:", opCode, "payload:", dataPacket.payload)
+
         if opCode == UartRxType.MESH_STATE_0 or opCode == UartRxType.MESH_STATE_1:
             # unpack the mesh packet
             meshPacket = MeshStatePacket(dataPacket.payload)
@@ -38,7 +40,22 @@ class UartParser:
             serviceData = ServiceData(dataPacket.payload)
             if serviceData.validData:
                 BluenetEventBus.emit(DevTopics.newServiceData, serviceData.getDictionary())
-  
+
+        elif opCode == UartRxType.CROWNSTONE_ID:
+            id = Conversion.int8_to_uint8(dataPacket.payload)
+            BluenetEventBus.emit(DevTopics.ownCrownstoneId, id)
+
+        elif opCode == UartRxType.MAC_ADDRESS:
+            if (len(dataPacket.payload) == 7):
+                # Bug in old firmware (2.1.4 and lower) sends an extra byte.
+                addr = Conversion.uint8_array_to_address(dataPacket.payload[0:-1])
+            else:
+                addr = Conversion.uint8_array_to_address(dataPacket.payload)
+            if (addr is not ""):
+                BluenetEventBus.emit(DevTopics.ownMacAddress, addr)
+            else:
+                print("invalid address:", dataPacket.payload)
+
         elif opCode == UartRxType.POWER_LOG_CURRENT:
             # type is CurrentSamples
             parsedData = CurrentSamplesPacket(dataPacket.payload)

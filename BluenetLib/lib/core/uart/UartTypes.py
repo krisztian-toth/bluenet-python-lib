@@ -31,6 +31,11 @@ class UartRxType(IntEnum):
 	MESH_STATE_1 =                     101   # Second state handle
 	MESH_STATE_LAST =                  101   # Last state handle
 
+	ADVERTISING_ENABLED =              10000
+	MESH_ENABLED =                     10001
+	CROWNSTONE_ID =                    10002
+	MAC_ADDRESS =                      10003
+
 	ADC_CONFIG =                       10100
 	ADC_RESTART =                      10101
 

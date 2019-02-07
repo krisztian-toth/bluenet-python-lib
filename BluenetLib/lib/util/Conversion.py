@@ -293,6 +293,21 @@ class Conversion:
 			arr8.append(Conversion.hex_string_to_uint8_array(p)[0])
 		return bytearray(arr8)
 
+	@staticmethod
+	def uint8_array_to_address(arr8):
+		"""
+        Converts a uint8 array to a bluetooth address string
+        :param arr8: array of uint8, should be 6 long.
+        :type arr8: bytearray
+        :rtype: str
+        """
+		if (len(arr8) != 6):
+			return ""
+		hexStr = Conversion.uint8_to_hex_string(arr8[-1])
+		for b in reversed(arr8[0:-1]):
+			hexStr = hexStr + ":" + Conversion.uint8_to_hex_string(b)
+		return hexStr
+
 
 	@staticmethod
 	def uint8_to_bit_array(val):

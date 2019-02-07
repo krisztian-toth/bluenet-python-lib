@@ -33,3 +33,4 @@ class DevTopics(Enum):
     newAdcConfigPacket = 'newAdcConfigPacket'
     adcRestarted = 'adcRestarted'
     uartNoise = 'uartNoise'
+    ownMacAddress = 'ownMacAddress'

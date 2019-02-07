@@ -1,6 +1,8 @@
 from BluenetLib.lib.core.uart.UartTypes import UartTxType
 from BluenetLib.lib.core.uart.UartWrapper import UartWrapper
 from BluenetLib._EventBusInstance import BluenetEventBus
+from BluenetLib.lib.protocol.BlePackets import ControlPacket
+from BluenetLib.lib.protocol.BluenetTypes import ControlType
 from BluenetLib.lib.topics.SystemTopics import SystemTopics
 
 
@@ -139,6 +141,16 @@ class UsbDevHandler:
         """
         self._send(UartWrapper(UartTxType.POWER_LOG_CALCULATED_POWER, self._getPayload(enabled)).getPacket())
 
+    def setUartMode(self, mode):
+        """
+            Set UART mode.
+            :param mode: : 0=none 1=RX only, 2=TX only, 3=TX and RX
+            :return:
+        """
+        if ((mode < 0) or (mode > 3)):
+            return
+        controlPacket = ControlPacket(ControlType.UART_ENABLE).loadUInt8(mode).getPacket()
+        self._send(UartWrapper(UartTxType.CONTROL, controlPacket).getPacket())
 
 
     # MARK: internal methods
