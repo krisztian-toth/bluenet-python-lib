@@ -2,7 +2,7 @@ from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.topics.SystemBleTopics import SystemBleTopics
 
 
-class SetupChecker:
+class OperationModeChecker:
 
     def __init__(self, address):
         self.address = address
@@ -15,10 +15,9 @@ class SetupChecker:
         if advertisement["address"] != self.address:
             return
 
-        self.result = advertisement["serviceData"]["setupMode"]
+        self.result = True
 
         BluenetEventBus.emit(SystemBleTopics.abortScanning, True)
 
     def getResult(self):
         return self.result
-

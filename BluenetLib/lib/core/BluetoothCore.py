@@ -1,4 +1,5 @@
 from BluenetLib.lib.core.modules.Gatherer import Gatherer
+from BluenetLib.lib.core.modules.OperationModeChecker import OperationModeChecker
 from BluenetLib.lib.core.modules.SetupChecker import SetupChecker
 from BluenetLib.lib.util.JsonFileStore import JsonFileStore
 
@@ -55,6 +56,7 @@ class BluetoothCore:
                 if err.type is BleError.COULD_NOT_VALIDATE_SESSION_NONCE:
                     raise err
 
+
     def setupCrownstone(self, address, crownstoneId, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor):
         self.connect(address)
         self.setup.setup(crownstoneId, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor)
@@ -84,16 +86,25 @@ class BluetoothCore:
         return gatherer.getCollection()
     
     def isCrownstoneInSetupMode(self, address, scanDuration=3):
-        setupChecker = SetupChecker(address)
-        subscriptionId = BluenetEventBus.subscribe(Topics.advertisement, setupChecker.handleAdvertisement)
+        checker = SetupChecker(address)
+        subscriptionId = BluenetEventBus.subscribe(Topics.advertisement, checker.handleAdvertisement)
 
         self.ble.startScanning(scanDuration=scanDuration)
         
         BluenetEventBus.unsubscribe(subscriptionId)
 
-        return setupChecker.getResult()
-        
-    
+        return checker.getResult()
+
+    def isCrownstoneInNormalMode(self, address, scanDuration=3):
+        checker = OperationModeChecker(address)
+        subscriptionId = BluenetEventBus.subscribe(Topics.advertisement, checker.handleAdvertisement)
+
+        self.ble.startScanning(scanDuration=scanDuration)
+
+        BluenetEventBus.unsubscribe(subscriptionId)
+
+        return checker.getResult()
+
     def getNearestCrownstone(self, rssiAtLeast=-100, scanDuration=3, returnFirstAcceptable=False, addressesToExclude=[]):
         return self._getNearest(False, rssiAtLeast, scanDuration, returnFirstAcceptable, False, addressesToExclude)
     

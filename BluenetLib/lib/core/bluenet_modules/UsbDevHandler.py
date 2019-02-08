@@ -152,6 +152,34 @@ class UsbDevHandler:
         controlPacket = ControlPacket(ControlType.UART_ENABLE).loadUInt8(mode).getPacket()
         self._send(UartWrapper(UartTxType.CONTROL, controlPacket).getPacket())
 
+    def resetCrownstone(self):
+        """
+            Reset the Crownstone
+            :return:
+        """
+        resetPacket = ControlPacket(ControlType.RESET).getPacket()
+        self._send(UartWrapper(UartTxType.CONTROL, resetPacket).getPacket())
+
+    def toggleRelay(self, isOn):
+        val = 0
+        if isOn:
+            val = 1
+        switchPacket = ControlPacket(ControlType.RELAY).loadUInt8(val).getPacket()
+        self._send(UartWrapper(UartTxType.CONTROL, switchPacket).getPacket())
+
+    def toggleIGBTs(self, isOn):
+        val = 0
+        if isOn:
+            val = 100
+        switchPacket = ControlPacket(ControlType.PWM).loadUInt8(val).getPacket()
+        self._send(UartWrapper(UartTxType.CONTROL, switchPacket).getPacket())
+
+    def toggleAllowDimming(self, isOn):
+        val = 0
+        if isOn:
+            val = 1
+        instructionPacket = ControlPacket(ControlType.ALLOW_DIMMING).loadUInt8(val).getPacket()
+        self._send(UartWrapper(UartTxType.CONTROL, instructionPacket).getPacket())
 
     # MARK: internal methods
     
