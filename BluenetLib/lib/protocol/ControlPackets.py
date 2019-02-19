@@ -140,9 +140,9 @@ class ControlPacketsGenerator:
 
 	
 	@staticmethod
-	def getSetupPacket(type, crownstoneId, adminKey, memberKey, guestKey, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor):
+	def getSetupPacket(commandType, crownstoneId, adminKey, memberKey, guestKey, meshAccessAddress, ibeaconUUID, ibeaconMajor, ibeaconMinor):
 		"""
-		:param type:          		uint8 number
+		:param commandType:      	uint8 number
 		:param crownstoneId:  		uint8 number
 		:param adminKey:      		byteString (no conversion required)
 		:param memberKey:     		byteString (no conversion required)
@@ -154,18 +154,22 @@ class ControlPacketsGenerator:
 		:return:
 		"""
 		data = []
-		data.append(type)
+		data.append(commandType)
 		data.append(crownstoneId)
-		
+
 		data += list(adminKey)
 		data += list(memberKey)
 		data += list(guestKey)
-		
-		data += Conversion.hex_string_to_uint8_array(meshAccessAddress)
-		
+
+		if type(meshAccessAddress) is str:
+			data += Conversion.hex_string_to_uint8_array(meshAccessAddress)
+		else:
+			data += Conversion.uint32_to_uint8_array(meshAccessAddress)
+
 		data += Conversion.ibeaconUUIDString_to_reversed_uint8_array(ibeaconUUID)
 		data += Conversion.uint16_to_uint8_array(ibeaconMajor)
 		data += Conversion.uint16_to_uint8_array(ibeaconMinor)
-		
+
 		return ControlPacket(ControlType.SETUP).loadByteArray(data).getPacket()
+
 

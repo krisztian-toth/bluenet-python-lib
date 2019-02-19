@@ -1,5 +1,5 @@
 from BluenetLib.lib.core.modules.Gatherer import Gatherer
-from BluenetLib.lib.core.modules.OperationModeChecker import OperationModeChecker
+from BluenetLib.lib.core.modules.NormalModeChecker import NormalModeChecker
 from BluenetLib.lib.core.modules.SetupChecker import SetupChecker
 from BluenetLib.lib.util.JsonFileStore import JsonFileStore
 
@@ -84,19 +84,21 @@ class BluetoothCore:
         BluenetEventBus.unsubscribe(subscriptionIdAll)
         
         return gatherer.getCollection()
-    
-    def isCrownstoneInSetupMode(self, address, scanDuration=3):
-        checker = SetupChecker(address)
+
+    def isCrownstoneInSetupMode(self, address, scanDuration=3, waitUntilInRequiredMode=False):
+        # print("Checking if it is in setup mode, address", address)
+        checker = SetupChecker(address, waitUntilInRequiredMode)
         subscriptionId = BluenetEventBus.subscribe(Topics.advertisement, checker.handleAdvertisement)
 
         self.ble.startScanning(scanDuration=scanDuration)
-        
+
         BluenetEventBus.unsubscribe(subscriptionId)
 
         return checker.getResult()
 
-    def isCrownstoneInNormalMode(self, address, scanDuration=3):
-        checker = OperationModeChecker(address)
+    def isCrownstoneInNormalMode(self, address, scanDuration=3, waitUntilInRequiredMode=False):
+        # print("Checking if it is in normal mode, address", address)
+        checker = NormalModeChecker(address, waitUntilInRequiredMode)
         subscriptionId = BluenetEventBus.subscribe(Topics.advertisement, checker.handleAdvertisement)
 
         self.ble.startScanning(scanDuration=scanDuration)

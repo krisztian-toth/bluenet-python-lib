@@ -2,7 +2,7 @@ from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.topics.SystemBleTopics import SystemBleTopics
 
 
-class SetupChecker:
+class NormalModeChecker:
 
     def __init__(self, address, waitUntilInRequiredMode=False):
         self.address = address
@@ -16,7 +16,7 @@ class SetupChecker:
         if advertisement["address"] != self.address:
             return
 
-        self.result = advertisement["serviceData"]["setupMode"]
+        self.result = not advertisement["serviceData"]["setupMode"]
 
         if not self.result and self.waitUntilInRequiredMode:
             pass
