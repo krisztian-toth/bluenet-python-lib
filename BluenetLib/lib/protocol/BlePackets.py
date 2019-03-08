@@ -10,9 +10,10 @@ class BLEPacket:
         self.type = packetType.value
 
     def loadKey(self, keyString):
-        self.payload = Conversion.ascii_or_hex_string_to_16_byte_array(keyString)
+        self.payload = Conversion.ascii_or_hex_string_to_16_byte_array(
+            keyString)
         return self._process()
-    
+
     def loadString(self, string):
         self.payload = Conversion.string_to_uint8_array(string)
         return self._process()
@@ -37,36 +38,46 @@ class BLEPacket:
         self.payload = byteArray
         return self._process()
 
-
     def _process(self):
-        self.lengthAsUint8Array = Conversion.uint16_to_uint8_array(len(self.payload))
+        self.lengthAsUint8Array = Conversion.uint16_to_uint8_array(
+            len(self.payload))
         return self
 
     def getPacket(self):
         packet = []
         packet.append(self.type)
-        packet.append(0)          # reserved
+        packet.append(0)  # reserved
         packet += self.lengthAsUint8Array
         packet += self.payload
 
         return packet
+
 
 class ControlPacket(BLEPacket):
 
     def __init__(self, packetType):
         super().__init__(packetType)
 
-
     def getPacket(self):
-        packet = []
-        
-        packet.append(self.type)
-        packet.append(0)
-        packet += self.lengthAsUint8Array
-        packet += self.payload
-        
-        return packet
+        """
+        Returns a Control packet, an array which consists of
+        the following elements (in order):
 
+        type    |   name    |   length  |   description
+                |           |           |
+        uint8	|    Type	|      1    |   Type of the command.
+                |           |           |
+        uint8	|   Reserved|      1    |   Not used, reserved for alignment.
+                |           |           |
+        uint16	|   Length	|      2    |   Length of the payload in bytes.
+                |           |           |
+        uint8	|   Payload |	Length	|   Payload data, depends on type.
+                |           |           |   Currently always a result value
+                |           |           |   packet.
+
+        :return: a control packet array
+        """
+        return [self.type, 0] + self.lengthAsUint8Array + self.payload
 
 
 class keepAliveStatePacket(ControlPacket):
@@ -81,14 +92,11 @@ class keepAliveStatePacket(ControlPacket):
         self.loadByteArray(packet)
 
 
-
-
 class FactoryResetPacket(ControlPacket):
 
     def __init__(self):
         super().__init__(ControlType.FACTORY_RESET)
         self.loadUInt32(0xdeadbeef)
-
 
 
 class ReadConfigPacket(BLEPacket):
@@ -103,10 +111,10 @@ class ReadConfigPacket(BLEPacket):
         packet += self.payload
         return packet
 
+
 class WriteConfigPacket(ReadConfigPacket):
     def getOpCode(self):
         return OpCode.WRITE
-
 
 
 class ReadStatePacket(BLEPacket):
@@ -137,5 +145,3 @@ class NotificationStatePacket(ReadStatePacket):
 
     def getOpCode(self):
         return OpCode.NOTIFY
-
-
