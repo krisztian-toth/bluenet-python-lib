@@ -72,8 +72,7 @@ class ControlPacket(BLEPacket):
         uint16	|   Length	|      2    |   Length of the payload in bytes.
                 |           |           |
         uint8	|   Payload |	Length	|   Payload data, depends on type.
-                |           |           |   Currently always a result value
-                |           |           |   packet.
+                |           |           |
 
         :return: a control packet array
         """
