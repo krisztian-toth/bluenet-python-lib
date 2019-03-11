@@ -17,8 +17,10 @@ class ControlHandler:
             CrownstoneCharacteristics.SessionNonce)
 
         # decrypt it
-        decryptedNonce = EncryptionHandler.decryptSessionNonce(rawNonce,
-                                                               self.core.settings.guestKey)
+        decryptedNonce = EncryptionHandler.decryptSessionNonce(
+            rawNonce,
+            self.core.settings.guestKey
+        )
 
         # load into the settings object
         self.core.settings.setSessionNonce(decryptedNonce)
@@ -46,7 +48,8 @@ class ControlHandler:
 
     def commandFactoryReset(self):
         """
-          If you have the keys, you can use this to put the crownstone back into factory default mode
+        If you have the keys, you can use this to put the crownstone back
+        into factory default mode.
         """
         self._writeControlPacket(
             ControlPacketsGenerator.getCommandFactoryResetPacket())
