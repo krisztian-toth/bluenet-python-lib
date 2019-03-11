@@ -1,3 +1,5 @@
+import enum
+
 from BluenetLib.lib.core.modules.Gatherer import Gatherer
 from BluenetLib.lib.core.modules.NormalModeChecker import NormalModeChecker
 from BluenetLib.lib.core.modules.SetupChecker import SetupChecker
@@ -6,7 +8,10 @@ from BluenetLib.lib.util.JsonFileStore import JsonFileStore
 from BluenetLib.Exceptions import BleError, BluenetError, BluenetBleException, BluenetException
 from BluenetLib._EventBusInstance import BluenetEventBus
 from BluenetLib.lib.core.bluenet_modules.BleHandler import BleHandler
-from BluenetLib.lib.core.bluenet_modules.ControlHandler import ControlHandler
+from BluenetLib.lib.core.bluenet_modules.ControlHandler import (
+    ControlHandler,
+    ScheduleData
+)
 from BluenetLib.lib.core.bluenet_modules.SetupHandler import SetupHandler
 from BluenetLib.lib.core.bluenet_modules.StateHandler import StateHandler
 
@@ -143,3 +148,61 @@ class BluetoothCore:
         BluenetEventBus.unsubscribe(subscriptionId)
         
         return selector.getNearest()
+
+    def setDailyScheduledTask(self,
+                              index,
+                              trigger_timestamp,
+                              days,
+                              powerSwitchValue):
+        """
+        Sets a daily scheduled task on the Crownstone. For more details see
+        https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#schedule-command-packet
+
+        :param index: index of the entry
+        :type index: int
+        :param trigger_timestamp: timestamp of the next time this entry
+        triggers. Set to 0 to remove this entry.
+        :type trigger_timestamp: int
+        :param days: a list of days when you want the task to execute at
+        :type days: list of DayOfWeek
+        :param powerSwitchValue: power switch value in a range of 0 - 100
+        where 0 is off and 100 is fully on
+        """
+        self.control.setSchedulePacket(
+            index=index,
+            scheduleData=ScheduleData(
+                schedule_type=16,  # 1 + 0 << 4
+                trigger_timestamp=trigger_timestamp,
+                repeat_data=[days_to_bitmask(days), 0],
+                action_data=[powerSwitchValue, 0, 0]
+            ))
+
+
+class DayOfWeek(enum.Enum):
+    """
+    An enum which represents each day in their corresponding bit. For details
+    see
+    https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#repeat-type-1
+    """
+    SUNDAY = 1
+    MONDAY = 2
+    TUESDAY = 4
+    WEDNESDAY = 8
+    THURSDAY = 16
+    FRIDAY = 32
+    SATURDAY = 64
+    ALL_DAYS = 128
+
+
+def days_to_bitmask(days):
+    """
+    Converts an array of DayOfWeek enums to a bitmask with the ^ (OR) operator.
+
+    :param days: the days array
+    :type days: list of DayOfWeek
+    :return: a bitmask
+    :rtype: int
+    """
+    from functools import reduce
+
+    return reduce(lambda n, m: n.value ^ m.value, days)
