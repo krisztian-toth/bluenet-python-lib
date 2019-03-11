@@ -82,6 +82,20 @@ class ControlHandler:
     def reset(self):
         self._writeControlPacket(ControlPacketsGenerator.getResetPacket())
 
+    def setSchedulePacket(self, index, scheduleData):
+        """
+        Sets a new schedule task as per the specification defined at
+        https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#schedule-command-packet
+
+        :param index: index of the entry
+        :type index: int
+        :param scheduleData: data required to build a schedule entry packet
+        :type scheduleData: ScheduleData
+        """
+        dataByteArray = [index] + scheduleData.to_byte_array()
+        self._writeControlPacket(
+            ControlPacketsGenerator.getSetSchedulePacket(dataByteArray))
+
     """
     ---------------  UTIL  ---------------
     """
@@ -94,3 +108,42 @@ class ControlHandler:
         self.core.ble.writeToCharacteristic(CSServices.CrownstoneService,
                                             CrownstoneCharacteristics.Control,
                                             packet)
+
+
+class ScheduleData:
+    """
+    Data class for Schedule data required for a Schedule command packet as
+    defined at
+    https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#schedule-command-packet
+    """
+
+    def __init__(self,
+                 schedule_type,
+                 trigger_timestamp,
+                 repeat_data,
+                 action_data,
+                 override_mask=0):
+        """
+        For more details see the bluenet protocol specification at
+        https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#schedule-entry-packet
+
+        :param schedule_type: combined repeat and action type
+        :param trigger_timestamp: timestamp of the next time this entry
+        triggers - set to 0 to remove this entry.
+        :param repeat_data: repeat time data, depends on the repeat type.
+        :param action_data: action data, depends on the action type.
+        :param override_mask: bitmask of switch commands to override.
+        """
+        self.schedule_type = schedule_type
+        self.trigger_timestamp = trigger_timestamp
+        self.repeat_data = repeat_data
+        self.action_data = action_data
+        self.override_mask = override_mask
+
+    def to_byte_array(self):
+        return [0,
+                self.schedule_type,
+                self.override_mask,
+                self.trigger_timestamp,
+                self.repeat_data,
+                self.action_data]
