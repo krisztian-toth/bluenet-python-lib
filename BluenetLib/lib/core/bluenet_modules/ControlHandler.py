@@ -144,9 +144,9 @@ class ScheduleData:
         self.override_mask = override_mask
 
     def to_byte_array(self):
-        return [0,
-                self.schedule_type,
-                self.override_mask,
-                self.trigger_timestamp,
-                self.repeat_data,
-                self.action_data]
+        byte_array = [0,
+                      self.schedule_type,
+                      self.override_mask,
+                      self.trigger_timestamp]
+
+        return byte_array + self.repeat_data + self.action_data
