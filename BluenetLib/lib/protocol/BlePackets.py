@@ -60,7 +60,7 @@ class ControlPacket(BLEPacket):
 
     def getPacket(self):
         """
-        Returns a Control packet, an array which consists of
+        Returns a Control packet, an array of bytes which consists of
         the following elements (in order):
 
         type    |   name    |   length  |   description
