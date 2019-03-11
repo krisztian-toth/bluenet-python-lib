@@ -131,11 +131,16 @@ class ScheduleData:
         https://github.com/crownstone/bluenet/blob/master/docs/PROTOCOL.md#schedule-entry-packet
 
         :param schedule_type: combined repeat and action type
+        :type schedule_type: int
         :param trigger_timestamp: timestamp of the next time this entry
         triggers - set to 0 to remove this entry.
+        :type trigger_timestamp: int
         :param repeat_data: repeat time data, depends on the repeat type.
+        :type repeat_data: list of int
         :param action_data: action data, depends on the action type.
+        :type action_data: list of int
         :param override_mask: bitmask of switch commands to override.
+        :type override_mask: int
         """
         self.schedule_type = schedule_type
         self.trigger_timestamp = trigger_timestamp
